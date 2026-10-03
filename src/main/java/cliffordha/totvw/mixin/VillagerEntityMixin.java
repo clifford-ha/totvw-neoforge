@@ -1,0 +1,225 @@
+package cliffordha.totvw.mixin;
+
+import cliffordha.totvw.config.VWConfig;
+import cliffordha.totvw.entity.skill.SkillManager;
+import cliffordha.totvw.registry.*;
+import cliffordha.totvw.registry.attachments.entity.PlayerAttachment;
+import cliffordha.totvw.registry.attachments.entity.VillagerAttachment;
+import cliffordha.totvw.registry.attachments.entity.WolfAttachment;
+import cliffordha.totvw.tag.VWBiomeTags;
+
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.animal.golem.IronGolem;
+import net.minecraft.world.entity.animal.wolf.Wolf;
+import net.minecraft.world.entity.npc.villager.Villager;
+import net.minecraft.world.entity.npc.villager.VillagerData;
+import net.minecraft.world.entity.npc.villager.VillagerProfession;
+import net.minecraft.world.entity.npc.villager.VillagerType;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.trading.MerchantOffer;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.phys.AABB;
+import net.neoforged.neoforge.attachment.AttachmentType;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import java.util.List;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
+
+import static cliffordha.totvw.util.VWUtil.isInBiome;
+
+@Mixin(Villager.class)
+public class VillagerEntityMixin {
+    @Inject(method = "finalizeSpawn", at = @At("TAIL"))
+    private void setSpawnData(ServerLevelAccessor level, DifficultyInstance difficulty, EntitySpawnReason spawnReason, SpawnGroupData groupData, CallbackInfoReturnable<SpawnGroupData> cir) {
+        Villager villager = (Villager) (Object) this;
+        boolean inVerdant = isInBiome(villager, VWBiomeTags.IS_VERDANT_BIOMES);
+
+        VillagerData data = villager.getVillagerData();
+        Holder<VillagerType> taiga = level.registryAccess()
+                .lookupOrThrow(Registries.VILLAGER_TYPE)
+                .getOrThrow(VillagerType.TAIGA);
+
+        if (spawnReason == EntitySpawnReason.BREEDING) {
+            villager.setVillagerData(villager.getVillagerData().withProfession(level.registryAccess(), VillagerProfession.NONE));
+            if (inVerdant || villager.getData(VillagerAttachment.IS_VERDANT_TYPE)) {
+                villager.setData(VillagerAttachment.IS_VERDANT_TYPE, true);
+            }
+        }
+
+        if (inVerdant) {
+            villager.setData(VillagerAttachment.IS_VERDANT_TYPE, true);
+            villager.setVillagerData(new VillagerData(taiga, data.profession(), data.level()));
+        }
+    }
+    
+    @Inject(method = "tick", at = @At("HEAD"))
+    private void onTick(CallbackInfo ci) {
+        Villager villager = (Villager) (Object) this;
+        Level level = villager.level();
+        boolean isVerdant = villager.getData(VillagerAttachment.IS_VERDANT_TYPE);
+        boolean isVerdantCleric = isVerdant && hasProfession(villager, VillagerProfession.CLERIC);
+        boolean hasProfession = !hasProfession(villager, VillagerProfession.NONE) || !hasProfession(villager, VillagerProfession.NITWIT);
+
+        int discountReroll = villager.getData(VillagerAttachment.CD_DISCOUNT_REROLL);
+
+        if (level.getGameTime() % 20 == 0) {
+            if (hasProfession && isVerdant && discountReroll <= 0) {
+                float MIN_MODIFIER = 0.15f;
+                float MAX_MODIFIER = 0.5f;
+                float BONUS = isInBiome(villager, VWBiomeTags.IS_VERDANT_BIOMES) ? 0.30f : 0.0f;
+
+                float modifier = MIN_MODIFIER + villager.level().getRandom().nextFloat() * (MAX_MODIFIER + BONUS) - MIN_MODIFIER;
+                villager.setData(VillagerAttachment.DISCOUNT_MODIFIER, modifier);
+                villager.setData(VillagerAttachment.CD_DISCOUNT_REROLL, 1440);
+            }
+            if (discountReroll > 0) depleteCD(villager, VillagerAttachment.CD_DISCOUNT_REROLL);
+        }
+        if (isVerdantCleric) {
+            if (level.getGameTime() % 20 == 0) {
+                depleteCD(villager, VillagerAttachment.CD_HEAL_OTHERS);
+                depleteCD(villager, VillagerAttachment.CD_HEAL_WOLF);
+                depleteCD(villager, VillagerAttachment.CD_HEAL_IRON_GOLEM);
+            }
+            if (level.getGameTime() % 60 == 0) {
+                int CD_HEAL_OTHERS = villager.getData(VillagerAttachment.CD_HEAL_OTHERS);
+                int CD_HEAL_WOLF = villager.getData(VillagerAttachment.CD_HEAL_WOLF);
+                int CD_HEAL_GOLEM = villager.getData(VillagerAttachment.CD_HEAL_IRON_GOLEM);
+
+                int villagerCount = getVillagerCount(villager);
+                float healStrength = villagerCount >= 3 ? villager.getHealth() * 0.3f + (0.1f * villagerCount) : villager.getHealth() * 0.3f;
+                double speed = 0.75;
+
+                if (CD_HEAL_OTHERS <= 0) {
+                    List<Villager> villagerList = level.getEntities(EntityTypes.VILLAGER, scanner(villager, 24),
+                            target -> target.isAlive()
+                                    && target.getHealth() < target.getMaxHealth() * 0.9f);
+                    if (!villagerList.isEmpty()) {
+                        Villager others = villagerList.getFirst();
+
+                        villager.getNavigation().moveTo(others, speed);
+                        others.heal(healStrength);
+                        villager.setData(VillagerAttachment.CD_HEAL_OTHERS, 30);
+                        healEffect(level, villager, others);
+                    }
+                }
+
+                if (CD_HEAL_WOLF <= 0) {
+                    List<Wolf> wolves = villager.level().getEntities(EntityTypes.WOLF, scanner(villager, 16),
+                            wolf -> wolf.isAlive()
+                                    && !wolf.isTame()
+                                    && wolf.getHealth() < wolf.getMaxHealth() * 0.9f
+                                    && wolf.getData(WolfAttachment.TRY_SAVE_POINTS) > 0);
+                    if (!wolves.isEmpty()) {
+                        Wolf wolf = wolves.getFirst();
+
+                        int currentPoints = wolf.getData(WolfAttachment.TRY_SAVE_POINTS);
+
+                        villager.getNavigation().moveTo(wolf.getX(), wolf.getY(), wolf.getZ(), 2, speed);
+                        villager.lookAt(wolf, 10, 10);
+                        wolf.heal(healStrength);
+                        wolf.setData(WolfAttachment.TRY_SAVE_POINTS, currentPoints - 1);
+                        villager.setData(VillagerAttachment.CD_HEAL_WOLF, 60);
+                        healEffect(level, villager, wolf);
+                    }
+                }
+                if (CD_HEAL_GOLEM <= 0) {
+                    List<IronGolem> golems = villager.level().getEntities(EntityTypes.IRON_GOLEM, scanner(villager, 16),
+                            golem -> golem.isAlive()
+                                    && golem.getHealth() < golem.getMaxHealth() * 0.75f);
+
+                    if (!golems.isEmpty()) {
+                        IronGolem golem = golems.getFirst();
+
+                        villager.getNavigation().moveTo(golem, speed);
+                        golem.heal(healStrength * 2f);
+                        villager.setData(VillagerAttachment.CD_HEAL_IRON_GOLEM, 90);
+                        healEffect(level, villager, golem);
+                    }
+                }
+            }
+        }
+    }
+
+    @Inject(method = "mobInteract", at = @At("HEAD"), cancellable = true)
+    private void onInteract(Player player, InteractionHand hand, CallbackInfoReturnable<InteractionResult> cir) {
+        Villager villager = (Villager) (Object) this;
+        if (player.getData(PlayerAttachment.VILLAGER_ATROCITY_COUNT) > 20) {
+            if (!villager.level().isClientSide()) {
+                villager.makeSound(SoundEvents.VILLAGER_NO);
+            }
+            int unhappiness = villager.getUnhappyCounter();
+            villager.setUnhappyCounter(unhappiness + 12);
+            cir.setReturnValue(InteractionResult.FAIL);
+        }
+    }
+
+    @Inject(method = "updateSpecialPrices", at = @At("TAIL"))
+    private void villagerVerdantTrades(Player player, CallbackInfo ci) {
+        Villager villager = (Villager) (Object) this;
+        if (!villager.getData(VillagerAttachment.IS_VERDANT_TYPE)) return;
+        if (player.getData(PlayerAttachment.VILLAGER_ATROCITY_COUNT) > 20) return;
+
+        float modifier = villager.getData(VillagerAttachment.DISCOUNT_MODIFIER);
+
+        for (MerchantOffer offer : villager.getOffers()) {
+            int costReduction = (int) Math.floor(modifier * (double) offer.getBaseCostA().getCount());
+            offer.addToSpecialPriceDiff(-Math.max(costReduction, 1));
+        }
+    }
+
+    @Unique
+    private static void depleteCD(Villager villager, Supplier<AttachmentType<Integer>> cooldown) {
+        if (VWConfig.get().SERVER_OTHER_COOLDOWNS) {
+            SkillManager.depleteCooldown(villager, cooldown);
+        } else {
+            villager.setData(cooldown, 0);
+        }
+    }
+
+    @Unique
+    private static void healEffect(Level level, Villager villager, LivingEntity entity) {
+        float random = 0.5f + level.getRandom().nextFloat();
+        if (entity.is(EntityTypes.IRON_GOLEM)) {
+            entity.playSound(SoundEvents.IRON_GOLEM_REPAIR, random, random);
+            VWParticles.showBlessingParticle(villager, 4);
+        } else {
+            villager.playSound(SoundEvents.ENCHANTMENT_TABLE_USE, random, random);
+            VWParticles.showBlessingParticle(villager, 1);
+            VWParticles.showBlessingParticle(entity, 4);
+        }
+    }
+
+    @Unique
+    private static int getVillagerCount(Villager villager) {
+        List<Villager> aliveVillagerList = villager.level().getEntities(
+                EntityTypes.VILLAGER,
+                villager.getBoundingBox().inflate(16),
+                LivingEntity::isAlive);
+        if (aliveVillagerList.isEmpty()) return 0;
+        return aliveVillagerList.size();
+    }
+
+    @Unique
+    private static AABB scanner(Villager villager, int size) {
+        return villager.getBoundingBox().inflate(size);
+    }
+
+    @Unique
+    private static boolean hasProfession(Villager villager, ResourceKey<VillagerProfession> profession) {
+        return villager.getVillagerData().profession().is(Predicate.isEqual(profession));
+    }
+}

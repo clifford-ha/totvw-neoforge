@@ -1,0 +1,13 @@
+{
+  "itemGroup.cliffordha.totvw": "Example Mod Tab",
+  "block.cliffordha.totvw.example_block": "Example Block",
+  "item.cliffordha.totvw.example_item": "Example Item",
+
+  "cliffordha.totvw.configuration.title": "Tales of The Verdant Wind Configs",
+  "cliffordha.totvw.configuration.section.cliffordha.totvw.common.toml": "Tales of The Verdant Wind Configs",
+  "cliffordha.totvw.configuration.section.cliffordha.totvw.common.toml.title": "Tales of The Verdant Wind Configs",
+  "cliffordha.totvw.configuration.items": "Item List",
+  "cliffordha.totvw.configuration.logDirtBlock": "Log Dirt Block",
+  "cliffordha.totvw.configuration.magicNumberIntroduction": "Magic Number Text",
+  "cliffordha.totvw.configuration.magicNumber": "Magic Number"
+}

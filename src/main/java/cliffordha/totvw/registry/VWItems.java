@@ -1,0 +1,398 @@
+package cliffordha.totvw.registry;
+
+import cliffordha.totvw.item.custom.*;
+import cliffordha.totvw.item.scatteredpages.ScatteredPageItem;
+import cliffordha.totvw.TOTVW;
+import cliffordha.totvw.item.VWArmorMaterials;
+import cliffordha.totvw.item.VWToolMaterials;
+
+import net.minecraft.core.Direction;
+import net.minecraft.world.entity.EquipmentSlotGroup;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.*;
+import net.minecraft.world.item.equipment.ArmorType;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.registries.DeferredItem;
+import net.neoforged.neoforge.registries.DeferredRegister;
+
+import java.util.function.Function;
+
+import static cliffordha.totvw.TOTVW.sendClassRegisterLog;
+import static cliffordha.totvw.registry.VWItems.Util.*;
+
+public class VWItems {
+    public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(TOTVW.MOD_ID);
+    public static final DeferredItem<Item> VERIXIUM_HELMET = registerItem("verixium_helmet",
+            properties -> new Item(properties
+                    .humanoidArmor(VWArmorMaterials.VERIXIUM_ARMOR_MATERIAL, ArmorType.HELMET)
+                    .fireResistant()
+                    .attributes(
+                            VWArmorMaterials.VERIXIUM_ARMOR_MATERIAL.createAttributes(ArmorType.HELMET)
+                                    .withModifierAdded(
+                                            Attributes.OXYGEN_BONUS,
+                                            new AttributeModifier(
+                                                    VWIdentifiers.VERIXIUM_ARMOR_EQUIPPED,
+                                                    0.2F,
+                                                    AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL
+                                            ),
+                                            EquipmentSlotGroup.HEAD
+                                    )
+                    )
+            ));
+    public static final DeferredItem<Item> VERIXIUM_CHESTPLATE = registerItem("verixium_chestplate",
+            properties -> new Item(properties
+                    .humanoidArmor(VWArmorMaterials.VERIXIUM_ARMOR_MATERIAL, ArmorType.CHESTPLATE)
+                    .fireResistant()
+                    .attributes(
+                            VWArmorMaterials.VERIXIUM_ARMOR_MATERIAL.createAttributes(ArmorType.CHESTPLATE)
+                                    .withModifierAdded(
+                                            Attributes.KNOCKBACK_RESISTANCE,
+                                            new AttributeModifier(
+                                                    VWIdentifiers.VERIXIUM_ARMOR_EQUIPPED,
+                                                    0.1F,
+                                                    AttributeModifier.Operation.ADD_VALUE
+                                            ),
+                                            EquipmentSlotGroup.CHEST
+                                    )
+                                    .withModifierAdded(
+                                            Attributes.ARMOR_TOUGHNESS,
+                                            new AttributeModifier(
+                                                    VWIdentifiers.VERIXIUM_ARMOR_EQUIPPED,
+                                                    2,
+                                                    AttributeModifier.Operation.ADD_VALUE
+                                            ),
+                                            EquipmentSlotGroup.CHEST
+                                    )
+
+                    )
+            ));
+    public static final DeferredItem<Item> VERIXIUM_LEGGINGS = registerItem("verixium_leggings",
+            properties -> new Item(properties
+                    .humanoidArmor(VWArmorMaterials.VERIXIUM_ARMOR_MATERIAL, ArmorType.LEGGINGS)
+                    .fireResistant()
+                    .attributes(
+                            VWArmorMaterials.VERIXIUM_ARMOR_MATERIAL.createAttributes(ArmorType.LEGGINGS)
+                                    .withModifierAdded(
+                                            Attributes.SNEAKING_SPEED,
+                                            new AttributeModifier(
+                                                    VWIdentifiers.VERIXIUM_ARMOR_EQUIPPED,
+                                                    0.15F,
+                                                    AttributeModifier.Operation.ADD_VALUE
+                                            ),
+                                            EquipmentSlotGroup.LEGS
+                                    )
+                                    .withModifierAdded(
+                                            Attributes.KNOCKBACK_RESISTANCE,
+                                            new AttributeModifier(
+                                                    VWIdentifiers.VERIXIUM_ARMOR_EQUIPPED,
+                                                    0.1F,
+                                                    AttributeModifier.Operation.ADD_VALUE
+                                            ),
+                                            EquipmentSlotGroup.LEGS
+                                    )
+                                    .withModifierAdded(
+                                            Attributes.ARMOR_TOUGHNESS,
+                                            new AttributeModifier(
+                                                    VWIdentifiers.VERIXIUM_ARMOR_EQUIPPED,
+                                                    2,
+                                                    AttributeModifier.Operation.ADD_VALUE
+                                            ),
+                                            EquipmentSlotGroup.LEGS
+                                    )
+                    )
+            ));
+    public static final DeferredItem<Item> VERIXIUM_BOOTS = registerItem("verixium_boots",
+            properties -> new Item(properties
+                    .humanoidArmor(VWArmorMaterials.VERIXIUM_ARMOR_MATERIAL, ArmorType.BOOTS)
+                    .fireResistant()
+                    .attributes(
+                            VWArmorMaterials.VERIXIUM_ARMOR_MATERIAL.createAttributes(ArmorType.BOOTS)
+                                    .withModifierAdded(
+                                            Attributes.MOVEMENT_EFFICIENCY,
+                                            new AttributeModifier(
+                                                    VWIdentifiers.VERIXIUM_ARMOR_EQUIPPED,
+                                                    0.3F,
+                                                    AttributeModifier.Operation.ADD_VALUE
+                                            ),
+                                            EquipmentSlotGroup.FEET
+                                    )
+                                    .withModifierAdded(
+                                            Attributes.KNOCKBACK_RESISTANCE,
+                                            new AttributeModifier(
+                                                    VWIdentifiers.VERIXIUM_ARMOR_EQUIPPED,
+                                                    0.1F,
+                                                    AttributeModifier.Operation.ADD_VALUE
+                                            ),
+                                            EquipmentSlotGroup.FEET
+                                    )
+                                    .withModifierAdded(
+                                            Attributes.ARMOR_TOUGHNESS,
+                                            new AttributeModifier(
+                                                    VWIdentifiers.VERIXIUM_ARMOR_EQUIPPED,
+                                                    2,
+                                                    AttributeModifier.Operation.ADD_VALUE
+                                            ),
+                                            EquipmentSlotGroup.FEET
+                                    )
+                    )
+            ));
+    public static final DeferredItem<Item> VERIXIUM_WOLF_ARMOR = registerItem("verixium_wolf_armor",
+            properties -> new Item(properties
+                    .fireResistant()
+                    .wolfArmor(VWArmorMaterials.VERIXIUM_ENTITY_ARMOR)
+                    .enchantable(15)
+                    .attributes(
+                            VWArmorMaterials.VERIXIUM_ENTITY_ARMOR.createAttributes(ArmorType.BODY)
+                                    .withModifierAdded(
+                                            Attributes.MOVEMENT_SPEED,
+                                            new AttributeModifier(
+                                                    VWIdentifiers.VERIXIUM_WOLF_ARMOR_EQUIPPED,
+                                                    0.05,
+                                                    AttributeModifier.Operation.ADD_VALUE
+                                            ),
+                                            EquipmentSlotGroup.BODY
+                                    )
+                    )
+            ));
+
+    public static final DeferredItem<Item> VERIXIUM_HORSE_ARMOR = registerItem( "verixium_horse_armor",
+            properties -> new Item(properties
+                    .fireResistant()
+                    .horseArmor(VWArmorMaterials.VERIXIUM_ENTITY_ARMOR)
+                    .enchantable(15)
+                    .attributes(
+                            VWArmorMaterials.VERIXIUM_ENTITY_ARMOR.createAttributes(ArmorType.BODY)
+                                    .withModifierAdded(
+                                            Attributes.JUMP_STRENGTH,
+                                            new AttributeModifier(
+                                                    VWIdentifiers.VERIXIUM_HORSE_ARMOR_EQUIPPED,
+                                                    0.5,
+                                                    AttributeModifier.Operation.ADD_VALUE
+                                            ),
+                                            EquipmentSlotGroup.BODY
+                                    )
+                                    .withModifierAdded(
+                                            Attributes.FALL_DAMAGE_MULTIPLIER,
+                                            new AttributeModifier(
+                                                    VWIdentifiers.VERIXIUM_HORSE_ARMOR_EQUIPPED,
+                                                    -0.2f,
+                                                    AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL
+                                            ),
+                                            EquipmentSlotGroup.BODY
+                                    )
+                    )
+            )
+    );
+
+
+    //VERIXIUM ITEMS
+    public static final DeferredItem<Item> VERIXIUM_CHUNK = registerItem("verixium_chunk",
+            properties -> new Item(properties
+                    .fireResistant()
+            ));
+    public static final DeferredItem<Item> CONDENSED_VERIXIUM = registerItem("condensed_verixium",
+            properties -> new Item(properties
+                    .fireResistant()
+            ));
+    public static final DeferredItem<Item> VERIXIUM_SHARD = registerItem("verixium_shard",
+            properties -> new Item(properties
+                    .fireResistant()
+            ));
+    public static final DeferredItem<Item> VERIXIUM_POWDER = registerItem("verixium_powder",
+            properties -> new Item(properties
+                    .fireResistant()
+            ));
+    public static final DeferredItem<Item> VERIXIUM_INGOT = registerItem("verixium_ingot",
+            properties -> new Item(properties
+                    .fireResistant()
+            ));
+    public static final DeferredItem<Item> VERIXIUM_PAPER = registerItem("verixium_paper",
+            properties -> new Item(properties
+                    .fireResistant())
+            );
+    public static final DeferredItem<Item> VERIXIUM_ARMOR_UPGRADE_TEMPLATE = registerItem("verixium_armor_upgrade_template",
+            properties -> new Item(properties
+                    .rarity(Rarity.EPIC)
+                    .fireResistant()
+            ));
+    public static final DeferredItem<Item> VERIXIUM_SPEAR = registerItem("verixium_spear",
+            properties -> new Item(properties
+                    .spear(VWToolMaterials.VERIXIUM_TOOL_MATERIAL, 1.10f, 1.1f, 0.5f, 1.3f, 9.0f, 6.0f, 5.1f, 9.10f, 4.6f)
+                    .fireResistant()
+            ));
+    public static final DeferredItem<Item> VERIXIUM_SWORD = registerItem("verixium_sword",
+            properties -> new Item(properties
+                    .sword(VWToolMaterials.VERIXIUM_TOOL_MATERIAL, 3.0F, -2.4f)
+                    .fireResistant()
+            ));
+    public static final DeferredItem<Item> VERIXIUM_AXE = registerItem("verixium_axe",
+            properties -> new Item(properties
+                    .axe(VWToolMaterials.VERIXIUM_TOOL_MATERIAL, 5.0F, -2.5f)
+                    .fireResistant()
+            ));
+    public static final DeferredItem<Item> VERIXIUM_PICKAXE = registerItem("verixium_pickaxe",
+            properties -> new Item(properties
+                    .pickaxe(VWToolMaterials.VERIXIUM_TOOL_MATERIAL, 1.0F, -2.8f)
+                    .fireResistant()
+            ));
+    public static final DeferredItem<Item> VERIXIUM_HOE = registerItem("verixium_hoe",
+            properties -> new Item(properties
+                    .hoe(VWToolMaterials.VERIXIUM_TOOL_MATERIAL, 3.0F, 0.0f)
+                    .fireResistant()
+            ));
+    public static final DeferredItem<Item> VERIXIUM_SHOVEL = registerItem("verixium_shovel",
+            properties -> new Item(properties
+                    .shovel(VWToolMaterials.VERIXIUM_TOOL_MATERIAL, 1.5F, -3.0f)
+                    .fireResistant()
+            ));
+    public static final DeferredItem<Item> VERIXIUM_FLUID_BUCKET = registerItem("verixium_fluid_bucket",
+            properties -> new BucketItem(VWFluids.VERIXIUM_FLUID, properties
+                    .stacksTo(1)
+                    .craftRemainder(Items.BUCKET)
+                    .fireResistant()
+            ));
+    public static final DeferredItem<Item> VERDANT_SPRUCE_BOAT = registerItem("verdant_spruce_boat",
+            properties -> new BoatItem(VWEntities.VERDANT_SPRUCE_BOAT, properties.stacksTo(1)));
+    public static final DeferredItem<Item> VERDANT_SPRUCE_CHEST_BOAT = registerItem("verdant_spruce_chest_boat",
+            properties -> new BoatItem(VWEntities.VERDANT_SPRUCE_CHEST_BOAT, properties.stacksTo(1)
+            ));
+    public static final DeferredItem<Item> VERDANT_SPRUCE_SIGN = registerItem("verdant_spruce_sign",
+            properties -> new StandingAndWallBlockItem(VWBlocks.VERDANT_SPRUCE_SIGN.get(), VWBlocks.VERDANT_SPRUCE_WALL_SIGN.get(), Direction.DOWN, properties
+                    .stacksTo(16)
+            ));
+    public static final DeferredItem<Item> VERDANT_SPRUCE_HANGING_SIGN = registerItem("verdant_spruce_hanging_sign",
+            properties -> new HangingSignItem(VWBlocks.VERDANT_SPRUCE_HANGING_SIGN.get(), VWBlocks.VERDANT_SPRUCE_WALL_HANGING_SIGN.get(), properties
+                    .stacksTo(16)
+            ));
+    public static final DeferredItem<Item> SOUL_RUNESTONE_PLATE = registerItem("soul_runestone_plate",
+            properties -> new SoulRunestonePlate(properties
+                    .stacksTo(1)
+                    .fireResistant()
+            ));
+    public static final DeferredItem<Item> SOUL_RUNESTONE_FRAGMENT_1 = registerItem("soul_runestone_fragment_1",
+            properties -> new Item(properties
+                    .stacksTo(1)
+                    .rarity(Rarity.RARE)
+            ));
+    public static final DeferredItem<Item> SOUL_RUNESTONE_FRAGMENT_2 = registerItem("soul_runestone_fragment_2",
+            properties -> new Item(properties
+                    .stacksTo(1)
+                    .rarity(Rarity.RARE)
+            ));
+    public static final DeferredItem<Item> SOUL_RUNESTONE_FRAGMENT_3 = registerItem("soul_runestone_fragment_3",
+            properties -> new Item(properties
+                    .stacksTo(1)
+                    .rarity(Rarity.RARE)
+            ));
+    public static final DeferredItem<Item> SOUL_RUNESTONE_FRAGMENT_4 = registerItem("soul_runestone_fragment_4",
+            properties -> new Item(properties
+                    .stacksTo(1)
+                    .rarity(Rarity.RARE)
+            ));
+    public static final DeferredItem<Item> TETHER_RUNESTONE_PLATE = registerItem("tether_runestone_plate",
+            properties -> new TetherRunestonePlate(properties
+                    .stacksTo(1)
+                    .fireResistant()
+            ));
+    public static final DeferredItem<Item> GENESIS_RUNESTONE_PLATE = registerItem("genesis_runestone_plate",
+            properties -> new GenesisRunestonePlate(properties
+                    .stacksTo(1)
+                    .fireResistant()
+            ));
+    public static final DeferredItem<Item> HAVOC_RUNESTONE_PLATE = registerItem("havoc_runestone_plate",
+            properties -> new HavocRunestonePlate(properties
+                    .stacksTo(1)
+                    .fireResistant()
+            ));
+    public static final DeferredItem<Item> EFFLORESCENCE_RUNESTONE_PLATE = registerItem("efflorescence_runestone_plate",
+            properties -> new EfflorescenceRunestonePlate(properties
+                    .stacksTo(1)
+                    .fireResistant()
+            ));
+
+    public static class Pages {
+
+        /** placeholder items **/
+        public static final DeferredItem<Item> SCATTERED_PAGE = createPlaceholder("scattered_page");
+        public static final DeferredItem<Item> OLD_SCATTERED_PAGE = createPlaceholder("old_scattered_page");
+
+        /** handbooks & player tools **/
+        public static final DeferredItem<Item> ENCHANTMENTS_HANDBOOK = createHandbook("enchantments_handbook", 2006);
+        public static final DeferredItem<Item> EFFECTS_HANDBOOK = createHandbook("effects_handbook", 2007);
+        public static final DeferredItem<Item> ITEMS_HANDBOOK = createHandbook("items_handbook", 2008);
+        public static final DeferredItem<Item> FEATURES_HANDBOOK = createHandbook("features_handbook", 2009);
+
+        /** lores or canon stories of the Tales of the Verdant Wind **/
+        public static final DeferredItem<Item> LODESTONE_WIND_CORE_MANUAL = createPage("lodestone_wind_core_manual", 333);
+
+
+        public static final DeferredItem<Item> SP_ID_1001 = createPage1000(1001);
+        public static final DeferredItem<Item> SP_ID_1002 = createPage1000(1002);
+        public static final DeferredItem<Item> SP_ID_1003 = createPage1000(1003);
+        public static final DeferredItem<Item> SP_ID_1004 = createPage1000(1004);
+
+        public static final DeferredItem<Item> SP_ID_1005 = createPage1000(1005);
+
+        public static final DeferredItem<Item> SP_ID_1006 = createPage1000(1006);
+
+        public static final DeferredItem<Item> SP_ID_1007 = createPage1000(1007);
+        public static final DeferredItem<Item> SP_ID_1008 = createPage1000(1008);
+        public static final DeferredItem<Item> SP_ID_1009 = createPage1000(1009);
+
+        public static final DeferredItem<Item> SP_ID_3000 = createPage1000(3000);
+        public static final DeferredItem<Item> SP_ID_3001 = createPage1000(3001);
+        public static final DeferredItem<Item> SP_ID_3002 = createPage1000(3002);
+
+
+        /** for testing purposes **/
+        public static final DeferredItem<Item> SP_ID_1000 = createPage1000(1000);
+        public static final DeferredItem<Item> PLAYER_STATS = createPage("player_stats", -2);
+        public static final DeferredItem<Item> SP_ID_TEST = createPage("scattered_page_test", 0);
+
+        public static void register() {}
+    }
+
+    public static class DevItems {
+        public static final DeferredItem<Item> ATTACHMENTS_REMOVER = registerItem("attachments_remover",
+                properties -> new AttachmentsRemover(properties
+                        .stacksTo(1)
+                        .rarity(Rarity.EPIC)
+                        .fireResistant()
+                ));
+
+        public static void register() {}
+    }
+
+
+    public static void register(IEventBus eventBus) {
+        Pages.register();
+        if (TOTVW.IN_DEVELOPMENT) {
+            DevItems.register();
+        }
+
+        VWCreativeTabs.register(eventBus);
+        ITEMS.register(eventBus);
+        sendClassRegisterLog("Items");
+    }
+    
+    public static class Util {
+        public static DeferredItem<Item> registerItem(String name, Function<Item.Properties, Item> function) {
+            return ITEMS.registerItem(name, function);
+        }
+
+        public static DeferredItem<Item>  createPage1000(int id) {
+            return registerItem("scattered_page_" + id, properties -> new ScatteredPageItem(properties.stacksTo(1), id));
+        }
+        public static DeferredItem<Item>  createPage(String name, int id) {
+            return registerItem(name, properties -> new ScatteredPageItem(properties.stacksTo(1), id));
+        }
+
+        public static DeferredItem<Item>  createHandbook(String name, int id) {
+            return registerItem(name, properties -> new ScatteredPageItem(properties.stacksTo(1).rarity(Rarity.RARE), id));
+        }
+        public static DeferredItem<Item>  createPlaceholder(String name) {
+            return registerItem(name, properties -> new Item(properties.stacksTo(1)));
+        }
+    }
+}
