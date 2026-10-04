@@ -51,8 +51,6 @@ public class TalesOfTheVerdantWind {
         VWParticles.register(modEventBus);
 
 
-
-
         NeoForge.EVENT_BUS.register(this);
         NeoForge.EVENT_BUS.addListener(VWNetworking::onPlayerJoinEvents);
         NeoForge.EVENT_BUS.addListener(VWCommands::register);
@@ -60,7 +58,7 @@ public class TalesOfTheVerdantWind {
         modEventBus.addListener(VWNetworking::registerPayloads);
         modEventBus.addListener(VWBiomes::registerBiomes);
 
-        modContainer.registerConfig(ModConfig.Type.LOCAL, Config.SPEC);
+        modContainer.registerConfig(ModConfig.Type.SYNCED, Config.SPEC);
 
         VWPotionBrewing.register();
 

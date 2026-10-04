@@ -5,7 +5,7 @@ import cliffordha.totvw.world.VWBiomes;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
-import net.minecraft.data.tags.TagsProvider;
+import net.minecraft.data.tags.BiomeTagsProvider;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.biome.Biome;
@@ -16,9 +16,9 @@ import java.util.concurrent.CompletableFuture;
 
 import static cliffordha.totvw.tag.VWTagHelpers.biome;
 
-public class VWBiomeTags extends TagsProvider<Biome> {
+public class VWBiomeTags extends BiomeTagsProvider {
     public VWBiomeTags(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider) {
-        super(output, Registries.BIOME, lookupProvider, TOTVW.MOD_ID);
+        super(output, lookupProvider, TOTVW.MOD_ID);
     }
 
     @Override
@@ -28,8 +28,8 @@ public class VWBiomeTags extends TagsProvider<Biome> {
                 .addTag(VWBiomeTags.IS_VERDANT_BIOMES.location());*/
 
         getOrCreateRawBuilder(IS_VERDANT_BIOMES)
-                .add(biome(VWBiomes.VERDANT_MOUNTAINS))
-                .add(biome(VWBiomes.VERDANT_FOREST));
+                .addElement(VWBiomes.VERDANT_MOUNTAINS.identifier())
+                .addElement(VWBiomes.VERDANT_FOREST.identifier());
 
         getOrCreateRawBuilder(FOREST_WHERE_WOLVES_HOWL)
                 .addTag(VWBiomeTags.IS_VERDANT_BIOMES.location())

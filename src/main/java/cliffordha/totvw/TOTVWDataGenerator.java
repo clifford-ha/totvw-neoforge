@@ -1,6 +1,7 @@
 package cliffordha.totvw;
 
 import cliffordha.totvw.datagen.*;
+import cliffordha.totvw.loot.VWLootModifiers;
 import cliffordha.totvw.tag.*;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
@@ -14,23 +15,27 @@ public class TOTVWDataGenerator {
 	public static void gatherClientData(GatherDataEvent.Client event) {
 		DataGenerator generator = event.getGenerator();
 		PackOutput output = generator.getPackOutput();
-		var lookupProvider = event.getReloadableLookupProvider();
-
-		generator.addProvider(true, new VWModelProvider(output));
-		generator.addProvider(true, new VWSoundsProvider(output));
-		generator.addProvider(true, new VWEngLangProvider(output));
+		var provider = event.getReloadableLookupProvider();
 
 		event.createWorldRegistryObjects(VWDatapackProvider.WORLD_BUILDER);
 		event.createReloadableRegistryObjects(VWDatapackProvider.RELOADABLE_BUILDER);
 
-		generator.addProvider(true, new VWItemTags(output, lookupProvider));
-		generator.addProvider(true, new VWBlockTags(output, lookupProvider));
-		generator.addProvider(true, new VWBiomeTags(output, lookupProvider));
-		generator.addProvider(true, new VWFluidTags(output, lookupProvider));
-		generator.addProvider(true, new VWEnchantmentTags(output, lookupProvider));
-		generator.addProvider(true, new VWDamageTypeTags(output, lookupProvider));
-		generator.addProvider(true, new VWEntityTypeTags(output, lookupProvider));
-		generator.addProvider(true, new VWVillagerTradeTags(output, lookupProvider));
+		generator.addProvider(true, new VWModelProvider(output));
+
+		generator.addProvider(true, new VWBlockTags(output, provider));
+		generator.addProvider(true, new VWItemTags(output, provider));
+
+		generator.addProvider(true, new VWFluidTags(output, provider));
+		generator.addProvider(true, new VWEnchantmentTags(output, provider));
+		generator.addProvider(true, new VWDamageTypeTags(output, provider));
+		generator.addProvider(true, new VWEntityTypeTags(output, provider));
+		generator.addProvider(true, new VWVillagerTradeTags(output, provider));
+		generator.addProvider(true, new VWBiomeTags(output, provider));
+
+		generator.addProvider(true, new VWSoundsProvider(output));
+		generator.addProvider(true, new VWEngLangProvider(output));
+
+		generator.addProvider(true, new VWLootModifiers(output, provider));
 	}
 
 	@SubscribeEvent

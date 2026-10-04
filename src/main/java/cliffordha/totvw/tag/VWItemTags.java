@@ -6,10 +6,12 @@ import cliffordha.totvw.registry.VWItems;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
+import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.common.data.ItemTagsProvider;
 import org.jspecify.annotations.NonNull;
 
@@ -20,6 +22,11 @@ import static cliffordha.totvw.tag.VWTagHelpers.item;
 public class VWItemTags extends ItemTagsProvider {
     public VWItemTags(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider) {
         super(output, lookupProvider, TOTVW.MOD_ID);
+    }
+
+    public VWItemTags(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> providerCompletableFuture, CompletableFuture<TagLookup<Block>> tagLookupCompletableFuture) {
+        super(packOutput, providerCompletableFuture, TOTVW.MOD_ID);
+
     }
 
     @Override

@@ -4,7 +4,7 @@ import cliffordha.totvw.TOTVW;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
-import net.minecraft.data.tags.TagsProvider;
+import net.minecraft.data.tags.EntityTypeTagsProvider;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EntityTypes;
@@ -12,9 +12,9 @@ import net.minecraft.world.entity.EntityTypes;
 import java.util.concurrent.CompletableFuture;
 import static cliffordha.totvw.tag.VWTagHelpers.entity;
 
-public class VWEntityTypeTags extends TagsProvider<EntityType<?>> {
+public class VWEntityTypeTags extends EntityTypeTagsProvider {
     public VWEntityTypeTags(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider) {
-        super(output, Registries.ENTITY_TYPE, lookupProvider, TOTVW.MOD_ID);
+        super(output, lookupProvider, TOTVW.MOD_ID);
     }
 
     @Override

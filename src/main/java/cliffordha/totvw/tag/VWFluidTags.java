@@ -4,7 +4,7 @@ import cliffordha.totvw.TOTVW;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
-import net.minecraft.data.tags.TagsProvider;
+import net.minecraft.data.tags.FluidTagsProvider;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.TagEntry;
@@ -14,16 +14,16 @@ import org.jspecify.annotations.NonNull;
 
 import java.util.concurrent.CompletableFuture;
 
-public class VWFluidTags extends TagsProvider<Fluid> {
+public class VWFluidTags extends FluidTagsProvider {
     public VWFluidTags(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider) {
-        super(output, Registries.FLUID, lookupProvider, TOTVW.MOD_ID);
+        super(output, lookupProvider, TOTVW.MOD_ID);
     }
 
     @Override
     protected void addTags(HolderLookup.@NonNull Provider registries) {
         getOrCreateRawBuilder(VWFluidTags.VERIXIUM_FLUID)
-                .add(TagEntry.element(Identifier.fromNamespaceAndPath(TOTVW.MOD_ID, "verixium_fluid")))
-                .add(TagEntry.element(Identifier.fromNamespaceAndPath(TOTVW.MOD_ID, "flowing_verixium_fluid")));
+                .addElement(TOTVW.registerID("verixium_fluid"))
+                .addElement(TOTVW.registerID("flowing_verixium_fluid"));
 
 
         getOrCreateRawBuilder(FluidTags.WATER)
@@ -39,5 +39,5 @@ public class VWFluidTags extends TagsProvider<Fluid> {
                 .addTag(VWFluidTags.VERIXIUM_FLUID.location());
     }
 
-    public static final TagKey<Fluid> VERIXIUM_FLUID = TagKey.create(Registries.FLUID, Identifier.fromNamespaceAndPath(TOTVW.MOD_ID, "verixium_fluid"));
+    public static final TagKey<Fluid> VERIXIUM_FLUID = TagKey.create(Registries.FLUID, TOTVW.registerID("verixium_fluid"));
 }

@@ -14,7 +14,6 @@ import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.loot.LootTableProvider;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
-import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
 import java.util.List;
@@ -26,7 +25,6 @@ public class VWDatapackProvider {
         .add(Registries.DAMAGE_TYPE, VWDamageTypes::bootstrap)
 
         .add(Registries.WOLF_VARIANT, VWWolfVariants::bootstrap)
-        //.add(Registries.VILLAGER_TYPE)
         .add(Registries.VILLAGER_TRADE, VWVillagerTrades::bootstrap)
 
         .add(Registries.BIOME, VWBiomes::bootstrap)
@@ -38,10 +36,10 @@ public class VWDatapackProvider {
         .add(Registries.LEVEL_STEM, VWDimensions::bootstrapStem);
 
     public static final RegistrySetBuilder RELOADABLE_BUILDER = new RegistrySetBuilder()
-            .add(Registries.LOOT_TABLE, new LootTableProvider(Set.of(), List.of(
-                    new LootTableProvider.SubProviderEntry(VWBlockLootTableProvider::new, LootContextParamSets.BLOCK),
-                    new LootTableProvider.SubProviderEntry(VWLootTables::new, LootContextParamSets.CHEST)
-            )))
+            //.add(Registries.LOOT_TABLE, new LootTableProvider(Set.of(), List.of(
+                    //new LootTableProvider.SubProviderEntry(VWBlockLootTableProvider::new, LootContextParamSets.BLOCK),
+                    //new LootTableProvider.SubProviderEntry(VWLootTables::new, LootContextParamSets.ALL_PARAMS)
+            //)))
             .add(Registries.ADVANCEMENT, VWAdvancements::new)
             .add(VWRecipeProvider.create());
 }

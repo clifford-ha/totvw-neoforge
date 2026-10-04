@@ -4,7 +4,7 @@ import cliffordha.totvw.TOTVW;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
-import net.minecraft.data.tags.TagsProvider;
+import net.minecraft.data.tags.DamageTypeTagsProvider;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageType;
@@ -15,9 +15,9 @@ import java.util.concurrent.CompletableFuture;
 import static cliffordha.totvw.tag.VWTagHelpers.type;
 import static cliffordha.totvw.datagen.VWDamageTypes.*;
 
-public class VWDamageTypeTags extends TagsProvider<DamageType> {
+public class VWDamageTypeTags extends DamageTypeTagsProvider {
     public VWDamageTypeTags(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider) {
-        super(output, Registries.DAMAGE_TYPE, lookupProvider, TOTVW.MOD_ID);
+        super(output, lookupProvider, TOTVW.MOD_ID);
     }
 
     @Override
