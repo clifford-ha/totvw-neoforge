@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "tales_of_the_verdant_wind:block/verdant_spruce_planks"
+  }
+}

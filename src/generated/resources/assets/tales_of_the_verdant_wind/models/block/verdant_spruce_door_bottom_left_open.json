@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/door_bottom_left_open",
+  "textures": {
+    "bottom": "tales_of_the_verdant_wind:block/verdant_spruce_door_bottom",
+    "top": "tales_of_the_verdant_wind:block/verdant_spruce_door_top"
+  }
+}

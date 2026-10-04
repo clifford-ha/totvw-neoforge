@@ -1,17 +1,19 @@
 package cliffordha.totvw.world;
 
 import cliffordha.totvw.TOTVW;
+import cliffordha.totvw.tag.VWBiomeTags;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.biome.Biome;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import terrablender.api.Regions;
 
 public class VWBiomes {
     public static final ResourceKey<Biome> VERDANT_MOUNTAINS = registerBiomeKey("verdant_mountains");
     public static final ResourceKey<Biome> VERDANT_FOREST = registerBiomeKey("verdant_forest");
 
-    public static void registerBiomes() {
+    public static void registerBiomes(FMLCommonSetupEvent event) {
         Regions.register(new VWOverworldRegion());
     }
 

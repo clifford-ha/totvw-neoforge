@@ -7,6 +7,8 @@ import cliffordha.totvw.world.tree.VWTreeGrowers;
 
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.data.BlockFamilies;
+import net.minecraft.data.BlockFamily;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.ColorRGBA;
@@ -71,15 +73,18 @@ public class VWBlocks {
             BlockBehaviour.Properties.of(),
             true
     );
-    public static final DeferredBlock<Block> VERIXIUM_FLUID = registerBlock("verixium_fluid",
-            properties -> new LiquidBlock(VWFluids.VERIXIUM_FLUID, properties
-                    .mapColor(DyeColor.CYAN)
-                    .lightLevel(_ -> 14)
-                    .noLootTable()
-                    .liquid()
-            ),
-            BlockBehaviour.Properties.ofFullCopy(Blocks.WATER),
-            false
+    public static final DeferredBlock<LiquidBlock> VERIXIUM_FLUID = BLOCKS.registerBlock(
+            "verixium_fluid", properties -> new LiquidBlock(VWFluids.FLOWING_VERIXIUM_FLUID.get(),
+                    properties
+                            .noCollision()
+                            .strength(100.0F)
+                            .pushReaction(PushReaction.POPPED)
+                            .noLootTable()
+                            .liquid()
+                            .replaceable()
+                            .mapColor(MapColor.WARPED_NYLIUM)
+                            .sound(SoundType.EMPTY)
+            )
     );
     public static final DeferredBlock<Block> VERDANT_SPRUCE_LEAVES = registerBlock("verdant_spruce_leaves",
             properties -> new VerdantSpruceLeavesBlock(0.00f, ParticleTypes.ASH, properties
@@ -279,6 +284,8 @@ public class VWBlocks {
             BlockBehaviour.Properties.of(),
             true
     );
+
+
 
     public static void register(IEventBus modEventBus) {
         BLOCKS.register(modEventBus);

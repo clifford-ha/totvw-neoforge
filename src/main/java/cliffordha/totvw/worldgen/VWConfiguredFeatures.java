@@ -166,7 +166,7 @@ public class VWConfiguredFeatures {
         );
 
         context.register(VERIXIUM_FLUID_POND_CONFIGURED_KEY, new LakeFeature(
-                getBlock(VWBlocks.VERIXIUM_FLUID),
+                getBlock(VWBlocks.VERIXIUM_FLUID.get()),
                 getBlock(Blocks.DEEPSLATE),
                 BlockPredicate.alwaysTrue(),
                 BlockPredicate.matchesTag(VWBlockTags.VERDANT_MOSS_REPLACEABLE),

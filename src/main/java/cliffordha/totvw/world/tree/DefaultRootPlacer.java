@@ -28,7 +28,7 @@ public class DefaultRootPlacer extends RootPlacer {
 
     @Override
     protected RootPlacerType<?> type() {
-        return VWRootPlacerTypes.DEFAULT;
+        return VWRootPlacerTypes.DEFAULT.get();
     }
 
     @Override

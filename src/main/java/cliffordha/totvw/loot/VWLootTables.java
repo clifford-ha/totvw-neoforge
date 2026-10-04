@@ -91,10 +91,6 @@ public class VWLootTables implements LootTableSubProvider {
         context.accept(BuiltInLootTables.ANCIENT_CITY, ANCIENT_CITY);
 
 
-        context.accept(BuiltInLootTables.TRIAL_CHAMBERS_REWARD_OMINOUS_RARE,
-                LootTable.lootTable().withPool(
-                        addItemChance(VWItems.VERIXIUM_ARMOR_UPGRADE_TEMPLATE,1, 0.6f))
-        );
 
         context.accept(BuiltInLootTables.TRIAL_CHAMBERS_REWARD_RARE,
                 LootTable.lootTable().withPool(
@@ -113,6 +109,9 @@ public class VWLootTables implements LootTableSubProvider {
                                 addEnchantedBookChance(provider, VWEnchantments.WOLF_EFFECT_POISONING, 3, 5, 0.1f))
                         .withPool(
                                 addEnchantedBookChance(provider, VWEnchantments.WOLF_EFFECT_MIGHT, 3, 5, 0.1f))
+                        .withPool(
+                                addItemChance(VWItems.VERIXIUM_ARMOR_UPGRADE_TEMPLATE,1, 0.6f)
+                        )
         );
 
         context.accept(BuiltInLootTables.TRIAL_CHAMBERS_REWARD_OMINOUS_UNIQUE,

@@ -1,0 +1,6 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "#tales_of_the_verdant_wind:is_verdant_mountains",
+  "features": "minecraft:sculk_patch_ancient_city",
+  "step": "local_modifications"
+}

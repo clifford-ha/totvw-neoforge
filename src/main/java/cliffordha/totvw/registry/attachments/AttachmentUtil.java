@@ -9,6 +9,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
@@ -22,6 +23,7 @@ import java.util.function.Supplier;
 public class AttachmentUtil {
     public static final DeferredRegister<AttachmentType<?>> ATTACHMENTS =
             DeferredRegister.create(NeoForgeRegistries.ATTACHMENT_TYPES, TOTVW.MOD_ID);
+
     public static final UUID EMPTY_UUID = new UUID(0L, 0L);
 
     private static final Codec<Pair<String, UUID>> ENTITY_DATA_CODEC = RecordCodecBuilder.create(
@@ -156,5 +158,10 @@ public class AttachmentUtil {
 
             return builder.build();
         });
+    }
+
+
+    public static void registerAttachments(IEventBus eventBus) {
+        ATTACHMENTS.register(eventBus);
     }
 }

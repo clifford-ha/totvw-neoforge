@@ -13,7 +13,7 @@ public class VWShelfBlockEntity extends ShelfBlockEntity {
 
     @Override
     public BlockEntityType<?> getType() {
-        return VWBlockEntityTypes.SHELF;
+        return VWBlockEntityTypes.SHELF.get();
     }
 
     @Override

@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": "tales_of_the_verdant_wind:verixium_ingot",
+  "base": "minecraft:wolf_armor",
+  "result": {
+    "id": "tales_of_the_verdant_wind:verixium_wolf_armor"
+  },
+  "template": "tales_of_the_verdant_wind:verixium_armor_upgrade_template"
+}

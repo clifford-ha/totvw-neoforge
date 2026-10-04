@@ -110,7 +110,7 @@ public class LodestoneWindCoreBlock extends Block {
             }
             if (state.getValue(WIND_ENERGY) > 0) {
                 float randomPos = level.getRandom().nextFloat();
-                level.addParticle(VWParticles.VERIXIUM_POWDER_RAIN_PARTICLE,
+                level.addParticle(VWParticles.VERIXIUM_POWDER_RAIN_PARTICLE.get(),
                         pos.getX() + randomPos, pos.getY() + 1, pos.getZ() + randomPos, 0.0D, 0.0D, 0.0D);
             }
         }
@@ -400,11 +400,11 @@ public class LodestoneWindCoreBlock extends Block {
 
             if (!monster.getData(VWAttachments.HAS_VERDANT_OMEN)) {
                 applyVerdantOmen(monster);
-                sendParticles(VWParticles.MIGHT_PARALYZE_PARTICLE, level, monster.blockPosition(), 24, 0.5);
+                sendParticles(VWParticles.MIGHT_PARALYZE_PARTICLE.get(), level, monster.blockPosition(), 24, 0.5);
                 //VWParticleEffects.triggerMightParalyzeParticles(monster, 4);
             }
 
-            sendParticles(VWParticles.MIGHT_PARALYZE_PARTICLE, level, monster.blockPosition(), 12, 0.5);
+            sendParticles(VWParticles.MIGHT_PARALYZE_PARTICLE.get(), level, monster.blockPosition(), 12, 0.5);
             //VWParticleEffects.triggerMightParalyzeParticles(monster, 1);
             float pulseDMG = 2f * (level.getRandom().nextIntBetweenInclusive(1, 2) + level.getRandom().nextFloat());
             monster.hurtServer(level, VWDamageTypes.lodestoneWindCorePulse(level), pulseDMG);
@@ -533,7 +533,7 @@ public class LodestoneWindCoreBlock extends Block {
             addAttributeModifier(wolf, verdant, Attributes.MOVEMENT_SPEED, 0.075, ADD);
             addAttributeModifier(wolf, verdant, Attributes.SCALE, 0.2, ADD);
 
-            sendParticles(VWParticles.BENEDICTION_TRIGGER_PARTICLE, level, wolf.blockPosition(), 12, 0.5);
+            sendParticles(VWParticles.BENEDICTION_TRIGGER_PARTICLE.get(), level, wolf.blockPosition(), 12, 0.5);
 
             if (wolf.getOwner() instanceof Player player) {
                 int amount = player.experienceLevel < 12 ? 9 : 3;
@@ -549,7 +549,7 @@ public class LodestoneWindCoreBlock extends Block {
             Villager villager = villagers.get(Math.min(random, 0));
 
             villager.setData(VillagerAttachment.IS_VERDANT_TYPE, true);
-            sendParticles(VWParticles.BENEDICTION_TRIGGER_PARTICLE, level, villager.blockPosition(), 12, 0.5);
+            sendParticles(VWParticles.BENEDICTION_TRIGGER_PARTICLE.get(), level, villager.blockPosition(), 12, 0.5);
             sendToLogger(LOG_ENTITY_CONVERSION, "A core at " + getStringPos(pos) + " converted a nearby villager into a verdant type.");
         }
         depleteEnergy(level, pos, state, 1000);

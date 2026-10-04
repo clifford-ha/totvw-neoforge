@@ -8,12 +8,12 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class VWSignBlockEntity extends SignBlockEntity {
     public VWSignBlockEntity(BlockPos worldPosition, BlockState blockState) {
-        super(VWBlockEntityTypes.SIGN, worldPosition, blockState);
+        super(VWBlockEntityTypes.SIGN.get(), worldPosition, blockState);
     }
 
     @Override
     public BlockEntityType<?> getType() {
-        return VWBlockEntityTypes.SIGN;
+        return VWBlockEntityTypes.SIGN.get();
     }
 
     @Override

@@ -33,7 +33,7 @@ public class StorageBlockEntity extends RandomizableContainerBlockEntity {
     private static final int CONTAINER_SIZE = 9 * 6;
 
     public StorageBlockEntity(BlockPos worldPosition, BlockState blockState) {
-        super(VWBlockEntityTypes.STORAGE_BOX, worldPosition, blockState);
+        super(VWBlockEntityTypes.STORAGE_BOX.get(), worldPosition, blockState);
 
         this.items = NonNullList.withSize(CONTAINER_SIZE, ItemStack.EMPTY);
         this.openersCounter = new ContainerOpenersCounter() {
@@ -63,7 +63,7 @@ public class StorageBlockEntity extends RandomizableContainerBlockEntity {
 
     @Override
     public BlockEntityType<?> getType() {
-        return VWBlockEntityTypes.STORAGE_BOX;
+        return VWBlockEntityTypes.STORAGE_BOX.get();
     }
 
     @Override

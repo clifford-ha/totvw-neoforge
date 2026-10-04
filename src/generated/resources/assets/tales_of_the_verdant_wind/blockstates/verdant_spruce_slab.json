@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "tales_of_the_verdant_wind:block/verdant_spruce_slab"
+    },
+    "type=double": {
+      "model": "tales_of_the_verdant_wind:block/verdant_spruce_planks"
+    },
+    "type=top": {
+      "model": "tales_of_the_verdant_wind:block/verdant_spruce_slab_top"
+    }
+  }
+}

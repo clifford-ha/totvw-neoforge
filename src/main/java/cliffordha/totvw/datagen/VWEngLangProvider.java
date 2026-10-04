@@ -62,7 +62,7 @@ public class VWEngLangProvider extends LanguageProvider {
         add(VWBlocks.VERDANT_SPRUCE_SHELF, "Verdant Spruce Shelf");
         add(VWBlocks.VERDANT_SPRUCE_STORAGE_BOX, "Verdant Spruce Storage Box");
 
-        add(VWBlocks.VERIXIUM_FLUID, "Verixium Fluid");
+        add(VWBlocks.VERIXIUM_FLUID.get(), "Verixium Fluid");
         add(VWBlocks.LODESTONE_WIND_CORE, "Lodestone Wind Core");
 
         
@@ -71,8 +71,8 @@ public class VWEngLangProvider extends LanguageProvider {
         
         
         // ENTITIES
-        add(VWEntities.VERDANT_SPRUCE_BOAT, "Verdant Spruce Boat");
-        add(VWEntities.VERDANT_SPRUCE_CHEST_BOAT, "Verdant Spruce Chest Boat");
+        add(VWEntities.VERDANT_SPRUCE_BOAT.get(), "Verdant Spruce Boat");
+        add(VWEntities.VERDANT_SPRUCE_CHEST_BOAT.get(), "Verdant Spruce Chest Boat");
 
         add(VWItems.VERDANT_SPRUCE_BOAT, "Verdant Spruce Boat");
         add(VWItems.VERDANT_SPRUCE_CHEST_BOAT, "Verdant Spruce Chest Boat");
@@ -147,16 +147,16 @@ public class VWEngLangProvider extends LanguageProvider {
 
 
 
-        add(VWEnchantments.WOLF_EFFECT_IGNITION.registryKey().toString(), "Wolf ATK Effect: §vIgnition");
-        add(VWEnchantments.WOLF_EFFECT_POISONING.registryKey().toString(), "Wolf ATK Effect: §cPoison");
-        add(VWEnchantments.WOLF_EFFECT_WITHERING.registryKey().toString(), "Wolf ATK Effect: §cWithering");
-        add(VWEnchantments.WOLF_EFFECT_LIFTING.registryKey().toString(), "Wolf ATK Effect: Lifting");
-        add(VWEnchantments.WOLF_EFFECT_BLOODLUST.registryKey().toString(), "Wolf ATK Effect: §cBloodlust");
-        add(VWEnchantments.WOLF_EFFECT_MIGHT.registryKey().toString(), "Wolf ATK Effect: §dMight");
-        add(VWEnchantments.WOLF_EFFECT_OOZING.registryKey().toString(), "Wolf ATK Effect: §aOozing");
-        add(VWEnchantments.WOLF_EFFECT_GNAWING.registryKey().toString(), "Wolf ATK Effect: §dGnawing");
-        add(VWEnchantments.WOLF_ARMOR_ENHANCEMENT_KIT.registryKey().toString(), "Wolf Armor Enhancement Kit");
-        add(VWEnchantments.BENEDICTION_OF_THE_VERDANT_MOUNTAINS.registryKey().toString(),"Benediction of the Verdant Mountains");
+//        add(VWEnchantments.WOLF_EFFECT_IGNITION.registryKey().toString(), "Wolf ATK Effect: §vIgnition");
+//        add(VWEnchantments.WOLF_EFFECT_POISONING.registryKey().toString(), "Wolf ATK Effect: §cPoison");
+//        add(VWEnchantments.WOLF_EFFECT_WITHERING.registryKey().toString(), "Wolf ATK Effect: §cWithering");
+//        add(VWEnchantments.WOLF_EFFECT_LIFTING.registryKey().toString(), "Wolf ATK Effect: Lifting");
+//        add(VWEnchantments.WOLF_EFFECT_BLOODLUST.registryKey().toString(), "Wolf ATK Effect: §cBloodlust");
+//        add(VWEnchantments.WOLF_EFFECT_MIGHT.registryKey().toString(), "Wolf ATK Effect: §dMight");
+//        add(VWEnchantments.WOLF_EFFECT_OOZING.registryKey().toString(), "Wolf ATK Effect: §aOozing");
+//        add(VWEnchantments.WOLF_EFFECT_GNAWING.registryKey().toString(), "Wolf ATK Effect: §dGnawing");
+//        add(VWEnchantments.WOLF_ARMOR_ENHANCEMENT_KIT.registryKey().toString(), "Wolf Armor Enhancement Kit");
+//        add(VWEnchantments.BENEDICTION_OF_THE_VERDANT_MOUNTAINS.registryKey().toString(),"Benediction of the Verdant Mountains");
 
 
         add(effectKey("blessing_of_the_verdant_wind"), "Blessing of the Verdant Wind");

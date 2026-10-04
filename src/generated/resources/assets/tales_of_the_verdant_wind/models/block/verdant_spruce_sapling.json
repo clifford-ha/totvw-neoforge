@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/tinted_cross",
+  "textures": {
+    "cross": "tales_of_the_verdant_wind:block/verdant_spruce_sapling"
+  }
+}

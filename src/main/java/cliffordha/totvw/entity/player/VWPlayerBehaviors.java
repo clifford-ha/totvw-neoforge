@@ -144,7 +144,7 @@ public class VWPlayerBehaviors {
         VerdantWindBlessing.applyBenedictionEffects(wolf,  false);
         sendToChat(player, VWColors.VERDANT_WIND, true, "You have granted §nVerdant Wind's Blessing§r to " + wolfName(wolf));
 
-        sendParticles(VWParticles.BENEDICTION_TRIGGER_PARTICLE, level, wolf.blockPosition(), 6, 0.5);
+        sendParticles(VWParticles.BENEDICTION_TRIGGER_PARTICLE.get(), level, wolf.blockPosition(), 6, 0.5);
         verdantBlessingAfterEffects(level, player);
     }
     private static void runEnchantmentsOnDamage(Player player, ServerLevel level) {
@@ -185,9 +185,12 @@ public class VWPlayerBehaviors {
     private static final ThreadLocal<LivingEntity> CURRENT_VICTIM = new ThreadLocal<>();
 
     @SubscribeEvent
-    private static void playerOnDamageEvent(LivingDamageEvent.Post afterDamageEvent, LivingDeathEvent damageEvent) {
+    private static void playerOnDamageEvent(LivingDamageEvent.Post afterDamageEvent) {
         getPlayerVictimThread(afterDamageEvent.getEntity(),  afterDamageEvent.getSource());
-        getPlayerVictimThread(damageEvent.getEntity(),  damageEvent.getSource());
+    }
+    @SubscribeEvent
+    private static void targetOnDeathEvent(LivingDeathEvent deathEvent) {
+        getPlayerVictimThread(deathEvent.getEntity(),  deathEvent.getSource());
     }
 
     private static void getPlayerVictimThread(LivingEntity victim, DamageSource damageSource) {
@@ -204,7 +207,9 @@ public class VWPlayerBehaviors {
             CURRENT_VICTIM.remove();
         }
     }
-    private static void playerOnTickEvent(ServerTickEvent event) {
+
+    @SubscribeEvent
+    private static void playerOnTickEvent(ServerTickEvent.Post event) {
         if (TICK_RULES.isEmpty()) return;
         for (var serverLevel : event.getServer().getAllLevels()) {
             serverLevel.getEntities(

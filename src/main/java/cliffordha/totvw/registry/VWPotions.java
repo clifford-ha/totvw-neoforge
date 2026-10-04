@@ -6,8 +6,13 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.item.alchemy.Potion;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.registries.DeferredRegister;
 
 public class VWPotions {
+    public static final DeferredRegister<Potion> POTIONS =
+            DeferredRegister.create(BuiltInRegistries.POTION, TOTVW.MOD_ID);
+
     private static final int TICK_SECONDS = 20;
     private static final int TICK_MINUTES = TICK_SECONDS * 60;
     private static int setTime(int min, int sec) {return ((TICK_MINUTES * min) + (TICK_SECONDS * sec));}
@@ -31,10 +36,11 @@ public class VWPotions {
             new Potion("baleful_strength_potion", new MobEffectInstance(VWEffects.BLOODLUST, setTime(1, 15), 1)));
 
     private static Holder<Potion> registerPotion(String name, Potion potion) {
-        return Registry.registerForHolder(BuiltInRegistries.POTION, TOTVW.registerID(name), potion);
+        return POTIONS.register(name, () -> potion);
     }
 
-    public static void register() {
+    public static void register(IEventBus eventBus) {
+        POTIONS.register(eventBus);
         TOTVW.sendClassRegisterLog("Potions");
     }
 }

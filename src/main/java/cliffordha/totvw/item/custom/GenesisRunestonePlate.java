@@ -65,7 +65,7 @@ public class GenesisRunestonePlate extends Item {
         if (!(entity instanceof ServerPlayer player)) return null;
         ServerLevel currentLevel = player.level();
 
-        VWUtil.sendParticles(VWParticles.BENEDICTION_TRIGGER_PARTICLE, currentLevel, player.blockPosition(), 32, 1.5);
+        VWUtil.sendParticles(VWParticles.BENEDICTION_TRIGGER_PARTICLE.get(), currentLevel, player.blockPosition(), 32, 1.5);
         ResourceKey<Level> currentDimension = currentLevel.dimension();
         boolean isLeavingCustomDim = currentDimension == VWDimensions.NOLAYAN_LEVEL_KEY;
 

@@ -1,0 +1,44 @@
+{
+  "alex_jauk.wolf_howl_a": {
+    "sounds": [
+      "tales_of_the_verdant_wind:alex_jauk.wolf_howl_a"
+    ],
+    "subtitle": "SoundEvent[location=tales_of_the_verdant_wind:alex_jauk.wolf_howl_a, fixedRange=Optional.empty]"
+  },
+  "dragon_studio.lodestone_wind_core_ambient": {
+    "sounds": [
+      "tales_of_the_verdant_wind:dragon_studio.lodestone_wind_core_ambient"
+    ],
+    "subtitle": "SoundEvent[location=tales_of_the_verdant_wind:dragon_studio.lodestone_wind_core_ambient, fixedRange=Optional.empty]"
+  },
+  "dragon_studio.notify": {
+    "sounds": [
+      "tales_of_the_verdant_wind:dragon_studio.notify"
+    ],
+    "subtitle": "SoundEvent[location=tales_of_the_verdant_wind:dragon_studio.notify, fixedRange=Optional.empty]"
+  },
+  "dragon_studio.wolf_howl_b1": {
+    "sounds": [
+      "tales_of_the_verdant_wind:dragon_studio.wolf_howl_b1"
+    ],
+    "subtitle": "SoundEvent[location=tales_of_the_verdant_wind:dragon_studio.wolf_howl_b1, fixedRange=Optional.empty]"
+  },
+  "dragon_studio.wolf_howl_b2": {
+    "sounds": [
+      "tales_of_the_verdant_wind:dragon_studio.wolf_howl_b2"
+    ],
+    "subtitle": "SoundEvent[location=tales_of_the_verdant_wind:dragon_studio.wolf_howl_b2, fixedRange=Optional.empty]"
+  },
+  "dragon_studio.wolf_howl_b3": {
+    "sounds": [
+      "tales_of_the_verdant_wind:dragon_studio.wolf_howl_b3"
+    ],
+    "subtitle": "SoundEvent[location=tales_of_the_verdant_wind:dragon_studio.wolf_howl_b3, fixedRange=Optional.empty]"
+  },
+  "dragon_studio.wolf_skill_paralyze": {
+    "sounds": [
+      "tales_of_the_verdant_wind:dragon_studio.wolf_skill_paralyze"
+    ],
+    "subtitle": "SoundEvent[location=tales_of_the_verdant_wind:dragon_studio.wolf_skill_paralyze, fixedRange=Optional.empty]"
+  }
+}

@@ -14,6 +14,7 @@ import net.minecraft.util.Util;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.event.ScreenEvent;
 
 @EventBusSubscriber(modid = TOTVW.MOD_ID)
@@ -23,7 +24,7 @@ public class VWEffectOverlays {
     private VWEffectOverlays() {}
 
     @SubscribeEvent
-    public static void register(ScreenEvent.Render event) {
+    public static void register(ScreenEvent.Render.Post event) {
         bloodlustOverlay(event.getGuiGraphics(), new DeltaTracker() {
             @Override
             public float getGameTimeDeltaTicks() {

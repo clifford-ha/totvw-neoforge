@@ -10,6 +10,7 @@ import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.attachment.AttachmentType;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 public class AttachmentsRemover extends Item {
     public AttachmentsRemover(Properties properties) {
@@ -18,12 +19,12 @@ public class AttachmentsRemover extends Item {
 
     @Override
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
-        List<AttachmentType<?>> PLAYER_ATTACHMENTS = VWAttachments.PLAYER_ATTACHMENTS;
+        List<Supplier<? extends AttachmentType<?>>> PLAYER_ATTACHMENTS = VWAttachments.PLAYER_ATTACHMENTS;
 
         int count = 0;
-        for (AttachmentType<?> attachment : PLAYER_ATTACHMENTS) {
-            if (player.hasData(attachment)) {
-                player.removeData(attachment);
+        for (Supplier<? extends AttachmentType<?>> attachment : PLAYER_ATTACHMENTS) {
+            if (player.hasData(attachment.get())) {
+                player.removeData(attachment.get());
                 count++;
             }
         }

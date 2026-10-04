@@ -13,7 +13,7 @@ public class VWHangingSignBlockEntity extends HangingSignBlockEntity {
 
     @Override
     public BlockEntityType<?> getType() {
-        return VWBlockEntityTypes.HANGING_SIGN;
+        return VWBlockEntityTypes.HANGING_SIGN.get();
     }
 
     @Override

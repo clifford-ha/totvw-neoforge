@@ -406,7 +406,7 @@ public abstract class WolfEntityMixin extends LivingEntity {
             if (STACK < STACK_LIMIT) {
                 wolf.setData(WolfAttachment.BENEDICTION, STACK + 1);
                 level.playSound(null, wolf.blockPosition(), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.NEUTRAL);
-                sendParticles(VWParticles.BENEDICTION_TRIGGER_PARTICLE, level, wolf.blockPosition(), 12, 0.5);
+                sendParticles(VWParticles.BENEDICTION_TRIGGER_PARTICLE.get(), level, wolf.blockPosition(), 12, 0.5);
                 sendToChat(player, VWColors.VERDANT_WIND, true, wolf.getPlainTextName() + " Benediction stack " + wolf.getData(WolfAttachment.BENEDICTION));
                 consumeItem(player, stack);
                 cir.setReturnValue(InteractionResult.SUCCESS);

@@ -15,6 +15,7 @@ import net.minecraft.client.data.models.blockstates.MultiVariantGenerator;
 import net.minecraft.client.data.models.blockstates.PropertyDispatch;
 import net.minecraft.client.data.models.model.*;
 import net.minecraft.core.Direction;
+import net.minecraft.data.BlockFamily;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
@@ -43,6 +44,23 @@ public class VWModelProvider extends ModelProvider {
         generateItemModels(itemModels);
     }
 
+    public static final BlockFamily VERDANT_SPRUCE_FAMILY = new BlockFamily.Builder(VWBlocks.VERDANT_SPRUCE_PLANKS.get())
+            .log(VWBlocks.VERDANT_SPRUCE_LOG.get())
+            .strippedLog(VWBlocks.STRIPPED_VERDANT_SPRUCE_LOG.get())
+            .stairs(VWBlocks.VERDANT_SPRUCE_STAIRS.get())
+            .slab(VWBlocks.VERDANT_SPRUCE_SLAB.get())
+            .fence(VWBlocks.VERDANT_SPRUCE_FENCE.get())
+            .fenceGate(VWBlocks.VERDANT_SPRUCE_FENCE_GATE.get())
+            .button(VWBlocks.VERDANT_SPRUCE_BUTTON.get())
+            .pressurePlate(VWBlocks.VERDANT_SPRUCE_PRESSURE_PLATE.get())
+            .sign(VWBlocks.VERDANT_SPRUCE_SIGN.get(), VWBlocks.VERDANT_SPRUCE_WALL_SIGN.get())
+            .hangingSign(VWBlocks.VERDANT_SPRUCE_HANGING_SIGN.get(), VWBlocks.VERDANT_SPRUCE_WALL_HANGING_SIGN.get())
+            .door(VWBlocks.VERDANT_SPRUCE_DOOR.get())
+            .trapdoor(VWBlocks.VERDANT_SPRUCE_TRAPDOOR.get())
+            .recipeGroupPrefix("wooden")
+            .recipeUnlockedBy("has_planks")
+            .getFamily();
+
     public void generateBlockStateModels(BlockModelGenerators block) {
         block.createTrivialCube(VWBlocks.VERIXIUM_STONE_ORE.get());
         block.createTrivialCube(VWBlocks.VERIXIUM_DEEPSLATE_ORE.get());
@@ -59,20 +77,14 @@ public class VWModelProvider extends ModelProvider {
         block.createTrivialBlock(VWBlocks.VERDANT_SPRUCE_LEAVES.get(), TexturedModel.LEAVES);
         block.createPlantWithDefaultItem(VWBlocks.VERDANT_SPRUCE_SAPLING.get(), VWBlocks.POTTED_VERDANT_SPRUCE_SAPLING.get(), BlockModelGenerators.PlantType.TINTED);
 
-        block.family(VWBlocks.VERDANT_SPRUCE_LOG.get())
-                .pressurePlate(VWBlocks.VERDANT_SPRUCE_PRESSURE_PLATE.get())
-                .slab(VWBlocks.VERDANT_SPRUCE_SLAB.get())
-                .sign(VWBlocks.VERDANT_SPRUCE_SIGN.get())
-                .hangingSign(VWBlocks.VERDANT_SPRUCE_HANGING_SIGN.get())
-                .fence(VWBlocks.VERDANT_SPRUCE_FENCE.get())
-                .fenceGate(VWBlocks.VERDANT_SPRUCE_FENCE_GATE.get())
-                .button(VWBlocks.VERDANT_SPRUCE_BUTTON.get())
-                .door(VWBlocks.VERDANT_SPRUCE_DOOR.get())
-                .trapdoor(VWBlocks.VERDANT_SPRUCE_TRAPDOOR.get());
+        var verdantFamily = block.family(VWBlocks.VERDANT_SPRUCE_PLANKS.get());
+        verdantFamily.generateFor(VERDANT_SPRUCE_FAMILY);
 
         block.createShelf(VWBlocks.VERDANT_SPRUCE_SHELF.get(), VWBlocks.STRIPPED_VERDANT_SPRUCE_LOG.get());
         block.woodProvider(VWBlocks.VERDANT_SPRUCE_LOG.get()).log(VWBlocks.VERDANT_SPRUCE_LOG.get()).wood(VWBlocks.VERDANT_SPRUCE_WOOD.get());
         block.woodProvider(VWBlocks.STRIPPED_VERDANT_SPRUCE_LOG.get()).log(VWBlocks.STRIPPED_VERDANT_SPRUCE_LOG.get()).wood(VWBlocks.STRIPPED_VERDANT_SPRUCE_WOOD.get());
+
+        block.createNonTemplateModelBlock(VWBlocks.VERIXIUM_FLUID.get());
 
         MultiVariant OPEN = BlockModelGenerators.plainVariant(
                 ModelTemplates.CUBE_BOTTOM_TOP.createWithSuffix(VWBlocks.VERDANT_SPRUCE_STORAGE_BOX.get(), "_open",

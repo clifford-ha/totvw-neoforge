@@ -37,14 +37,18 @@ import static cliffordha.totvw.util.VWUtil.sendToChat;
 public class VWPlayerInteractions {
 
     @SubscribeEvent
-    public static void onInteractEvents(PlayerInteractEvent.EntityInteract interact, PlayerInteractEvent.RightClickItem use) {
+    public static void onInteractEvents(PlayerInteractEvent.EntityInteract interact) {
         if (interact.getEntity() instanceof Player player) {
             interact.setCancellationResult(
                     onEntityInteractEvent(player, interact.getTarget(), interact.getHand())
             );
         }
-        if (use.getEntity() instanceof Player player) {
-            use.setCancellationResult(
+    }
+
+    @SubscribeEvent
+    public static void onRightClickItemEvent(PlayerInteractEvent.RightClickItem event) {
+        if (event.getEntity() instanceof Player player) {
+            event.setCancellationResult(
                     onUseItemEvent(player)
             );
         }

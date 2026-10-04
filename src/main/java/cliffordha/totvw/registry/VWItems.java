@@ -247,15 +247,15 @@ public class VWItems {
                     .fireResistant()
             ));
     public static final DeferredItem<Item> VERIXIUM_FLUID_BUCKET = registerItem("verixium_fluid_bucket",
-            properties -> new BucketItem(VWFluids.VERIXIUM_FLUID, properties
+            properties -> new BucketItem(VWFluids.VERIXIUM_FLUID.get(), properties
                     .stacksTo(1)
                     .craftRemainder(Items.BUCKET)
                     .fireResistant()
             ));
     public static final DeferredItem<Item> VERDANT_SPRUCE_BOAT = registerItem("verdant_spruce_boat",
-            properties -> new BoatItem(VWEntities.VERDANT_SPRUCE_BOAT, properties.stacksTo(1)));
+            properties -> new BoatItem(VWEntities.VERDANT_SPRUCE_BOAT.get(), properties.stacksTo(1)));
     public static final DeferredItem<Item> VERDANT_SPRUCE_CHEST_BOAT = registerItem("verdant_spruce_chest_boat",
-            properties -> new BoatItem(VWEntities.VERDANT_SPRUCE_CHEST_BOAT, properties.stacksTo(1)
+            properties -> new BoatItem(VWEntities.VERDANT_SPRUCE_CHEST_BOAT.get(), properties.stacksTo(1)
             ));
     public static final DeferredItem<Item> VERDANT_SPRUCE_SIGN = registerItem("verdant_spruce_sign",
             properties -> new StandingAndWallBlockItem(VWBlocks.VERDANT_SPRUCE_SIGN.get(), VWBlocks.VERDANT_SPRUCE_WALL_SIGN.get(), Direction.DOWN, properties

@@ -1,0 +1,21 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "tales_of_the_verdant_wind:block/verdant_moss_block"
+      },
+      {
+        "model": "tales_of_the_verdant_wind:block/verdant_moss_block",
+        "y": 90
+      },
+      {
+        "model": "tales_of_the_verdant_wind:block/verdant_moss_block",
+        "y": 180
+      },
+      {
+        "model": "tales_of_the_verdant_wind:block/verdant_moss_block",
+        "y": 270
+      }
+    ]
+  }
+}

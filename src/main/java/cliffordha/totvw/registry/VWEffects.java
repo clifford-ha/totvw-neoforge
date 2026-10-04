@@ -12,12 +12,18 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 import static cliffordha.totvw.TOTVW.sendClassRegisterLog;
 
 public class VWEffects {
+    public static final DeferredRegister<MobEffect> MOB_EFFECTS =
+            DeferredRegister.create(BuiltInRegistries.MOB_EFFECT, TOTVW.MOD_ID);
+
     public static final Holder<MobEffect> AMPLIFIED_MIGHT = registerMobEffect("amplified_might",
             new AmplifiedMightEffect());
 
@@ -37,8 +43,7 @@ public class VWEffects {
             new HavocEffect());
 
     private static Holder<MobEffect> registerMobEffect(String name, MobEffect effect) {
-        return Registry.registerForHolder(BuiltInRegistries.MOB_EFFECT,
-                TOTVW.registerID(name), effect);
+        return MOB_EFFECTS.register(name, () -> effect);
     }
 
     public static void addModifier(AttributeMap map, Identifier id, Holder<Attribute> name, double value, AttributeModifier.Operation operation) {
@@ -63,7 +68,8 @@ public class VWEffects {
         }
     }
 
-    public static void register() {
+    public static void register(IEventBus eventBus) {
+        MOB_EFFECTS.register(eventBus);
         sendClassRegisterLog("Effects");
     }
 }

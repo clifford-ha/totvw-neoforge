@@ -16,6 +16,10 @@ public class TOTVWDataGenerator {
 		PackOutput output = generator.getPackOutput();
 		var lookupProvider = event.getReloadableLookupProvider();
 
+		generator.addProvider(true, new VWModelProvider(output));
+		generator.addProvider(true, new VWSoundsProvider(output));
+		generator.addProvider(true, new VWEngLangProvider(output));
+
 		event.createWorldRegistryObjects(VWDatapackProvider.WORLD_BUILDER);
 		event.createReloadableRegistryObjects(VWDatapackProvider.RELOADABLE_BUILDER);
 
@@ -27,9 +31,15 @@ public class TOTVWDataGenerator {
 		generator.addProvider(true, new VWDamageTypeTags(output, lookupProvider));
 		generator.addProvider(true, new VWEntityTypeTags(output, lookupProvider));
 		generator.addProvider(true, new VWVillagerTradeTags(output, lookupProvider));
+	}
 
-		generator.addProvider(true, new VWModelProvider(output));
-		generator.addProvider(true, new VWSoundsProvider(output));
-		generator.addProvider(true, new VWEngLangProvider(output));
+	@SubscribeEvent
+	public static void gatherServerData(GatherDataEvent.Server event) {
+		DataGenerator generator = event.getGenerator();
+		PackOutput output = generator.getPackOutput();
+		var lookupProvider = event.getReloadableLookupProvider();
+
+
+
 	}
 }

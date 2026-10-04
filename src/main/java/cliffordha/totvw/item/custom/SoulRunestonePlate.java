@@ -29,12 +29,13 @@ import org.jspecify.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import static cliffordha.totvw.util.VWUtil.*;
 
 public class SoulRunestonePlate extends Item {
-    private static final AttachmentType<List<CompoundTag>> WOLF_SOULS = PlayerAttachment.WOLF_SOULS.get();
+    private static final Supplier<AttachmentType<List<CompoundTag>>> WOLF_SOULS = PlayerAttachment.WOLF_SOULS;
 
     public SoulRunestonePlate(Properties properties) {
         super(properties);
@@ -168,7 +169,7 @@ public class SoulRunestonePlate extends Item {
         for (int i = 0; i < 16; i++) {
             double xz = random.nextIntBetweenInclusive(0, 2);
             double y = random.nextIntBetweenInclusive(0, 3);
-            level.sendParticles(VWParticles.VERIXIUM_POWDER_RAIN_PARTICLE, player.getX(), player.getY(), player.getZ(), 3, xz, y, xz, 0);
+            level.sendParticles(VWParticles.VERIXIUM_POWDER_RAIN_PARTICLE.get(), player.getX(), player.getY(), player.getZ(), 3, xz, y, xz, 0);
         }
         level.playSound(null, player.blockPosition(), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS);
 

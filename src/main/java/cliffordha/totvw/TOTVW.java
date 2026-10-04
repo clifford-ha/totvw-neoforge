@@ -5,7 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class TOTVW {
-    public static final String MOD_ID = "tales-of-the-verdant-wind";
+    public static final String MOD_ID = "tales_of_the_verdant_wind";
     public static final String MOD_NAME_LONG = "Tales of the Verdant Wind";
     public static final String MOD_NAME = "TOTVW";
     private static final Logger LOGGER = LoggerFactory.getLogger(MOD_NAME);

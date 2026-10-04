@@ -14,6 +14,7 @@ import cliffordha.totvw.tag.VWBiomeTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
@@ -44,6 +45,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 import static cliffordha.totvw.item.scatteredpages.ScatteredPageTextColor.DARK_GRAY;
 import static cliffordha.totvw.item.scatteredpages.ScatteredPageTextStyle.*;
@@ -80,6 +82,11 @@ public class VWUtil {
     public static void sendParticles(ParticleOptions type, ServerLevel level, BlockPos pos, int count, double deviation) {
         for (int i = 0; i < count; i++) {
             level.sendParticles(type, pos.getX() + deviation, pos.getY() + deviation, pos.getZ() + deviation, 1, deviation, deviation, deviation, 0);
+        }
+    }
+    public static void sendParticles(Supplier<ParticleOptions> type, ServerLevel level, BlockPos pos, int count, double deviation) {
+        for (int i = 0; i < count; i++) {
+            level.sendParticles(type.get(), pos.getX() + deviation, pos.getY() + deviation, pos.getZ() + deviation, 1, deviation, deviation, deviation, 0);
         }
     }
 

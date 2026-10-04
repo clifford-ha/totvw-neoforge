@@ -46,6 +46,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 import static cliffordha.totvw.entity.skill.SkillManager.*;
 import static cliffordha.totvw.util.VWUtil.*;
@@ -53,8 +54,12 @@ import static cliffordha.totvw.util.VWUtil.TimeUtil.*;
 
 @EventBusSubscriber
 public class VWWolfBehaviors {
-    public static final SoundEvent[] DISTANT_HOWL_SOUNDS = {VWSounds.WOLF_HOWL_A.get(), VWSounds.WOLF_HOWL_B1.get(), VWSounds.WOLF_HOWL_B2.get(), VWSounds.WOLF_HOWL_B3.get()};
-
+    public static final Supplier<SoundEvent>[] DISTANT_HOWL_SOUNDS = new Supplier[]{
+            VWSounds.WOLF_HOWL_A,
+            VWSounds.WOLF_HOWL_B1,
+            VWSounds.WOLF_HOWL_B2,
+            VWSounds.WOLF_HOWL_B3
+    };
     private static final List<WolfBehaviorRule> ON_DAMAGE_RULES = new ArrayList<>();
     private static final List<WolfBehaviorRule> TICK_RULES = new ArrayList<>();
 
@@ -163,7 +168,7 @@ public class VWWolfBehaviors {
                     if (wolf.level().getMaxLocalRawBrightness(wolf.blockPosition()) > 11) return;
 
                     if (level.getRandom().nextFloat() < 0.05f) {
-                        SoundEvent sound = DISTANT_HOWL_SOUNDS[level.getRandom().nextInt(DISTANT_HOWL_SOUNDS.length)];
+                        SoundEvent sound = DISTANT_HOWL_SOUNDS[level.getRandom().nextInt(DISTANT_HOWL_SOUNDS.length)].get();
                         level.playSound(null, wolf.blockPosition(), sound, SoundSource.AMBIENT, 0.2f + level.getRandom().nextFloat() * 0.5f, 0.8f + level.getRandom().nextFloat() * 0.4f);
                     }
                 }
@@ -221,7 +226,7 @@ public class VWWolfBehaviors {
         player.heal(triggerHeal(wolf, player));
         VWUtil.sendToChat(wolf, VWColors.VERDANT_WIND, true, wolfName(wolf) + " has granted you the §nVerdant Wind's Blessing§r");
 
-        sendParticles(VWParticles.BENEDICTION_TRIGGER_PARTICLE, level, player.blockPosition(), 6, 0.5);
+        sendParticles(VWParticles.BENEDICTION_TRIGGER_PARTICLE.get(), level, player.blockPosition(), 6, 0.5);
         verdantBlessingAfterEffects(level, wolf);
     }
     public static void runEnchantmentsOnDamage(Wolf wolf, ServerLevel level, @Nullable LivingEntity linkVictim, boolean enchantmentExclusive, DamageSource override) {
@@ -584,12 +589,15 @@ public class VWWolfBehaviors {
     public static final ThreadLocal<LivingEntity> CURRENT_VICTIM = new ThreadLocal<>();
 
     @SubscribeEvent
-    public static void wolfOnDamageEvent(LivingDamageEvent.Post afterDamageEvent, LivingDeathEvent damageEvent) {
+    public static void targetOnDMGEvent(LivingDamageEvent.Post afterDamageEvent) {
         getWolfVictimThread(afterDamageEvent.getEntity(),  afterDamageEvent.getSource());
-        getWolfVictimThread(damageEvent.getEntity(),  damageEvent.getSource());
     }
     @SubscribeEvent
-    private static void wolfOnTickEvent(ServerTickEvent event) {
+    public static void targetOnDeathEvent(LivingDeathEvent deathEvent) {
+        getWolfVictimThread(deathEvent.getEntity(),  deathEvent.getSource());
+    }
+    @SubscribeEvent
+    private static void wolfOnTickEvent(ServerTickEvent.Post event) {
         if (TICK_RULES.isEmpty()) return;
 
         for (var serverLevel : event.getServer().getAllLevels()) {

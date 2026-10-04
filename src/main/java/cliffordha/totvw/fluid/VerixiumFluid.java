@@ -55,10 +55,10 @@ public abstract class VerixiumFluid extends FlowingFluid {
     private static final Direction[] ALL_DIRECTIONS = { Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST, Direction.DOWN, Direction.UP};
 
     @Override
-    public  Fluid getFlowing() { return VWFluids.FLOWING_VERIXIUM_FLUID; }
+    public  Fluid getFlowing() { return VWFluids.FLOWING_VERIXIUM_FLUID.get(); }
 
     @Override
-    public  Fluid getSource() { return VWFluids.VERIXIUM_FLUID; }
+    public  Fluid getSource() { return VWFluids.VERIXIUM_FLUID.get(); }
 
     @Override
     public Item getBucket() { return VWItems.VERIXIUM_FLUID_BUCKET.get(); }
@@ -80,7 +80,7 @@ public abstract class VerixiumFluid extends FlowingFluid {
             level.addParticle(ParticleTypes.UNDERWATER, (double)pos.getX() + random.nextDouble(), (double)pos.getY() + random.nextDouble(), (double)pos.getZ() + random.nextDouble(), 0.0F, 0.0F, 0.0F);
         }
         if (random.nextDouble() <= 0.1) {
-            level.addParticle(VWParticles.VERDANT_BIOMES_ENVIRONMENT_AMBIANCE, glowX, glowY, glowZ, 3D, 1D, 3D);
+            level.addParticle(VWParticles.VERDANT_BIOMES_ENVIRONMENT_AMBIANCE.get(), glowX, glowY, glowZ, 3D, 1D, 3D);
         }
     }
 
@@ -149,7 +149,7 @@ public abstract class VerixiumFluid extends FlowingFluid {
 
     @Nullable
     @Override
-    public ParticleOptions getDripParticle() { return VWParticles.VERDANT_BIOMES_ENVIRONMENT_AMBIANCE; }
+    public ParticleOptions getDripParticle() { return VWParticles.VERDANT_BIOMES_ENVIRONMENT_AMBIANCE.get(); }
 
     @Override
     protected boolean canConvertToSource(ServerLevel world) {
