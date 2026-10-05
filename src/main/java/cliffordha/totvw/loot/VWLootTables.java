@@ -6,7 +6,9 @@ import cliffordha.totvw.registry.VWEnchantments;
 import cliffordha.totvw.registry.VWItems;
 
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.loot.LootTableSubProvider;
 import net.minecraft.resources.Identifier;
@@ -25,6 +27,9 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCon
 import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProvider;
 import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders;
 import net.neoforged.neoforge.registries.DeferredItem;
+import net.neoforged.neoforge.server.ServerLifecycleHooks;
+
+import java.util.concurrent.CompletableFuture;
 
 public class VWLootTables implements LootTableSubProvider {
     private static final Holder<ContextIntProvider> ONE_ROLL = ContextIntProviders.exactly(1);
@@ -65,7 +70,7 @@ public class VWLootTables implements LootTableSubProvider {
                 .add(LootItem.lootTableItem(block)
                 .apply(SetItemCountFunction.setCount(ContextIntProviders.exactly(count))));
     }
-    private static LootPool.Builder addEnchantedBookChance(HolderLookup.Provider provider, ResourceKey<Enchantment> ench, int lvl, float chance) {
+    private static LootPool.Builder addEnchantedBookChance(HolderGetter.Provider provider, ResourceKey<Enchantment> ench, int lvl, float chance) {
         return LootPool.lootPool()
                 .setRolls(ONE_ROLL)
                 .when(LootItemRandomChanceCondition.randomChance(chance))
@@ -73,7 +78,7 @@ public class VWLootTables implements LootTableSubProvider {
                         .withEnchantment(provider.getOrThrow(ench), ContextIntProviders.exactly(lvl)))
                 .apply(SetItemCountFunction.setCount(ContextIntProviders.exactly(1))));
     }
-    private static LootPool.Builder addEnchantedBookChance(HolderLookup.Provider provider, ResourceKey<Enchantment> ench, int lvlA, int lvlB, float chance) {
+    private static LootPool.Builder addEnchantedBookChance(HolderGetter.Provider provider, ResourceKey<Enchantment> ench, int lvlA, int lvlB, float chance) {
         return LootPool.lootPool()
                 .setRolls(ONE_ROLL)
                 .when(LootItemRandomChanceCondition.randomChance(chance))
@@ -100,7 +105,7 @@ public class VWLootTables implements LootTableSubProvider {
 
     @Override
     public void run() {
-        HolderLookup.Provider provider = (HolderLookup.Provider) context.holderLookup(Registries.LOOT_TABLE).orElseThrow();
+        HolderGetter.Provider provider = (HolderGetter.Provider) context.lookup(Registries.ENCHANTMENT);
 
         LootPool.Builder benedictionEnchantment = addEnchantedBookChance(provider, VWEnchantments.BENEDICTION_OF_THE_VERDANT_MOUNTAINS, 1, 0.05f);
         LootPool.Builder page1005 = addItemChance(VWItems.Pages.SP_ID_1005,1, 0.07f);

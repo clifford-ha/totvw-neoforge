@@ -1,6 +1,6 @@
 package cliffordha.totvw.entity.wolf;
 
-import cliffordha.totvw.config.VWConfig;
+import cliffordha.totvw.Config;
 import cliffordha.totvw.datagen.VWDamageTypes;
 import cliffordha.totvw.effect.HavocEffect;
 import cliffordha.totvw.entity.player.EntityEnchants;
@@ -180,11 +180,11 @@ public class VWWolfBehaviors {
         TICK_RULES.add(WolfBehaviorRule.forAny(WolfCondition.tick(), (wolf, level) -> {
             runEffectsOnTick(wolf, level);
 
-            if (VWConfig.get().LOG_ENCHANTMENT_SHOW_WOLF_CD) setWolfConfiguration(wolf, 0);
-            if (VWConfig.get().SERVER_OTHER_COOLDOWNS) {
+            if (Config.LOG_ENCHANTMENT_SHOW_WOLF_CD.get()) setWolfConfiguration(wolf, 0);
+            if (Config.SERVER_OTHER_COOLDOWNS.get()) {
                 depleteCooldown(wolf, WolfAttachment.TIMER_AIR_SUPPLY);
             }
-            if (VWConfig.get().SERVER_SKILL_COOLDOWNS) {
+            if (Config.SERVER_SKILL_COOLDOWNS.get()) {
                 depleteCooldown(wolf, WolfAttachment.CD_BLESSING_OF_THE_VERDANT_WIND);
                 depleteCooldown(wolf, WolfAttachment.CD_BLOODLUST_SKILL_PARALYZE);
                 depleteCooldown(wolf, WolfAttachment.CD_MIGHT_SKILL_RUPTURE);

@@ -2,15 +2,13 @@ package cliffordha.totvw;
 
 import cliffordha.totvw.client.VWModelLayerProvider;
 import cliffordha.totvw.client.VWTooltips;
-import cliffordha.totvw.config.VWConfig;
-import cliffordha.totvw.config.VWConfigScreen;
 import cliffordha.totvw.fluid.VWFluidTypes;
 import cliffordha.totvw.keymapping.VWKeymap;
+import cliffordha.totvw.networking.VWNetworking;
 import cliffordha.totvw.particle.BenedictionTriggerParticle;
 import cliffordha.totvw.particle.VerdantBiomesEnvironmentAmbiance;
 import cliffordha.totvw.particle.VerixiumPowderRainParticle;
 import cliffordha.totvw.registry.*;
-import cliffordha.totvw.util.VWEffectOverlays;
 import net.minecraft.client.color.block.BlockTintSources;
 import net.minecraft.client.model.object.boat.BoatModel;
 import net.minecraft.client.renderer.block.FluidModel;
@@ -20,6 +18,7 @@ import net.minecraft.client.renderer.blockentity.StandingSignRenderer;
 import net.minecraft.client.renderer.entity.BoatRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.resources.model.sprite.Material;
+import net.minecraft.resources.Identifier;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
@@ -36,11 +35,9 @@ import net.neoforged.neoforge.common.NeoForge;
 @EventBusSubscriber(modid = TOTVW.MOD_ID, value = Dist.CLIENT)
 public class TOTVWClient {
     public TOTVWClient(ModContainer container) {
-        //container.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
-        container.registerExtensionPoint(IConfigScreenFactory.class, (modContainer, parent) -> VWConfigScreen.create(parent));
-
-        NeoForge.EVENT_BUS.addListener(VWTooltips::register);
-        //NeoForge.EVENT_BUS.addListener(VWEffectOverlays::register);
+        container.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
+        //NeoForge.EVENT_BUS.addListener(VWTooltips::register);
+        //NeoForge.EVENT_BUS.addListener(VWNetworking::onPlayerJoinEvents);
 
         VWKeymap.register();
     }
@@ -95,14 +92,14 @@ public class TOTVWClient {
 
     @SubscribeEvent
     public static void registerFluidModelsEvent(RegisterFluidModelsEvent event) {
-        FluidModel.Unbaked zirconWaterModel = new FluidModel.Unbaked(
-                new Material(TOTVW.registerID("block/water_still")),
-                new Material(TOTVW.registerID("block/water_flow")),
-                new Material(TOTVW.registerID("block/water_overlay")),
+        FluidModel.Unbaked verixiumFluid = new FluidModel.Unbaked(
+                new Material(Identifier.withDefaultNamespace("block/water_still")),
+                new Material(Identifier.withDefaultNamespace("block/water_flow")),
+                new Material(Identifier.withDefaultNamespace("block/water_overlay")),
                 BlockTintSources.constant(VWColors.setColor(0x13e1a8)));
 
-        event.register(zirconWaterModel, VWFluids.VERIXIUM_FLUID.get());
-        event.register(zirconWaterModel, VWFluids.FLOWING_VERIXIUM_FLUID.get());
+        event.register(verixiumFluid, VWFluids.VERIXIUM_FLUID.get());
+        event.register(verixiumFluid, VWFluids.FLOWING_VERIXIUM_FLUID.get());
     }
 
     @SubscribeEvent

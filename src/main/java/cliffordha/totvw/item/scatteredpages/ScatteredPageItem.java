@@ -1,7 +1,7 @@
 package cliffordha.totvw.item.scatteredpages;
 
+import cliffordha.totvw.Config;
 import cliffordha.totvw.client.screen.ScatteredPageScreen;
-import cliffordha.totvw.config.VWConfig;
 import cliffordha.totvw.item.scatteredpages.contents.FirstBookSet;
 import cliffordha.totvw.item.scatteredpages.contents.MiscBookSet;
 import cliffordha.totvw.item.scatteredpages.handbooks.VWEffectsHandbook;
@@ -66,7 +66,7 @@ public class ScatteredPageItem extends Item {
     public String[] getPages(Player player, int contents) {
         FirstBookSet.resolvePlayer(player);
         MiscBookSet.resolvePlayer(player);
-        if (player.isCreative() && !VWConfig.get().CLIENT_ALLOW_LORE_SPOILERS) {
+        if (player.isCreative() && !Config.CLIENT_ALLOW_LORE_SPOILERS.get()) {
             return invalidInSurvival;
         }
 

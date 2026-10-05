@@ -165,6 +165,7 @@ public class RunestoneEffects {
 
     public static void reapplyLinkStatus(LivingEntity victim, DamageSource damageSource) {
         if (!(damageSource.getEntity() instanceof Wolf wolf)) return;
+        if (!Runestone.hasTether(wolf)) return;
         if (!VWEnchantments.getBenediction(wolf)) return;
 
         if (!(wolf.level() instanceof ServerLevel level)) return;

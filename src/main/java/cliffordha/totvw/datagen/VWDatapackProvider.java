@@ -12,6 +12,7 @@ import cliffordha.totvw.worldgen.dimension.VWDimensions;
 
 import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.data.advancements.AdvancementProvider;
 import net.minecraft.data.loot.LootTableProvider;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
@@ -33,13 +34,14 @@ public class VWDatapackProvider {
         .add(Registries.PLACED_FEATURE, VWPlacedFeatures::configure)
 
         .add(Registries.DIMENSION_TYPE, VWDimensions::bootstrapType)
-        .add(Registries.LEVEL_STEM, VWDimensions::bootstrapStem);
+        .add(Registries.LEVEL_STEM, VWDimensions::bootstrapStem)
+            ;
 
     public static final RegistrySetBuilder RELOADABLE_BUILDER = new RegistrySetBuilder()
-            //.add(Registries.LOOT_TABLE, new LootTableProvider(Set.of(), List.of(
-                    //new LootTableProvider.SubProviderEntry(VWBlockLootTableProvider::new, LootContextParamSets.BLOCK),
-                    //new LootTableProvider.SubProviderEntry(VWLootTables::new, LootContextParamSets.ALL_PARAMS)
-            //)))
-            .add(Registries.ADVANCEMENT, VWAdvancements::new)
-            .add(VWRecipeProvider.create());
+            .add(Registries.ADVANCEMENT, new AdvancementProvider(List.of(VWAdvancements::create)))
+            .add(VWRecipeProvider.create())
+            .add(Registries.LOOT_TABLE, new LootTableProvider(Set.of(), List.of(
+                    new LootTableProvider.SubProviderEntry(VWBlockLootTableProvider::new, LootContextParamSets.BLOCK),
+                    new LootTableProvider.SubProviderEntry(VWLootTables::new, LootContextParamSets.ALL_PARAMS)
+            )));
 }

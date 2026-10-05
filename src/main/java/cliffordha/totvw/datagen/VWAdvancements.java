@@ -16,31 +16,36 @@ import net.minecraft.advancements.predicates.entity.EntityPredicate;
 import net.minecraft.advancements.triggers.InventoryChangeTrigger;
 import net.minecraft.advancements.triggers.PlayerInteractTrigger;
 import net.minecraft.advancements.triggers.PlayerTrigger;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.data.advancements.AdvancementProvider;
 import net.minecraft.data.advancements.AdvancementSubProvider;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityTypes;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
 
-import java.util.List;
 import java.util.Optional;
 
 import static net.minecraft.advancements.triggers.InventoryChangeTrigger.TriggerInstance.hasItems;
 
-public class VWAdvancements extends AdvancementProvider {
-    public VWAdvancements(BootstrapContext<Advancement> context) {
-        super(List.of(VWAdvancementsProvider::new));
+public class VWAdvancements extends AdvancementSubProvider {
+    private final HolderGetter<Item> items;
+    private final HolderGetter<Block> blocks;
+
+    public VWAdvancements(BootstrapContext<Advancement> output) {
+        super(output);
+        this.items = output.lookup(Registries.ITEM);
+        this.blocks = output.lookup(Registries.BLOCK);
     }
 
-    public static class VWAdvancementsProvider extends AdvancementSubProvider {
-        public VWAdvancementsProvider(BootstrapContext<Advancement> output) {
-            super(output);
-        }
+    public static AdvancementSubProvider create(BootstrapContext<Advancement> context) {
+        return new VWAdvancements(context);
+    }
 
-        @Override
-        public void generate() {
+    @Override
+    public void generate() {
             var items = output.lookup(Registries.ITEM);
             var entityTypes = output.lookup(Registries.ENTITY_TYPE);
 
@@ -222,7 +227,6 @@ public class VWAdvancements extends AdvancementProvider {
                                     ItemPredicate.Builder.item().of(items, VWItems.HAVOC_RUNESTONE_PLATE),
                                     Optional.of(EntityPredicate.wrap(EntityPredicate.Builder.entity().of(entityTypes, EntityTypes.WOLF)))))
                     .save(output, TOTVW.registerID(deathlyDefianceID));
-        }
     }
 
     private static Component title(String text) {

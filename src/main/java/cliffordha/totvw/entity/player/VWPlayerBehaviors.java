@@ -1,6 +1,6 @@
 package cliffordha.totvw.entity.player;
 
-import cliffordha.totvw.config.VWConfig;
+import cliffordha.totvw.Config;
 import cliffordha.totvw.entity.skill.PlayerSkillDefinition;
 import cliffordha.totvw.entity.skill.SkillManager;
 import cliffordha.totvw.entity.skills.RunestoneEffects;
@@ -79,7 +79,7 @@ public class VWPlayerBehaviors {
         TICK_RULES.add(PlayerBehaviorRule.register(
                 PlayerCondition.tick(0, 30),
                 (player, _) -> {
-                    if (VWConfig.get().SERVER_OTHER_COOLDOWNS) {
+                    if (Config.SERVER_OTHER_COOLDOWNS.get()) {
                         depleteCooldown(player, PlayerAttachment.VILLAGER_ATROCITY_COUNT);
                         depleteCooldown(player, PlayerAttachment.WOLF_ATROCITY_COUNT);
                     }
@@ -111,15 +111,15 @@ public class VWPlayerBehaviors {
                 PlayerCondition.tick(),
                 (player, _) -> {
 
-                    if (VWConfig.get().LOG_ENCHANTMENT_SHOW_PLAYER_CD) setPlayerConfiguration(player, 0);
-                    if (VWConfig.get().SERVER_SKILL_COOLDOWNS) {
+                    if (Config.LOG_ENCHANTMENT_SHOW_PLAYER_CD.get()) setPlayerConfiguration(player, 0);
+                    if (Config.SERVER_SKILL_COOLDOWNS.get()) {
                         depleteCooldown(player, PlayerAttachment.CD_BLESSING_OF_THE_VERDANT_WIND);
                         depleteCooldown(player, PlayerAttachment.CD_HAVOC);
                     } else {
                         setPlayerConfiguration(player, 1);
                     }
 
-                    if (!VWConfig.get().SERVER_OTHER_COOLDOWNS) setPlayerOtherConfig(player);
+                    if (!Config.SERVER_OTHER_COOLDOWNS.get()) setPlayerOtherConfig(player);
 
                     SkillManager.notifyReset(player, VERDANT_BLESSING);
                     processCDNotify(player,

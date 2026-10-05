@@ -19,13 +19,24 @@ public class VWFluidTypes {
             DeferredRegister.create(NeoForgeRegistries.Keys.FLUID_TYPES, TOTVW.MOD_ID);
 
     public static final Supplier<FluidType> VERIXIUM_FLUID_TYPE = FLUID_TYPES.register("verixium_fluid_type",
-            () -> new FluidType(FluidType.Properties.create().isWaterLike(false)));
+            () -> new FluidType(FluidType.Properties.create()
+                    .isWaterLike(true)
+                    .canDrown(true)
+                    .canExtinguish(true)
+                    .canSwim(true)
+                    .density(100)
+                    .viscosity(100)
+                    .canConvertToSource(true)
+                    .canPushEntity(true)
+                    .lightLevel(9)
+                    .supportsBoating(true)
+            ));
 
     public static IClientFluidTypeExtensions VERIXIUM_FLUID_EXTENSION = new IClientFluidTypeExtensions() {
         @Override
         public void modifyFogColor(Camera camera, float partialTick, ClientLevel level, int renderDistance, float darkenWorldAmount, Vector4f fluidFogColor) {
             fluidFogColor.set(ARGB.vector4fFromARGB32(VWColors.VERDANT_WIND));
-            IClientFluidTypeExtensions.super.modifyFogColor(camera, partialTick, level, renderDistance, darkenWorldAmount, fluidFogColor);
+            IClientFluidTypeExtensions.super.modifyFogColor(camera, partialTick, level, 32, darkenWorldAmount, fluidFogColor);
         }
     };
 

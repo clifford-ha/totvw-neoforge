@@ -1,6 +1,6 @@
 package cliffordha.totvw.entity.skills;
 
-import cliffordha.totvw.config.VWConfig;
+import cliffordha.totvw.Config;
 import cliffordha.totvw.datagen.VWDamageTypes;
 import cliffordha.totvw.effect.HavocEffect;
 import cliffordha.totvw.entity.player.VWPlayerBehaviors;
@@ -44,7 +44,7 @@ public class VerdantWindBlessing {
     public static boolean triggerBenediction(LivingEntity entity, DamageSource source, float damage) {
         if (damage < 4) return true;
         if (!(entity.level() instanceof ServerLevel level)) return true;
-        double SCAN_LIMIT = VWConfig.get().SERVER_WOLF_PLAYER_SCAN_DISTANCE * 16;
+        double SCAN_LIMIT = Config.SERVER_WOLF_PLAYER_SCAN_DISTANCE.get() * 16;
         float HEALTH_THRESHOLD;
         boolean IS_LOW_HEALTH;
         boolean IS_HIGH_DMG;
@@ -121,7 +121,7 @@ public class VerdantWindBlessing {
     }
     public static void triggerBenedictionFromTick(LivingEntity entity) {
         if (!(entity.level() instanceof ServerLevel level)) return;
-        double SCAN_LIMIT = VWConfig.get().SERVER_WOLF_PLAYER_SCAN_DISTANCE * 16;
+        double SCAN_LIMIT = Config.SERVER_WOLF_PLAYER_SCAN_DISTANCE.get() * 16;
 
         if (entity instanceof Player player) {
             List<Wolf> wolves = getWolvesInRange(level, player, SCAN_LIMIT);

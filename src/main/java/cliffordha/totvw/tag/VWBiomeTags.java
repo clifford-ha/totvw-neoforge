@@ -14,8 +14,6 @@ import org.jspecify.annotations.NonNull;
 
 import java.util.concurrent.CompletableFuture;
 
-import static cliffordha.totvw.tag.VWTagHelpers.biome;
-
 public class VWBiomeTags extends BiomeTagsProvider {
     public VWBiomeTags(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider) {
         super(output, lookupProvider, TOTVW.MOD_ID);
@@ -28,65 +26,65 @@ public class VWBiomeTags extends BiomeTagsProvider {
                 .addTag(VWBiomeTags.IS_VERDANT_BIOMES.location());*/
 
         getOrCreateRawBuilder(IS_VERDANT_BIOMES)
-                .addElement(VWBiomes.VERDANT_MOUNTAINS.identifier())
-                .addElement(VWBiomes.VERDANT_FOREST.identifier());
+                .addOptionalElement(VWBiomes.VERDANT_MOUNTAINS.identifier())
+                .addOptionalElement(VWBiomes.VERDANT_FOREST.identifier());
 
         getOrCreateRawBuilder(FOREST_WHERE_WOLVES_HOWL)
-                .addTag(VWBiomeTags.IS_VERDANT_BIOMES.location())
-                .add(biome(Biomes.FOREST))
-                .add(biome(Biomes.FLOWER_FOREST))
-                .add(biome(Biomes.DARK_FOREST));
+                .addOptionalTag(VWBiomeTags.IS_VERDANT_BIOMES.location())
+                .addOptionalElement(Biomes.FOREST.identifier())
+                .addOptionalElement(Biomes.FLOWER_FOREST.identifier())
+                .addOptionalElement(Biomes.DARK_FOREST.identifier());
 
         getOrCreateRawBuilder(IS_VERDANT_MOUNTAINS)
-                .add(biome(VWBiomes.VERDANT_MOUNTAINS));
+                .addOptionalElement(VWBiomes.VERDANT_MOUNTAINS.identifier());
 
         getOrCreateRawBuilder(IS_VERDANT_FOREST)
-                .add(biome(VWBiomes.VERDANT_FOREST));
+                .addOptionalElement(VWBiomes.VERDANT_FOREST.identifier());
 
         getOrCreateRawBuilder(HAS_VERDANT_FOREST_VILLAGE)
-                .addTag(IS_VERDANT_FOREST.location());
+                .addOptionalTag(IS_VERDANT_FOREST.location());
 
         getOrCreateRawBuilder(HAS_VERDANT_MOUNTAINS_VILLAGE)
-                .add(biome(VWBiomes.VERDANT_MOUNTAINS));
+                .addOptionalElement(VWBiomes.VERDANT_MOUNTAINS.identifier());
 
         getOrCreateRawBuilder(BiomeTags.IS_MOUNTAIN)
-                .add(biome(VWBiomes.VERDANT_MOUNTAINS));
+                .addOptionalElement(VWBiomes.VERDANT_MOUNTAINS.identifier());
 
         getOrCreateRawBuilder(BiomeTags.HAS_ANCIENT_CITY)
-                .add(biome(VWBiomes.VERDANT_MOUNTAINS));
+                .addOptionalElement(VWBiomes.VERDANT_MOUNTAINS.identifier());
 
         getOrCreateRawBuilder(BiomeTags.HAS_BURIED_TREASURE)
-                .addTag(VWBiomeTags.IS_VERDANT_BIOMES.location());
+                .addOptionalTag(VWBiomeTags.IS_VERDANT_BIOMES.location());
 
         getOrCreateRawBuilder(BiomeTags.HAS_JUNGLE_TEMPLE)
-                .add(biome(VWBiomes.VERDANT_FOREST));
+                .addOptionalElement(VWBiomes.VERDANT_FOREST.identifier());
 
         getOrCreateRawBuilder(BiomeTags.HAS_MINESHAFT)
-                .addTag(VWBiomeTags.IS_VERDANT_BIOMES.location());
+                .addOptionalTag(VWBiomeTags.IS_VERDANT_BIOMES.location());
 
         getOrCreateRawBuilder(BiomeTags.HAS_PILLAGER_OUTPOST)
-                .addTag(VWBiomeTags.IS_VERDANT_BIOMES.location());
+                .addOptionalTag(VWBiomeTags.IS_VERDANT_BIOMES.location());
 
         getOrCreateRawBuilder(BiomeTags.HAS_RUINED_PORTAL_MOUNTAIN)
-                .add(biome(VWBiomes.VERDANT_MOUNTAINS));
+                .addOptionalElement(VWBiomes.VERDANT_MOUNTAINS.identifier());
 
         getOrCreateRawBuilder(BiomeTags.HAS_RUINED_PORTAL_JUNGLE)
-                .add(biome(VWBiomes.VERDANT_FOREST));
+                .addOptionalElement(VWBiomes.VERDANT_FOREST.identifier());
 
         getOrCreateRawBuilder(BiomeTags.HAS_STRONGHOLD)
-                .addTag(VWBiomeTags.IS_VERDANT_BIOMES.location());
+                .addOptionalTag(VWBiomeTags.IS_VERDANT_BIOMES.location());
 
         getOrCreateRawBuilder(BiomeTags.HAS_SWAMP_HUT)
-                .add(biome(VWBiomes.VERDANT_FOREST));
+                .addOptionalElement(VWBiomes.VERDANT_FOREST.identifier());
 
         getOrCreateRawBuilder(BiomeTags.HAS_TRIAL_CHAMBERS)
-                .addTag(VWBiomeTags.IS_VERDANT_BIOMES.location());
+                .addOptionalTag(VWBiomeTags.IS_VERDANT_BIOMES.location());
 
         getOrCreateRawBuilder(BiomeTags.SPAWNS_COLD_VARIANT_FROGS)
-                .addTag(VWBiomeTags.IS_VERDANT_BIOMES.location());
+                .addOptionalTag(VWBiomeTags.IS_VERDANT_BIOMES.location());
 
         getOrCreateRawBuilder(BiomeTags.PRODUCES_CORALS_FROM_BONEMEAL)
-                .addTag(VWBiomeTags.IS_VERDANT_BIOMES.location());
+                .addOptionalTag(VWBiomeTags.IS_VERDANT_BIOMES.location());
 
     }
     public static final TagKey<Biome> IS_VERDANT_BIOMES = create("is_verdant_biomes");

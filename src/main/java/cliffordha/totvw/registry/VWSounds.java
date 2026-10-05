@@ -14,8 +14,8 @@ public class VWSounds {
     public static final DeferredRegister<SoundEvent> SOUND_EVENTS =
             DeferredRegister.create(BuiltInRegistries.SOUND_EVENT, TOTVW.MOD_ID);
 
-    public static final String ALEX_JAUK = "alex_jauk.";
-    public static final String DRAGON_STUDIO = "dragon_studio.";
+    public static final String ALEX_JAUK = "alex_jauk/";
+    public static final String DRAGON_STUDIO = "dragon_studio/";
 
     public static final Supplier<SoundEvent> WOLF_HOWL_A = registerSound(ALEX_JAUK + "wolf_howl_a");
     public static final Supplier<SoundEvent> WOLF_HOWL_B1 = registerSound(DRAGON_STUDIO + "wolf_howl_b1");

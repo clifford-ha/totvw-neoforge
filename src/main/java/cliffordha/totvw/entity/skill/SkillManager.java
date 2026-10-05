@@ -1,6 +1,6 @@
 package cliffordha.totvw.entity.skill;
 
-import cliffordha.totvw.config.VWConfig;
+import cliffordha.totvw.Config;
 import cliffordha.totvw.registry.VWSounds;
 import cliffordha.totvw.registry.attachments.PlayerPrefs;
 import cliffordha.totvw.registry.attachments.entity.PlayerAttachment;
@@ -19,12 +19,12 @@ import static cliffordha.totvw.util.VWUtil.sendToChat;
 
 public class SkillManager {
     public static void startCooldown(Wolf wolf, WolfSkillDefinition skill, int duration) {
-        if (!VWConfig.get().SERVER_SKILL_COOLDOWNS) return;
+        if (!Config.SERVER_SKILL_COOLDOWNS.get()) return;
         wolf.setData(skill.cooldown(), duration);
         wolf.setData(skill.notifier(), 1);
     }
     public static void startCooldown(Player player, PlayerSkillDefinition skill, int duration) {
-        if (!VWConfig.get().SERVER_SKILL_COOLDOWNS) return;
+        if (!Config.SERVER_SKILL_COOLDOWNS.get()) return;
         player.setData(skill.cooldown(), duration);
         player.setData(skill.notifier(), 1);
     }

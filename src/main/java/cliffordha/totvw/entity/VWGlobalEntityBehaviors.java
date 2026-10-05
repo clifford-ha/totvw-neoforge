@@ -42,54 +42,30 @@ import java.util.UUID;
 
 import static cliffordha.totvw.util.VWUtil.*;
 
-@EventBusSubscriber(modid = TOTVW.MOD_ID)
 public class VWGlobalEntityBehaviors {
     public static void register() {
         VWPlayerBehaviors.registerModPlayerBehaviors();
         VWWolfBehaviors.registerModWolfBehaviors();
     }
 
-    @SubscribeEvent
-    private static void developmentTick(ServerTickEvent.Pre tickEvent) {
-        for (var serverLevel : tickEvent.getServer().getAllLevels()) {
-            serverLevel.getEntities(EntityTypes.PLAYER, _ -> true).forEach(player -> {
-                if (!player.entityTags().contains(player.getStringUUID() + "-reminderStamp")) {
-                    sendToChat(player, VWColors.VERDANT_WIND, false, "TOTVW mod version is a development build.");
-                    player.entityTags().add(player.getStringUUID() + "-reminderStamp");
-                }
-                if (!player.getData(PlayerAttachment.IS_DEV_MODE)) {
-                    player.setData(PlayerAttachment.IS_DEV_MODE, true);
-                }
-            });
+    // MIXIN
+    public static boolean revivePlayerIfPossible(LivingEntity entity, DamageSource source) {
+        if (entity instanceof Player player) {
+            return RevivalByProxy.revivePlayerIfPossible(player, source);
         }
+        return false;
     }
 
-    @SubscribeEvent
-    private static void allowDamageEvent(LivingIncomingDamageEvent event) {
-        event.setCanceled(
-                !allowDamageEvent(event.getEntity(), event.getSource(), event.getAmount())
-        );
-    }
-
-    @SubscribeEvent
-    private static void afterDeathEvent(LivingDeathEvent event) {
-        event.setCanceled(
-                RevivalByProxy.revivePlayerIfPossible(event.getEntity(), event.getSource())
-        );
-        afterDeathEvent(event.getEntity(), event.getSource());
-        RunestoneEffects.reapplyLinkStatus(event.getEntity(), event.getSource());
-    }
-
-    @SubscribeEvent
-    private static void onDamageOrDeathEvent(LivingDamageEvent.Post afterDamageEvent) {
-        afterDamageEvent(afterDamageEvent.getEntity(), afterDamageEvent.getSource(), afterDamageEvent.getOriginalDamage());
-    }
-
-    private static void afterDeathEvent(LivingEntity entity, DamageSource damageSource) {
+    // MIXIN
+    public static void afterDeathEvent(LivingEntity entity, DamageSource damageSource) {
         Entity attacker = damageSource.getEntity();
 
         boolean checkWardenStat = entity instanceof Warden warden
                 && isInBiome(warden, VWBiomeTags.IS_VERDANT_BIOMES);
+
+        if (entity instanceof LivingEntity livingEntity) {
+            RunestoneEffects.reapplyLinkStatus(livingEntity, damageSource);
+        }
 
         Player playerWardenSlayer = attacker instanceof Player getPlayer ? getPlayer : (attacker instanceof Wolf wolf && wolf.getOwner() instanceof Player owner ? owner : null);
         if (checkWardenStat && playerWardenSlayer != null && playerWardenSlayer.level() instanceof ServerLevel level) {
@@ -137,7 +113,7 @@ public class VWGlobalEntityBehaviors {
             }
         }
     }
-    private static void afterDamageEvent(LivingEntity victim, DamageSource damageSource, float dmg) {
+    public static void afterDamageEvent(LivingEntity victim, DamageSource damageSource, float dmg) {
         if (victim == null) return;
         Entity attacker = damageSource.getEntity();
 
@@ -161,7 +137,9 @@ public class VWGlobalEntityBehaviors {
             }
         }
     }
-    private static boolean allowDamageEvent(LivingEntity entity, DamageSource source, float damage) {
+
+    // MIXIN
+    public static boolean allowDamageEvent(LivingEntity entity, DamageSource source, float damage) {
         Entity attacker = source.getEntity();
         if (entity.hasEffect(VWEffects.WIND_VEIL)) {
             return windVeilEffect(entity, source, damage);

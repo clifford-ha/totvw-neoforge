@@ -3,8 +3,8 @@
     {
       "element": {
         "element_type": "minecraft:legacy_single_pool_element",
-        "location": "tales-of-the-verdant-wind:village/verdant/town_centers/verdant_meeting_point_1",
-        "processors": "tales-of-the-verdant-wind:deepslate_cracks",
+        "location": "tales_of_the_verdant_wind:village/verdant/town_centers/verdant_meeting_point_1",
+        "processors": "tales_of_the_verdant_wind:deepslate_cracks",
         "projection": "rigid"
       },
       "weight": 49
@@ -12,8 +12,8 @@
     {
       "element": {
         "element_type": "minecraft:legacy_single_pool_element",
-        "location": "tales-of-the-verdant-wind:village/verdant/town_centers/verdant_meeting_point_2",
-        "processors": "tales-of-the-verdant-wind:deepslate_cracks",
+        "location": "tales_of_the_verdant_wind:village/verdant/town_centers/verdant_meeting_point_2",
+        "processors": "tales_of_the_verdant_wind:deepslate_cracks",
         "projection": "rigid"
       },
       "weight": 49
@@ -21,8 +21,8 @@
     {
       "element": {
         "element_type": "minecraft:legacy_single_pool_element",
-        "location": "tales-of-the-verdant-wind:village/verdant/zombie/town_centers/verdant_meeting_point_1",
-        "processors": "tales-of-the-verdant-wind:zombie_verdant",
+        "location": "tales_of_the_verdant_wind:village/verdant/zombie/town_centers/verdant_meeting_point_1",
+        "processors": "tales_of_the_verdant_wind:zombie_verdant",
         "projection": "rigid"
       },
       "weight": 1
@@ -30,8 +30,8 @@
     {
       "element": {
         "element_type": "minecraft:legacy_single_pool_element",
-        "location": "tales-of-the-verdant-wind:village/verdant/zombie/town_centers/verdant_meeting_point_2",
-        "processors": "tales-of-the-verdant-wind:zombie_verdant",
+        "location": "tales_of_the_verdant_wind:village/verdant/zombie/town_centers/verdant_meeting_point_2",
+        "processors": "tales_of_the_verdant_wind:zombie_verdant",
         "projection": "rigid"
       },
       "weight": 1

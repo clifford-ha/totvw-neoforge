@@ -16,7 +16,8 @@ license="${mod_license}"
 #displayURL="https://change.me.to.your.mods.homepage.example.invalid/" #optional
 
 # A file name (in the root of the mod JAR) containing a logo for display
-iconFile="examplemod.png" #optional
+iconFile="tales-of-the-verdant-wind.png" #optional
+bannerFile="mod-banner.png"
 
 # A text field displayed in the mod UI
 #credits="" #optional
@@ -68,13 +69,6 @@ file="META-INF/accesstransformer.cfg"
 modId="terrablender"
 type="required"
 versionRange="${terrablender_version_range}"
-ordering="NONE"
-side="BOTH"
-
-[[dependencies.${mod_id}]]
-modId="cloth_config"
-type="required"
-versionRange="${cloth_config_version}"
 ordering="NONE"
 side="BOTH"
 

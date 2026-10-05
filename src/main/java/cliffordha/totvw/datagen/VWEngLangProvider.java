@@ -1,12 +1,16 @@
 package cliffordha.totvw.datagen;
 
+import cliffordha.totvw.Config;
 import cliffordha.totvw.TOTVW;
 import cliffordha.totvw.keymapping.VWKeymap;
 import cliffordha.totvw.registry.*;
 import cliffordha.totvw.registry.VWBlocks;
 import cliffordha.totvw.registry.VWItems.Pages;
 import net.minecraft.data.PackOutput;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.common.data.LanguageProvider;
 import net.neoforged.neoforge.registries.DeferredBlock;
@@ -19,13 +23,6 @@ public class VWEngLangProvider extends LanguageProvider {
         super(output, TOTVW.MOD_ID, "en_us");
     }
 
-    private static String biomeKey(String name) {
-        return "biome." + TOTVW.MOD_ID + "." + name;
-    }
-    private static String effectKey(String name) {
-        return "effect." + TOTVW.MOD_ID + "." + name;
-    }
-    
     public void add(DeferredItem<Item> key, String name) {
         super.add(key.get(), name);
     }
@@ -114,6 +111,13 @@ public class VWEngLangProvider extends LanguageProvider {
         add(VWItems.HAVOC_RUNESTONE_PLATE, "Havoc Runestone Plate");
         add(VWItems.EFFLORESCENCE_RUNESTONE_PLATE, "Efflorescence Runestone Plate");
 
+        add(VWItems.VERIXIUM_SPEAR, "Verixium Spear");
+        add(VWItems.VERIXIUM_SWORD, "Verixium Sword");
+        add(VWItems.VERIXIUM_AXE, "Verixium Axe");
+        add(VWItems.VERIXIUM_PICKAXE, "Verixium Pickaxe");
+        add(VWItems.VERIXIUM_SHOVEL, "Verixium Shovel");
+        add(VWItems.VERIXIUM_HOE, "Verixium Hoe");
+
 
         String SCATTERED_PAGE = "Scattered Page";
         add(Pages.SCATTERED_PAGE, SCATTERED_PAGE);
@@ -146,26 +150,20 @@ public class VWEngLangProvider extends LanguageProvider {
         add(Pages.LODESTONE_WIND_CORE_MANUAL, LODESTONE_WIND_CORE_MANUAL.getTitle());
 
 
+        // ENCHANTMENTS
+        add(enchant(VWEnchantments.WOLF_EFFECT_IGNITION), "Wolf ATK Effect: §vIgnition");
+        add(enchant(VWEnchantments.WOLF_EFFECT_POISONING), "Wolf ATK Effect: §cPoison");
+        add(enchant(VWEnchantments.WOLF_EFFECT_WITHERING), "Wolf ATK Effect: §cWithering");
+        add(enchant(VWEnchantments.WOLF_EFFECT_LIFTING), "Wolf ATK Effect: Lifting");
+        add(enchant(VWEnchantments.WOLF_EFFECT_BLOODLUST), "Wolf ATK Effect: §cBloodlust");
+        add(enchant(VWEnchantments.WOLF_EFFECT_MIGHT), "Wolf ATK Effect: §dMight");
+        add(enchant(VWEnchantments.WOLF_EFFECT_OOZING), "Wolf ATK Effect: §aOozing");
+        add(enchant(VWEnchantments.WOLF_EFFECT_GNAWING), "Wolf ATK Effect: §dGnawing");
+        add(enchant(VWEnchantments.WOLF_ARMOR_ENHANCEMENT_KIT), "Wolf Armor Enhancement Kit");
+        add(enchant(VWEnchantments.BENEDICTION_OF_THE_VERDANT_MOUNTAINS),"Benediction of the Verdant Mountains");
 
-//        add(VWEnchantments.WOLF_EFFECT_IGNITION.registryKey().toString(), "Wolf ATK Effect: §vIgnition");
-//        add(VWEnchantments.WOLF_EFFECT_POISONING.registryKey().toString(), "Wolf ATK Effect: §cPoison");
-//        add(VWEnchantments.WOLF_EFFECT_WITHERING.registryKey().toString(), "Wolf ATK Effect: §cWithering");
-//        add(VWEnchantments.WOLF_EFFECT_LIFTING.registryKey().toString(), "Wolf ATK Effect: Lifting");
-//        add(VWEnchantments.WOLF_EFFECT_BLOODLUST.registryKey().toString(), "Wolf ATK Effect: §cBloodlust");
-//        add(VWEnchantments.WOLF_EFFECT_MIGHT.registryKey().toString(), "Wolf ATK Effect: §dMight");
-//        add(VWEnchantments.WOLF_EFFECT_OOZING.registryKey().toString(), "Wolf ATK Effect: §aOozing");
-//        add(VWEnchantments.WOLF_EFFECT_GNAWING.registryKey().toString(), "Wolf ATK Effect: §dGnawing");
-//        add(VWEnchantments.WOLF_ARMOR_ENHANCEMENT_KIT.registryKey().toString(), "Wolf Armor Enhancement Kit");
-//        add(VWEnchantments.BENEDICTION_OF_THE_VERDANT_MOUNTAINS.registryKey().toString(),"Benediction of the Verdant Mountains");
 
-
-        add(effectKey("blessing_of_the_verdant_wind"), "Blessing of the Verdant Wind");
-        add(effectKey("amplified_might"), "Amplified Might");
-        add(effectKey("bloodlust"), "Bloodlust");
-        add(effectKey("paralyze"), "Paralyzed");
-        add(effectKey("wind_veil"), "Wind Veil");
-        add(effectKey("havoc"), "Havoc");
-
+        // POTIONS
         add("effect.tales-of-the-verdant-wind.bloodlust.description", "Gives massive attack buff in exchange for constant damage while the effect is active");
 
         add("item.minecraft.potion.effect.sacred_verdant_potion", "Sacred Verdant Potion");
@@ -185,6 +183,7 @@ public class VWEngLangProvider extends LanguageProvider {
         add("item.minecraft.tipped_arrow.effect.baleful_strength_potion", "Arrow of Baleful Strength");
 
 
+        // DEATH DIALOGUE
         add("death.attack.bloodlust", "%1$s died from the agonizing effects of §cBloodlust§r");
         add("death.attack.bloodlust.player", "%1$s died from the agonizing effects of §cBloodlust§r while fighting %2$s");
 
@@ -204,16 +203,18 @@ public class VWEngLangProvider extends LanguageProvider {
         add("death.attack.tether_proxy.player", "%1$s got killed via proxy while fighting %2$s");
 
 
-        add(VWItems.VERIXIUM_SPEAR, "Verixium Spear");
-        add(VWItems.VERIXIUM_SWORD, "Verixium Sword");
-        add(VWItems.VERIXIUM_AXE, "Verixium Axe");
-        add(VWItems.VERIXIUM_PICKAXE, "Verixium Pickaxe");
-        add(VWItems.VERIXIUM_SHOVEL, "Verixium Shovel");
-        add(VWItems.VERIXIUM_HOE, "Verixium Hoe");
-
-
+        // BIOMES
         add(biomeKey("verdant_mountains"), "Verdant Mountains");
         add(biomeKey("verdant_forest"), "Verdant Forest");
+
+
+        // EFFECTS
+        add(effectKey("blessing_of_the_verdant_wind"), "Blessing of the Verdant Wind");
+        add(effectKey("amplified_might"), "Amplified Might");
+        add(effectKey("bloodlust"), "Bloodlust");
+        add(effectKey("paralyze"), "Paralyzed");
+        add(effectKey("wind_veil"), "Wind Veil");
+        add(effectKey("havoc"), "Havoc");
 
 
         // SOUNDS
@@ -228,15 +229,58 @@ public class VWEngLangProvider extends LanguageProvider {
         add(VWSounds.LODESTONE_WIND_CORE_AMBIENT.toString(), "Wind Core whooshes");
 
 
-
         // KEYMAPPINGS
         add(VWKeymap.WOLF_CONFIG_KEY, "Wolf Config Screen");
 
+        //MOD NAME
         add(TOTVW.MOD_ID, "Tales of the Verdant Wind");
+
+        // MOD CONFIG
+        add(config("clientTranslateLanguage"), "Client Translate Language");
+        add(config("clientEnableNotifiers"), "Client Enable Notifiers");
+        add(config("clientShowAtrocityCounter"), "Show Atrocity Counter");
+        add(config("clientModSounds"), "Client Mod Sounds");
+        add(config("clientAllowLoreSpoilers"), "Client Allow Lore Spoilers");
+        add(config("clientAllowEffectOverlays"), "Client Allow Effect Overlays");
+        add(config("clientBloodlustEffectOverlay"), "Client Bloodlust Effect Overlay");
+
+        add(config("serverWolfDamageDistribution"), "Server Wolf Damage Distribution");
+
+        add(config("serverBenedictionHealthThreshold"), "Server Benediction Health Threshold");
+        add(config("serverWolfPlayerScanDistance"), "Server Wolf Player Scan Distance");
+        add(config("serverAlwaysTriggerBlessing"), "Server Always Trigger Blessing");
+        add(config("serverWolfSharesBenedictionStack"), "Server Wolf Shares Benediction Stack");
+        add(config("serverTeleportAfterSave"), "Server Teleport After Save");
+        add(config("serverPlayerTPMethod"), "Server Player TP Method");
+        add(config("serverWolfTPMethod"), "Server Wolf TP Method");
+        add(config("serverWolfTPAll"), "Server Wolf TP All");
+
+        add(config("serverSkillCooldowns"), "Server Skill Cooldowns");
+        add(config("serverItemCooldowns"), "Server Item Cooldowns");
+        add(config("serverOtherCooldowns"), "Server Other Cooldowns");
+
+        add(config("logEnchantmentShowWolfCD"), "Show Wolf CD");
+        add(config("logEnchantmentShowPlayerCD"), "Show Player CD");
 
         //DEV
         if (TOTVW.IN_DEVELOPMENT) {
             add(VWItems.DevItems.ATTACHMENTS_REMOVER, "Attachments Remover");
+            addConfigValue(Config.CLIENT_TRANSLATE_LANGUAGE, "Translate Language");
         }
+    }
+    
+    private static String enchant(ResourceKey<Enchantment> value) {
+        Identifier ofValue = value.identifier();
+        String name = ofValue.toString().replace(":", ".");
+        return "enchantment." + name;
+    }
+    private static String config(String value) {
+        return TOTVW.MOD_ID + ".configuration." + value;
+    }
+    private static String biomeKey(String name) {
+        return "biome." + TOTVW.MOD_ID + "." + name;
+    }
+    private static String effectKey(String name) {
+        return "effect." + TOTVW.MOD_ID + "." + name;
     }
 }

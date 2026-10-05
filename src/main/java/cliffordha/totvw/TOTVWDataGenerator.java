@@ -2,12 +2,21 @@ package cliffordha.totvw;
 
 import cliffordha.totvw.datagen.*;
 import cliffordha.totvw.loot.VWLootModifiers;
+import cliffordha.totvw.loot.VWLootTables;
+import cliffordha.totvw.registry.VWEnchantments;
 import cliffordha.totvw.tag.*;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
+import net.minecraft.resources.RegistryDataLoader;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.common.data.DatapackBuiltinEntriesProvider;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.concurrent.CompletableFuture;
 
 @EventBusSubscriber(modid = TOTVW.MOD_ID)
 public class TOTVWDataGenerator {
@@ -24,26 +33,25 @@ public class TOTVWDataGenerator {
 
 		generator.addProvider(true, new VWBlockTags(output, provider));
 		generator.addProvider(true, new VWItemTags(output, provider));
-
 		generator.addProvider(true, new VWFluidTags(output, provider));
-		generator.addProvider(true, new VWEnchantmentTags(output, provider));
-		generator.addProvider(true, new VWDamageTypeTags(output, provider));
 		generator.addProvider(true, new VWEntityTypeTags(output, provider));
+		generator.addProvider(true, new VWEnchantmentTags(output, provider));
 		generator.addProvider(true, new VWVillagerTradeTags(output, provider));
 		generator.addProvider(true, new VWBiomeTags(output, provider));
+		generator.addProvider(true, new VWDamageTypeTags(output, provider));
 
 		generator.addProvider(true, new VWSoundsProvider(output));
 		generator.addProvider(true, new VWEngLangProvider(output));
-
 		generator.addProvider(true, new VWLootModifiers(output, provider));
+		generator.addProvider(true, new VWEquipmentAssetProvider(output));
+		generator.addProvider(true, new VWDatamapProvider(output, provider));
 	}
 
 	@SubscribeEvent
 	public static void gatherServerData(GatherDataEvent.Server event) {
 		DataGenerator generator = event.getGenerator();
 		PackOutput output = generator.getPackOutput();
-		var lookupProvider = event.getReloadableLookupProvider();
-
+		var provider = event.getReloadableLookupProvider();
 
 
 	}

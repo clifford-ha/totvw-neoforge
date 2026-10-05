@@ -3,7 +3,7 @@
     {
       "element": {
         "element_type": "minecraft:legacy_single_pool_element",
-        "location": "tales-of-the-verdant-wind:village/verdant/taiga_lamp_post_1",
+        "location": "tales_of_the_verdant_wind:village/verdant/taiga_lamp_post_1",
         "processors": {
           "processors": []
         },
@@ -14,7 +14,7 @@
     {
       "element": {
         "element_type": "minecraft:legacy_single_pool_element",
-        "location": "tales-of-the-verdant-wind:village/verdant/verdant_decoration_1",
+        "location": "tales_of_the_verdant_wind:village/verdant/verdant_decoration_1",
         "processors": {
           "processors": []
         },
@@ -25,7 +25,7 @@
     {
       "element": {
         "element_type": "minecraft:legacy_single_pool_element",
-        "location": "tales-of-the-verdant-wind:village/verdant/verdant_decoration_2",
+        "location": "tales_of_the_verdant_wind:village/verdant/verdant_decoration_2",
         "processors": {
           "processors": []
         },
@@ -36,7 +36,7 @@
     {
       "element": {
         "element_type": "minecraft:legacy_single_pool_element",
-        "location": "tales-of-the-verdant-wind:village/verdant/verdant_decoration_3",
+        "location": "tales_of_the_verdant_wind:village/verdant/verdant_decoration_3",
         "processors": {
           "processors": []
         },
@@ -47,7 +47,7 @@
     {
       "element": {
         "element_type": "minecraft:legacy_single_pool_element",
-        "location": "tales-of-the-verdant-wind:village/verdant/verdant_decoration_4",
+        "location": "tales_of_the_verdant_wind:village/verdant/verdant_decoration_4",
         "processors": {
           "processors": []
         },
@@ -58,7 +58,7 @@
     {
       "element": {
         "element_type": "minecraft:legacy_single_pool_element",
-        "location": "tales-of-the-verdant-wind:village/verdant/verdant_decoration_5",
+        "location": "tales_of_the_verdant_wind:village/verdant/verdant_decoration_5",
         "processors": {
           "processors": []
         },
@@ -69,7 +69,7 @@
     {
       "element": {
         "element_type": "minecraft:legacy_single_pool_element",
-        "location": "tales-of-the-verdant-wind:village/verdant/verdant_decoration_6",
+        "location": "tales_of_the_verdant_wind:village/verdant/verdant_decoration_6",
         "processors": {
           "processors": []
         },
@@ -80,7 +80,7 @@
     {
       "element": {
         "element_type": "minecraft:feature_pool_element",
-        "feature": "tales-of-the-verdant-wind:village_verdant_spruce_tree",
+        "feature": "tales_of_the_verdant_wind:village_verdant_spruce_tree",
         "projection": "terrain_matching"
       },
       "weight": 4
@@ -88,7 +88,7 @@
     {
       "element": {
         "element_type": "minecraft:feature_pool_element",
-        "feature": "tales-of-the-verdant-wind:village_verdant_spruce_tree",
+        "feature": "tales_of_the_verdant_wind:village_verdant_spruce_tree",
         "projection": "terrain_matching"
       },
       "weight": 4

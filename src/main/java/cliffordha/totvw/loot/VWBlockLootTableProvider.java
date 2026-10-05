@@ -2,10 +2,10 @@ package cliffordha.totvw.loot;
 
 import cliffordha.totvw.registry.VWItems;
 import cliffordha.totvw.registry.VWBlocks;
+import net.minecraft.core.Holder;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.data.loot.LootTableSubProvider;
 import net.minecraft.world.flag.FeatureFlags;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.LootPool;
@@ -24,11 +24,6 @@ public class VWBlockLootTableProvider extends BlockLootSubProvider {
     }
 
     @Override
-    protected void add(Block block, LootTable.Builder builder) {
-        super.add(block, builder);
-    }
-
-    @Override
     public void generate() {
         add(VWBlocks.VERIXIUM_STONE_ORE, createOreDrop(
                 VWBlocks.VERIXIUM_STONE_ORE,
@@ -38,7 +33,7 @@ public class VWBlockLootTableProvider extends BlockLootSubProvider {
                 VWBlocks.VERIXIUM_DEEPSLATE_ORE,
                 VWItems.VERIXIUM_CHUNK
         ));
-        add(VWBlocks.VERIXIUM_POWDER_BLOCK, LootTable.lootTable()
+        this.add(VWBlocks.VERIXIUM_POWDER_BLOCK, LootTable.lootTable()
                 .withPool(LootPool.lootPool()
                         .add(LootItem.lootTableItem(VWItems.VERIXIUM_POWDER)
                                 .apply(SetItemCountFunction.setCount(ContextIntProviders.between(3, 9)))
@@ -69,13 +64,13 @@ public class VWBlockLootTableProvider extends BlockLootSubProvider {
         dropSelf(VWBlocks.VERDANT_SPRUCE_WOOD);
         dropSelf(VWBlocks.STRIPPED_VERDANT_SPRUCE_LOG);
         dropSelf(VWBlocks.STRIPPED_VERDANT_SPRUCE_WOOD);
-        add(VWBlocks.VERDANT_SPRUCE_SLAB, createSlabItemTable(VWBlocks.VERDANT_SPRUCE_SLAB.get()));
+        add(VWBlocks.VERDANT_SPRUCE_SLAB.get(), this::createSlabItemTable);
+        add(VWBlocks.VERDANT_SPRUCE_DOOR.get(), this::createDoorTable);
         dropSelf(VWBlocks.VERDANT_SPRUCE_STAIRS);
         dropSelf(VWBlocks.VERDANT_SPRUCE_FENCE);
         dropSelf(VWBlocks.VERDANT_SPRUCE_FENCE_GATE);
         dropSelf(VWBlocks.VERDANT_SPRUCE_BUTTON);
         dropSelf(VWBlocks.VERDANT_SPRUCE_PRESSURE_PLATE);
-        add(VWBlocks.VERDANT_SPRUCE_DOOR, createDoorTable(VWBlocks.VERDANT_SPRUCE_DOOR.get()));
         dropSelf(VWBlocks.VERDANT_SPRUCE_TRAPDOOR);
         dropSelf(VWBlocks.VERDANT_SPRUCE_SIGN);
         dropSelf(VWBlocks.VERDANT_SPRUCE_HANGING_SIGN);
@@ -85,6 +80,7 @@ public class VWBlockLootTableProvider extends BlockLootSubProvider {
         dropSelf(VWBlocks.IRIDESCENT_GLASS);
         dropSelf(VWBlocks.IRIDESCENT_GLASS_PANE);
         dropSelf(VWBlocks.LODESTONE_WIND_CORE);
+        add(VWBlocks.FARMLAND_PLACER, noDrop());
     }
 
     private void dropSelf(DeferredBlock<Block> block) {
@@ -97,5 +93,10 @@ public class VWBlockLootTableProvider extends BlockLootSubProvider {
 
     private void add(DeferredBlock<Block> original, LootTable.Builder oreDrop) {
         super.add(original.get(), oreDrop);
+    }
+
+    @Override
+    protected Iterable<Block> getKnownBlocks() {
+        return VWBlocks.BLOCKS.getEntries().stream().map(Holder::value)::iterator;
     }
 }

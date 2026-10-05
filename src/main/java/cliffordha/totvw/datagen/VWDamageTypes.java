@@ -52,4 +52,6 @@ public class VWDamageTypes {
     public static DamageSource tetherProxy(Level level) {
         return create(level, TETHER_PROXY);
     }
+
+    public static void register() {}
 }

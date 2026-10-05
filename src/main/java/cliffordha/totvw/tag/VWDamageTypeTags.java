@@ -12,10 +12,11 @@ import net.minecraft.world.damagesource.DamageTypes;
 
 import java.util.concurrent.CompletableFuture;
 
-import static cliffordha.totvw.tag.VWTagHelpers.type;
 import static cliffordha.totvw.datagen.VWDamageTypes.*;
 
 public class VWDamageTypeTags extends DamageTypeTagsProvider {
+
+
     public VWDamageTypeTags(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider) {
         super(output, lookupProvider, TOTVW.MOD_ID);
     }
@@ -24,50 +25,50 @@ public class VWDamageTypeTags extends DamageTypeTagsProvider {
     protected void addTags(HolderLookup.Provider registries) {
 
         getOrCreateRawBuilder(DamageTypeTags.NO_KNOCKBACK)
-                .add(type(BLOODLUST))
-                .add(type(BLEEDING));
+                .addOptionalElement(BLOODLUST.identifier())
+                .addOptionalElement(BLEEDING.identifier());
 
         getOrCreateRawBuilder(DamageTypeTags.BYPASSES_ARMOR)
-                .add(type(BLOODLUST))
-                .add(type(BLEEDING))
-                .add(type(HAVOC))
-                .add(type(LODESTONE_WIND_CORE_PULSE))
-                .add(type(SCORCHING_HEAT));
+                .addOptionalElement(BLOODLUST.identifier())
+                .addOptionalElement(BLEEDING.identifier())
+                .addOptionalElement(HAVOC.identifier())
+                .addOptionalElement(LODESTONE_WIND_CORE_PULSE.identifier())
+                .addOptionalElement(SCORCHING_HEAT.identifier());
 
         getOrCreateRawBuilder(DamageTypeTags.BYPASSES_WOLF_ARMOR)
-                .add(type(BLOODLUST))
-                .add(type(BLEEDING));
+                .addOptionalElement(BLOODLUST.identifier())
+                .addOptionalElement(BLEEDING.identifier());
 
         getOrCreateRawBuilder(DamageTypeTags.ALWAYS_HURTS_ENDER_DRAGONS)
-                .add(type(LODESTONE_WIND_CORE_PULSE))
-                .add(type(SCORCHING_HEAT));
+                .addOptionalElement(LODESTONE_WIND_CORE_PULSE.identifier())
+                .addOptionalElement(SCORCHING_HEAT.identifier());
 
         getOrCreateRawBuilder(DamageTypeTags.BYPASSES_INVULNERABILITY)
-                .add(type(HAVOC))
-                .add(type(LODESTONE_WIND_CORE_PULSE));
+                .addOptionalElement(HAVOC.identifier())
+                .addOptionalElement(LODESTONE_WIND_CORE_PULSE.identifier());
 
         getOrCreateRawBuilder(DamageTypeTags.BYPASSES_RESISTANCE)
-                .add(type(HAVOC))
-                .add(type(BLEEDING))
-                .add(type(LODESTONE_WIND_CORE_PULSE))
-                .add(type(SCORCHING_HEAT))
-                .add(type(BLOODLUST));
+                .addOptionalElement(HAVOC.identifier())
+                .addOptionalElement(BLEEDING.identifier())
+                .addOptionalElement(LODESTONE_WIND_CORE_PULSE.identifier())
+                .addOptionalElement(SCORCHING_HEAT.identifier())
+                .addOptionalElement(BLOODLUST.identifier());
 
         getOrCreateRawBuilder(DamageTypeTags.BYPASSES_SHIELD)
-                .add(type(HAVOC))
-                .add(type(LODESTONE_WIND_CORE_PULSE))
-                .add(type(SCORCHING_HEAT));
+                .addOptionalElement(HAVOC.identifier())
+                .addOptionalElement(LODESTONE_WIND_CORE_PULSE.identifier())
+                .addOptionalElement(SCORCHING_HEAT.identifier());
 
         getOrCreateRawBuilder(DamageTypeTags.BYPASSES_EFFECTS)
-                .add(type(LODESTONE_WIND_CORE_PULSE))
-                .add(type(BLEEDING))
-                .add(type(HAVOC))
-                .add(type(SCORCHING_HEAT));
+                .addOptionalElement(LODESTONE_WIND_CORE_PULSE.identifier())
+                .addOptionalElement(BLEEDING.identifier())
+                .addOptionalElement(HAVOC.identifier())
+                .addOptionalElement(SCORCHING_HEAT.identifier());
 
         getOrCreateRawBuilder(BENEDICTION_CAN_REDUCE_HIGH_DAMAGE)
-                .add(type(DamageTypes.SONIC_BOOM))
-                .add(type(DamageTypes.WITHER_SKULL))
-                .add(type(DamageTypes.DRAGON_BREATH));
+                .addOptionalElement(DamageTypes.SONIC_BOOM.identifier())
+                .addOptionalElement(DamageTypes.WITHER_SKULL.identifier())
+                .addOptionalElement(DamageTypes.DRAGON_BREATH.identifier());
     }
 
     public static final TagKey<DamageType> BENEDICTION_CAN_REDUCE_HIGH_DAMAGE = create("benediction_can_reduce_high_damage");

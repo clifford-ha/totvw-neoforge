@@ -3,11 +3,11 @@
   "credit"        : "Made with Blockbench",
   "parent": "minecraft:block/orientable_with_bottom",
   "textures"      : {
-    "bottom"  : "tales-of-the-verdant-wind:block/lodestone_wind_core_side",
-    "front"   : "tales-of-the-verdant-wind:block/lodestone_wind_core",
-    "side"    : "tales-of-the-verdant-wind:block/lodestone_wind_core_side",
-    "top"     : "tales-of-the-verdant-wind:block/lodestone_wind_core_top",
-    "particle": "tales-of-the-verdant-wind:block/lodestone_wind_core_side"
+    "bottom"  : "tales_of_the_verdant_wind:block/lodestone_wind_core_side",
+    "front"   : "tales_of_the_verdant_wind:block/lodestone_wind_core",
+    "side"    : "tales_of_the_verdant_wind:block/lodestone_wind_core_side",
+    "top"     : "tales_of_the_verdant_wind:block/lodestone_wind_core_top",
+    "particle": "tales_of_the_verdant_wind:block/lodestone_wind_core_side"
   },
   "elements"      : [
     {

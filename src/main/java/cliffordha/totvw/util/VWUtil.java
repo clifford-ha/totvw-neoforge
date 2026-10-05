@@ -1,6 +1,6 @@
 package cliffordha.totvw.util;
 
-import cliffordha.totvw.config.VWConfig;
+import cliffordha.totvw.Config;
 import cliffordha.totvw.entity.player.VWPlayerBehaviors;
 import cliffordha.totvw.entity.skill.SkillManager;
 import cliffordha.totvw.entity.wolf.VWWolfBehaviors;
@@ -14,7 +14,6 @@ import cliffordha.totvw.tag.VWBiomeTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
@@ -124,7 +123,7 @@ public class VWUtil {
         return triggerHeal;
     }
     public static void verdantBlessingAfterEffects(LevelAccessor level, LivingEntity entity) {
-        if (!VWConfig.get().SERVER_SKILL_COOLDOWNS) return;
+        if (!Config.SERVER_SKILL_COOLDOWNS.get()) return;
         int minutes = 60;
         int cooldown = setDifficultyBasedValue(level, minutes * 3, minutes * 9, minutes * 15, minutes * 21);
         if (entity.getHealth() >= entity.getMaxHealth() * 0.5f) {

@@ -1,14 +1,14 @@
 package cliffordha.totvw.entity.skills;
 
+import cliffordha.totvw.Config;
 import cliffordha.totvw.TOTVW;
-import cliffordha.totvw.config.VWConfig;
 import cliffordha.totvw.item.custom.SoulRunestonePlate;
 import cliffordha.totvw.registry.VWColors;
 import cliffordha.totvw.registry.VWItems;
 import cliffordha.totvw.registry.attachments.PlayerPrefs;
-
 import cliffordha.totvw.registry.attachments.entity.PlayerAttachment;
 import cliffordha.totvw.registry.attachments.entity.WolfAttachment;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.Identifier;
@@ -43,7 +43,7 @@ public class RevivalByProxy {
             Level getLevel = player.level();
             ServerLevel level = (ServerLevel) getLevel;
 
-            double distance = VWConfig.get().SERVER_WOLF_PLAYER_SCAN_DISTANCE * 16;
+            double distance = Config.SERVER_WOLF_PLAYER_SCAN_DISTANCE.get() * 16;
             AttachmentType<Integer> BENEDICTION_STACK = WolfAttachment.BENEDICTION.get();
 
             List<Wolf> wolves = level.getEntities(EntityTypes.WOLF, player.getBoundingBox().inflate(distance), wolf ->

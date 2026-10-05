@@ -1,7 +1,7 @@
 package cliffordha.totvw.util;
 
+import cliffordha.totvw.Config;
 import cliffordha.totvw.TOTVW;
-import cliffordha.totvw.config.VWConfig;
 import cliffordha.totvw.registry.VWColors;
 import cliffordha.totvw.registry.VWEffects;
 import net.minecraft.client.DeltaTracker;
@@ -106,11 +106,11 @@ public class VWEffectOverlays {
         return Mth.lerp(t, 0, max);
     }
     private static boolean overlaysDisabled() {
-        return !VWConfig.get().CLIENT_ALLOW_EFFECT_OVERLAYS;
+        return !Config.CLIENT_ALLOW_EFFECT_OVERLAYS.get();
     }
     private static boolean allowBloodlustOverlay() {
         if (overlaysDisabled()) return false;
-        return VWConfig.get().CLIENT_BLOODLUST_EFFECT_OVERLAY;
+        return Config.CLIENT_BLOODLUST_EFFECT_OVERLAY.get();
     }
     private static Player player() {
         return Minecraft.getInstance().player;

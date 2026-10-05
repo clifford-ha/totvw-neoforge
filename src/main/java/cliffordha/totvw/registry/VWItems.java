@@ -370,8 +370,6 @@ public class VWItems {
         if (TOTVW.IN_DEVELOPMENT) {
             DevItems.register();
         }
-
-        VWCreativeTabs.register(eventBus);
         ITEMS.register(eventBus);
         sendClassRegisterLog("Items");
     }

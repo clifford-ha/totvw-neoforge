@@ -1,6 +1,6 @@
 {
   "type": "minecraft:jigsaw",
-  "biomes": "#tales-of-the-verdant-wind:is_verdant_biomes",
+  "biomes": "#tales_of_the_verdant_wind:is_verdant_biomes",
   "spawn_overrides": {},
   "step": "underground_structures",
   "size": 1,
@@ -22,5 +22,5 @@
     }
   ],
   "use_expansion_hack": false,
-  "start_pool": "tales-of-the-verdant-wind:underground_command_post"
+  "start_pool": "tales_of_the_verdant_wind:underground_command_post"
 }

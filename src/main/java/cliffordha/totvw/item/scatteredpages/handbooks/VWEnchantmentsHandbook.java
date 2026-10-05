@@ -1,6 +1,5 @@
 package cliffordha.totvw.item.scatteredpages.handbooks;
 
-import cliffordha.totvw.config.VWConfig;
 import cliffordha.totvw.registry.attachments.PlayerPrefs;
 import net.minecraft.world.entity.player.Player;
 

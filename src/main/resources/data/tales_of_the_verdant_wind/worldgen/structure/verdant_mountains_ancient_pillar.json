@@ -1,6 +1,6 @@
 {
   "type": "minecraft:jigsaw",
-  "biomes": "tales-of-the-verdant-wind:verdant_mountains",
+  "biomes": "tales_of_the_verdant_wind:verdant_mountains",
   "spawn_overrides": {},
   "step": "surface_structures",
   "size": 1,
@@ -23,5 +23,5 @@
   ],
   "project_start_to_heightmap": "WORLD_SURFACE_WG",
   "use_expansion_hack": false,
-  "start_pool": "tales-of-the-verdant-wind:verdant_ancient_pillar"
+  "start_pool": "tales_of_the_verdant_wind:verdant_ancient_pillar"
 }

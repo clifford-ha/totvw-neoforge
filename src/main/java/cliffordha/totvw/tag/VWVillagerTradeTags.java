@@ -9,8 +9,6 @@ import net.minecraft.tags.VillagerTradeTags;
 
 import java.util.concurrent.CompletableFuture;
 
-import static cliffordha.totvw.tag.VWTagHelpers.trade;
-
 public class VWVillagerTradeTags extends VillagerTradesTagsProvider {
     public VWVillagerTradeTags(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider) {
         super(output, lookupProvider, TOTVW.MOD_ID);
@@ -19,35 +17,35 @@ public class VWVillagerTradeTags extends VillagerTradesTagsProvider {
     @Override
     protected void addTags(HolderLookup.Provider registries) {
         getOrCreateRawBuilder(VillagerTradeTags.WEAPONSMITH_LEVEL_2)
-                .add(trade(VWVillagerTrades.WEAPONSMITH_2_RUNESTONE_FRAGMENT_3))
-                .add(trade(VWVillagerTrades.WEAPONSMITH_2_WOLF_ATK_ENCHANTMENTS));
+                .addOptionalElement(VWVillagerTrades.WEAPONSMITH_2_RUNESTONE_FRAGMENT_3.identifier())
+                .addOptionalElement(VWVillagerTrades.WEAPONSMITH_2_WOLF_ATK_ENCHANTMENTS.identifier());
 
 
         getOrCreateRawBuilder(VillagerTradeTags.WEAPONSMITH_LEVEL_3)
-                .add(trade(VWVillagerTrades.WEAPONSMITH_3_LODESTONE_WIND_CORE));
+                .addOptionalElement(VWVillagerTrades.WEAPONSMITH_3_LODESTONE_WIND_CORE.identifier());
 
 
         getOrCreateRawBuilder(VillagerTradeTags.LIBRARIAN_LEVEL_2)
-                .add(trade(VWVillagerTrades.LIBRARIAN_2_WOLF_ATK_ENCHANTMENTS))
-                .add(trade(VWVillagerTrades.LIBRARIAN_2_VERIXIUM_PAPER));
+                .addOptionalElement(VWVillagerTrades.LIBRARIAN_2_WOLF_ATK_ENCHANTMENTS.identifier())
+                .addOptionalElement(VWVillagerTrades.LIBRARIAN_2_VERIXIUM_PAPER.identifier());
 
 
         getOrCreateRawBuilder(VillagerTradeTags.CLERIC_LEVEL_2)
-                .add(trade(VWVillagerTrades.CLERIC_2_VERIXIUM_POWDER))
-                .add(trade(VWVillagerTrades.CLERIC_2_EMERALD));
+                .addOptionalElement(VWVillagerTrades.CLERIC_2_VERIXIUM_POWDER.identifier())
+                .addOptionalElement(VWVillagerTrades.CLERIC_2_EMERALD.identifier());
 
 
         getOrCreateRawBuilder(VillagerTradeTags.ARMORER_LEVEL_1)
-                .add(trade(VWVillagerTrades.ARMORER_1_WOLF_ENHANCEMENT_KIT));
+                .addOptionalElement(VWVillagerTrades.ARMORER_1_WOLF_ENHANCEMENT_KIT.identifier());
         getOrCreateRawBuilder(VillagerTradeTags.ARMORER_LEVEL_4)
-                .add(trade(VWVillagerTrades.ARMORER_4_VERIXIUM_WOLF_ARMOR));
+                .addOptionalElement(VWVillagerTrades.ARMORER_4_VERIXIUM_WOLF_ARMOR.identifier());
         getOrCreateRawBuilder(VillagerTradeTags.ARMORER_LEVEL_5)
-                .add(trade(VWVillagerTrades.ARMORER_5_VERIXIUM_ARMOR_UPGRADE_TEMPLATE));
+                .addOptionalElement(VWVillagerTrades.ARMORER_5_VERIXIUM_ARMOR_UPGRADE_TEMPLATE.identifier());
 
 
         getOrCreateRawBuilder(VillagerTradeTags.WANDERING_TRADER_COMMON)
-                .add(trade(VWVillagerTrades.WANDERING_VERDANT_SPRUCE_TREE_SAPLING));
+                .addOptionalElement(VWVillagerTrades.WANDERING_VERDANT_SPRUCE_TREE_SAPLING.identifier());
         getOrCreateRawBuilder(VillagerTradeTags.WANDERING_TRADER_UNCOMMON)
-                .add(trade(VWVillagerTrades.WANDERING_FAR_AWAY_ENCHANTMENTS));
+                .addOptionalElement(VWVillagerTrades.WANDERING_FAR_AWAY_ENCHANTMENTS.identifier());
     }
 }

@@ -1,6 +1,6 @@
 package cliffordha.totvw.mixin;
 
-import cliffordha.totvw.config.VWConfig;
+import cliffordha.totvw.Config;
 import cliffordha.totvw.entity.skills.RunestoneEffects;
 import cliffordha.totvw.entity.skills.VerdantWindBlessing;
 import cliffordha.totvw.entity.wolf.WolfStats;
@@ -481,7 +481,7 @@ public abstract class WolfEntityMixin extends LivingEntity {
         ItemStack armor = wolf.getBodyArmorItem();
         float computedDMG = VWEnchantments.getEnhancementKit(wolf) ? damage * 0.8f : damage;
 
-        if (!VWConfig.get().SERVER_WOLF_DMG_DISTRIBUTION || !wolf.canArmorAbsorb(source)) {
+        if (!Config.SERVER_WOLF_DMG_DISTRIBUTION.get() || !wolf.canArmorAbsorb(source)) {
             super.actuallyHurt(level, source, computedDMG);
             ci.cancel();
             return;

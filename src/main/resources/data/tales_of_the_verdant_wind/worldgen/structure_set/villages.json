@@ -7,11 +7,11 @@
   },
   "structures": [
     {
-      "structure": "tales-of-the-verdant-wind:village_verdant_forest",
+      "structure": "tales_of_the_verdant_wind:village_verdant_forest",
       "weight": 1
     },
     {
-      "structure": "tales-of-the-verdant-wind:village_verdant_mountains",
+      "structure": "tales_of_the_verdant_wind:village_verdant_mountains",
       "weight": 1
     }
   ]

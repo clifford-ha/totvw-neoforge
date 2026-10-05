@@ -13,8 +13,6 @@ import org.jspecify.annotations.NonNull;
 
 import java.util.concurrent.CompletableFuture;
 
-import static cliffordha.totvw.tag.VWTagHelpers.enchantment;
-
 public class VWEnchantmentTags extends EnchantmentTagsProvider {
     public VWEnchantmentTags(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider) {
         super(output, lookupProvider, TOTVW.MOD_ID);
@@ -23,43 +21,43 @@ public class VWEnchantmentTags extends EnchantmentTagsProvider {
     @Override
     protected void addTags(HolderLookup.@NonNull Provider registries) {
         getOrCreateRawBuilder(WOLF_ENCHANTMENTS)
-                .add(enchantment(VWEnchantments.BENEDICTION_OF_THE_VERDANT_MOUNTAINS))
-                .add(enchantment(VWEnchantments.WOLF_ARMOR_ENHANCEMENT_KIT))
-                .add(enchantment(VWEnchantments.WOLF_EFFECT_IGNITION))
-                .add(enchantment(VWEnchantments.WOLF_EFFECT_POISONING))
-                .add(enchantment(VWEnchantments.WOLF_EFFECT_WITHERING))
-                .add(enchantment(VWEnchantments.WOLF_EFFECT_LIFTING))
-                .add(enchantment(VWEnchantments.WOLF_EFFECT_BLOODLUST))
-                .add(enchantment(VWEnchantments.WOLF_EFFECT_MIGHT))
-                .add(enchantment(VWEnchantments.WOLF_EFFECT_OOZING))
-                .add(enchantment(VWEnchantments.WOLF_EFFECT_GNAWING));
+                .addOptionalElement(VWEnchantments.BENEDICTION_OF_THE_VERDANT_MOUNTAINS.identifier())
+                .addOptionalElement(VWEnchantments.WOLF_ARMOR_ENHANCEMENT_KIT.identifier())
+                .addOptionalElement(VWEnchantments.WOLF_EFFECT_IGNITION.identifier())
+                .addOptionalElement(VWEnchantments.WOLF_EFFECT_POISONING.identifier())
+                .addOptionalElement(VWEnchantments.WOLF_EFFECT_WITHERING.identifier())
+                .addOptionalElement(VWEnchantments.WOLF_EFFECT_LIFTING.identifier())
+                .addOptionalElement(VWEnchantments.WOLF_EFFECT_BLOODLUST.identifier())
+                .addOptionalElement(VWEnchantments.WOLF_EFFECT_MIGHT.identifier())
+                .addOptionalElement(VWEnchantments.WOLF_EFFECT_OOZING.identifier())
+                .addOptionalElement(VWEnchantments.WOLF_EFFECT_GNAWING.identifier());
 
         getOrCreateRawBuilder(CONTINUOUS_DAMAGE)
-                .add(enchantment(VWEnchantments.WOLF_EFFECT_IGNITION))
-                .add(enchantment(VWEnchantments.WOLF_EFFECT_POISONING))
-                .add(enchantment(VWEnchantments.WOLF_EFFECT_WITHERING));
+                .addOptionalElement(VWEnchantments.WOLF_EFFECT_IGNITION.identifier())
+                .addOptionalElement(VWEnchantments.WOLF_EFFECT_POISONING.identifier())
+                .addOptionalElement(VWEnchantments.WOLF_EFFECT_WITHERING.identifier());
 
         getOrCreateRawBuilder(IMPAIRING_DAMAGE)
-                .add(enchantment(VWEnchantments.WOLF_EFFECT_OOZING))
-                .add(enchantment(VWEnchantments.WOLF_EFFECT_LIFTING));
+                .addOptionalElement(VWEnchantments.WOLF_EFFECT_OOZING.identifier())
+                .addOptionalElement(VWEnchantments.WOLF_EFFECT_LIFTING.identifier());
 
         getOrCreateRawBuilder(EnchantmentTags.IN_ENCHANTING_TABLE)
                 .addTag(WOLF_ENCHANTMENTS.location());
 
         getOrCreateRawBuilder(EnchantmentTags.ON_RANDOM_LOOT)
-                .add(enchantment(VWEnchantments.WOLF_ARMOR_ENHANCEMENT_KIT))
-                .add(enchantment(VWEnchantments.WOLF_EFFECT_IGNITION))
-                .add(enchantment(VWEnchantments.WOLF_EFFECT_MIGHT))
-                .add(enchantment(VWEnchantments.WOLF_EFFECT_OOZING))
-                .add(enchantment(VWEnchantments.WOLF_EFFECT_LIFTING));
+                .addOptionalElement(VWEnchantments.WOLF_ARMOR_ENHANCEMENT_KIT.identifier())
+                .addOptionalElement(VWEnchantments.WOLF_EFFECT_IGNITION.identifier())
+                .addOptionalElement(VWEnchantments.WOLF_EFFECT_MIGHT.identifier())
+                .addOptionalElement(VWEnchantments.WOLF_EFFECT_OOZING.identifier())
+                .addOptionalElement(VWEnchantments.WOLF_EFFECT_LIFTING.identifier());
 
         getOrCreateRawBuilder(EnchantmentTags.TREASURE)
-                .add(enchantment(VWEnchantments.BENEDICTION_OF_THE_VERDANT_MOUNTAINS))
-                .add(enchantment(VWEnchantments.WOLF_ARMOR_ENHANCEMENT_KIT))
-                .add(enchantment(VWEnchantments.WOLF_EFFECT_POISONING))
-                .add(enchantment(VWEnchantments.WOLF_EFFECT_WITHERING))
-                .add(enchantment(VWEnchantments.WOLF_EFFECT_BLOODLUST))
-                .add(enchantment(VWEnchantments.WOLF_EFFECT_GNAWING));
+                .addOptionalElement(VWEnchantments.BENEDICTION_OF_THE_VERDANT_MOUNTAINS.identifier())
+                .addOptionalElement(VWEnchantments.WOLF_ARMOR_ENHANCEMENT_KIT.identifier())
+                .addOptionalElement(VWEnchantments.WOLF_EFFECT_POISONING.identifier())
+                .addOptionalElement(VWEnchantments.WOLF_EFFECT_WITHERING.identifier())
+                .addOptionalElement(VWEnchantments.WOLF_EFFECT_BLOODLUST.identifier())
+                .addOptionalElement(VWEnchantments.WOLF_EFFECT_GNAWING.identifier());
 
     }
     public static final TagKey<Enchantment> WOLF_ENCHANTMENTS = create("wolf_enchantments");
@@ -67,6 +65,6 @@ public class VWEnchantmentTags extends EnchantmentTagsProvider {
     public static final TagKey<Enchantment> IMPAIRING_DAMAGE = create("impairing_damage");
 
     private static TagKey<Enchantment> create(String name) {
-        return TagKey.create(Registries.ENCHANTMENT, TOTVW.registerID(name)); }
-
+        return TagKey.create(Registries.ENCHANTMENT, TOTVW.registerID(name));
+    }
 }

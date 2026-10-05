@@ -1,6 +1,6 @@
 package cliffordha.totvw.entity.wolf;
 
-import cliffordha.totvw.config.VWConfig;
+import cliffordha.totvw.Config;
 import cliffordha.totvw.util.VWUtil;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
@@ -95,7 +95,7 @@ public interface WolfCondition {
     }
 
     static WolfCondition newSoundsEnable() {
-        return (wolf, level) -> VWConfig.get().CLIENT_MOD_SOUNDS;
+        return (wolf, level) -> Config.CLIENT_MOD_SOUNDS.get();
     }
 
     static WolfCondition noAttachment(Supplier<AttachmentType<Integer>> type) {

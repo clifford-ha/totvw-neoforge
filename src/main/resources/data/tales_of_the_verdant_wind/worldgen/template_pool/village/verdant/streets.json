@@ -3,8 +3,8 @@
     {
       "element": {
         "element_type": "minecraft:legacy_single_pool_element",
-        "location": "tales-of-the-verdant-wind:village/verdant/streets/corner_01",
-        "processors": "tales-of-the-verdant-wind:street_verdant",
+        "location": "tales_of_the_verdant_wind:village/verdant/streets/corner_01",
+        "processors": "tales_of_the_verdant_wind:street_verdant",
         "projection": "terrain_matching"
       },
       "weight": 2
@@ -12,8 +12,8 @@
     {
       "element": {
         "element_type": "minecraft:legacy_single_pool_element",
-        "location": "tales-of-the-verdant-wind:village/verdant/streets/corner_02",
-        "processors": "tales-of-the-verdant-wind:street_verdant",
+        "location": "tales_of_the_verdant_wind:village/verdant/streets/corner_02",
+        "processors": "tales_of_the_verdant_wind:street_verdant",
         "projection": "terrain_matching"
       },
       "weight": 2
@@ -21,8 +21,8 @@
     {
       "element": {
         "element_type": "minecraft:legacy_single_pool_element",
-        "location": "tales-of-the-verdant-wind:village/verdant/streets/corner_03",
-        "processors": "tales-of-the-verdant-wind:street_verdant",
+        "location": "tales_of_the_verdant_wind:village/verdant/streets/corner_03",
+        "processors": "tales_of_the_verdant_wind:street_verdant",
         "projection": "terrain_matching"
       },
       "weight": 2
@@ -30,8 +30,8 @@
     {
       "element": {
         "element_type": "minecraft:legacy_single_pool_element",
-        "location": "tales-of-the-verdant-wind:village/verdant/streets/straight_01",
-        "processors": "tales-of-the-verdant-wind:street_verdant",
+        "location": "tales_of_the_verdant_wind:village/verdant/streets/straight_01",
+        "processors": "tales_of_the_verdant_wind:street_verdant",
         "projection": "terrain_matching"
       },
       "weight": 4
@@ -39,8 +39,8 @@
     {
       "element": {
         "element_type": "minecraft:legacy_single_pool_element",
-        "location": "tales-of-the-verdant-wind:village/verdant/streets/straight_02",
-        "processors": "tales-of-the-verdant-wind:street_verdant",
+        "location": "tales_of_the_verdant_wind:village/verdant/streets/straight_02",
+        "processors": "tales_of_the_verdant_wind:street_verdant",
         "projection": "terrain_matching"
       },
       "weight": 4
@@ -48,8 +48,8 @@
     {
       "element": {
         "element_type": "minecraft:legacy_single_pool_element",
-        "location": "tales-of-the-verdant-wind:village/verdant/streets/straight_03",
-        "processors": "tales-of-the-verdant-wind:street_verdant",
+        "location": "tales_of_the_verdant_wind:village/verdant/streets/straight_03",
+        "processors": "tales_of_the_verdant_wind:street_verdant",
         "projection": "terrain_matching"
       },
       "weight": 4
@@ -57,8 +57,8 @@
     {
       "element": {
         "element_type": "minecraft:legacy_single_pool_element",
-        "location": "tales-of-the-verdant-wind:village/verdant/streets/straight_04",
-        "processors": "tales-of-the-verdant-wind:street_verdant",
+        "location": "tales_of_the_verdant_wind:village/verdant/streets/straight_04",
+        "processors": "tales_of_the_verdant_wind:street_verdant",
         "projection": "terrain_matching"
       },
       "weight": 7
@@ -66,8 +66,8 @@
     {
       "element": {
         "element_type": "minecraft:legacy_single_pool_element",
-        "location": "tales-of-the-verdant-wind:village/verdant/streets/straight_05",
-        "processors": "tales-of-the-verdant-wind:street_verdant",
+        "location": "tales_of_the_verdant_wind:village/verdant/streets/straight_05",
+        "processors": "tales_of_the_verdant_wind:street_verdant",
         "projection": "terrain_matching"
       },
       "weight": 7
@@ -75,8 +75,8 @@
     {
       "element": {
         "element_type": "minecraft:legacy_single_pool_element",
-        "location": "tales-of-the-verdant-wind:village/verdant/streets/straight_06",
-        "processors": "tales-of-the-verdant-wind:street_verdant",
+        "location": "tales_of_the_verdant_wind:village/verdant/streets/straight_06",
+        "processors": "tales_of_the_verdant_wind:street_verdant",
         "projection": "terrain_matching"
       },
       "weight": 4
@@ -84,8 +84,8 @@
     {
       "element": {
         "element_type": "minecraft:legacy_single_pool_element",
-        "location": "tales-of-the-verdant-wind:village/verdant/streets/crossroad_01",
-        "processors": "tales-of-the-verdant-wind:street_verdant",
+        "location": "tales_of_the_verdant_wind:village/verdant/streets/crossroad_01",
+        "processors": "tales_of_the_verdant_wind:street_verdant",
         "projection": "terrain_matching"
       },
       "weight": 1
@@ -93,8 +93,8 @@
     {
       "element": {
         "element_type": "minecraft:legacy_single_pool_element",
-        "location": "tales-of-the-verdant-wind:village/verdant/streets/crossroad_02",
-        "processors": "tales-of-the-verdant-wind:street_verdant",
+        "location": "tales_of_the_verdant_wind:village/verdant/streets/crossroad_02",
+        "processors": "tales_of_the_verdant_wind:street_verdant",
         "projection": "terrain_matching"
       },
       "weight": 1
@@ -102,8 +102,8 @@
     {
       "element": {
         "element_type": "minecraft:legacy_single_pool_element",
-        "location": "tales-of-the-verdant-wind:village/verdant/streets/crossroad_03",
-        "processors": "tales-of-the-verdant-wind:street_verdant",
+        "location": "tales_of_the_verdant_wind:village/verdant/streets/crossroad_03",
+        "processors": "tales_of_the_verdant_wind:street_verdant",
         "projection": "terrain_matching"
       },
       "weight": 2
@@ -111,8 +111,8 @@
     {
       "element": {
         "element_type": "minecraft:legacy_single_pool_element",
-        "location": "tales-of-the-verdant-wind:village/verdant/streets/crossroad_04",
-        "processors": "tales-of-the-verdant-wind:street_verdant",
+        "location": "tales_of_the_verdant_wind:village/verdant/streets/crossroad_04",
+        "processors": "tales_of_the_verdant_wind:street_verdant",
         "projection": "terrain_matching"
       },
       "weight": 2
@@ -120,8 +120,8 @@
     {
       "element": {
         "element_type": "minecraft:legacy_single_pool_element",
-        "location": "tales-of-the-verdant-wind:village/verdant/streets/crossroad_05",
-        "processors": "tales-of-the-verdant-wind:street_verdant",
+        "location": "tales_of_the_verdant_wind:village/verdant/streets/crossroad_05",
+        "processors": "tales_of_the_verdant_wind:street_verdant",
         "projection": "terrain_matching"
       },
       "weight": 2
@@ -129,8 +129,8 @@
     {
       "element": {
         "element_type": "minecraft:legacy_single_pool_element",
-        "location": "tales-of-the-verdant-wind:village/verdant/streets/crossroad_06",
-        "processors": "tales-of-the-verdant-wind:street_verdant",
+        "location": "tales_of_the_verdant_wind:village/verdant/streets/crossroad_06",
+        "processors": "tales_of_the_verdant_wind:street_verdant",
         "projection": "terrain_matching"
       },
       "weight": 2
@@ -138,12 +138,12 @@
     {
       "element": {
         "element_type": "minecraft:legacy_single_pool_element",
-        "location": "tales-of-the-verdant-wind:village/verdant/streets/turn_01",
-        "processors": "tales-of-the-verdant-wind:street_verdant",
+        "location": "tales_of_the_verdant_wind:village/verdant/streets/turn_01",
+        "processors": "tales_of_the_verdant_wind:street_verdant",
         "projection": "terrain_matching"
       },
       "weight": 3
     }
   ],
-  "fallback": "tales-of-the-verdant-wind:village/verdant/terminators"
+  "fallback": "tales_of_the_verdant_wind:village/verdant/terminators"
 }

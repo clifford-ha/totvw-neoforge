@@ -1,6 +1,6 @@
 package cliffordha.totvw.client;
 
-import cliffordha.totvw.config.VWConfig;
+import cliffordha.totvw.Config;
 import cliffordha.totvw.registry.*;
 import cliffordha.totvw.registry.attachments.entity.PlayerAttachment;
 import cliffordha.totvw.tag.VWItemTags;
@@ -33,12 +33,19 @@ import static cliffordha.totvw.util.VWUtil.TextUtil.*;
 public class VWTooltips {
     @SubscribeEvent
     public static void register(ItemTooltipEvent event) {
-        onTooltip(event.getItemStack(), event.getContext(), event.getFlags(), event.getToolTip());
-    }
-    private static final Minecraft mc = Minecraft.getInstance();
-    private static void onTooltip(ItemStack stack, Item.TooltipContext context, TooltipFlag flag, List<Component> lines) {
-        if (mc.level == null) return;
+        Player playerClient = event.getContext().player();
+        if (playerClient == null) return;
 
+        onTooltip(playerClient, event.getItemStack(), event.getContext(), event.getToolTip());
+    }
+
+    private static Player player;
+    private static Minecraft mc = Minecraft.getInstance();
+    private static void onTooltip(Player playerClient, ItemStack stack, Item.TooltipContext context, List<Component> lines) {
+        if (mc == null) {
+            return;
+        }
+        player = playerClient;
         List<Component> injected = new ArrayList<>();
 
         handleBenedictionToolLines(stack, injected);
@@ -80,8 +87,6 @@ public class VWTooltips {
         }
     }
     private static void handleLoreLines(ItemStack stack, List<Component> out) {
-        if (mc.level == null) return;
-        Player player = mc.player;
         if (player == null) return;
 
         boolean ACTIVE_BENEDICTION = entityEnchantmentLVL(player, EquipmentSlot.CHEST, VWEnchantments.BENEDICTION_OF_THE_VERDANT_MOUNTAINS) > 0;
@@ -111,7 +116,7 @@ public class VWTooltips {
         String LORE_verixiumIngot;
 
 
-        if (!VWConfig.get().CLIENT_TRANSLATE_LANGUAGE) {
+        if (!Config.CLIENT_TRANSLATE_LANGUAGE.get()) {
             LORE_soulRunestonePlate = "My only regret is that I won't be able to be by your side as you grow up... and, do so forgive me for entrusting you with a heavy burden.";
             LORE_soulRunestoneFragment1 = "\"There will always be those who try to defy the absolute limit of this world. Though sacrifices were uncomfortably high, the ingenuity always take precedence to overcome the obstacles that stand in the way of the living.\"";
             LORE_soulRunestoneFragment2 = "\"But what good does constantly defying the very principles of nature have?\"";
@@ -246,12 +251,12 @@ public class VWTooltips {
     }
 
     private static boolean hasBenediction() {
-        if (mc.player == null || mc.level == null) return false;
-        return entityEnchantmentLVL(mc.player, EquipmentSlot.CHEST, VWEnchantments.BENEDICTION_OF_THE_VERDANT_MOUNTAINS) > 0;
+        if (player == null) return false;
+        return entityEnchantmentLVL(player, EquipmentSlot.CHEST, VWEnchantments.BENEDICTION_OF_THE_VERDANT_MOUNTAINS) > 0;
     }
 
     private static void addVWItem(List<Component> out, String... text) {
-        if (mc.hasShiftDown()) {
+        if (player.isShiftKeyDown()) {
             out.add(Component.literal(Arrays.toString(text)).withColor(VWColors.VERDANT_WIND));
         } else {
             out.add(Component.literal("[VW] Active"));
@@ -259,7 +264,7 @@ public class VWTooltips {
     }
 
     private static void addMutedItalic(List<Component> out, String text) {
-        if (!mc.hasShiftDown()) {
+        if (!player.isShiftKeyDown()) {
             out.add(Component.literal(text)
                     .withColor(VWColors.GRAY)
                     .withStyle(ChatFormatting.ITALIC));
@@ -267,7 +272,7 @@ public class VWTooltips {
     }
 
     private static void addTextChestplate(List<Component> out, String... keys) {
-        if (mc.hasShiftDown()) {
+        if (player.isShiftKeyDown()) {
             out.add(Component.literal("Verdant Wind's Blessing").withColor(VWColors.VERDANT_WIND));
             for (String key : keys) {
                 List<FormattedText> wrapped = mc.font.getSplitter()
@@ -297,7 +302,7 @@ public class VWTooltips {
         out.add(Component.literal(""));
     }
     private static void addExpandingText(List<Component> out, int color, String... keys) {
-        if (mc.hasShiftDown()) {
+        if (player.isShiftKeyDown()) {
             for (String key : keys) {
                 List<FormattedText> wrapped = mc.font.getSplitter()
                         .splitLines(Component.translatable(key), 150, Style.EMPTY);
@@ -310,7 +315,7 @@ public class VWTooltips {
         }
     }
     private static void addExpandingText(List<Component> out, String... keys) {
-        if (mc.hasShiftDown()) {
+        if (player.isShiftKeyDown()) {
             for (String key : keys) {
                 List<FormattedText> wrapped = mc.font.getSplitter()
                         .splitLines(Component.translatable(key), 150, Style.EMPTY);
@@ -323,9 +328,7 @@ public class VWTooltips {
         }
     }
     private static void addETForSurvival(List<Component> out, String... keys) {
-        Player player = mc.player;
-        if (player == null) return;
-        if (player.isCreative() && !VWConfig.get().CLIENT_ALLOW_LORE_SPOILERS) return;
+        if (player.isCreative() && !Config.CLIENT_ALLOW_LORE_SPOILERS.get()) return;
         addExpandingText(out, keys);
     }
 }

@@ -1,10 +1,8 @@
 package cliffordha.totvw.networking;
 
+import cliffordha.totvw.Config;
 import cliffordha.totvw.TOTVW;
-import cliffordha.totvw.config.VWConfig;
 import cliffordha.totvw.networking.packets.ClientPrefsPayload;
-import cliffordha.totvw.networking.packets.OpenTetherBlacklistPayload;
-import cliffordha.totvw.networking.packets.TetherBlacklistPayload;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
@@ -27,16 +25,16 @@ public class VWNetworking {
     public static void sendPrefs() {
         ClientPacketDistributor.sendToServer(
                 new ClientPrefsPayload(
-                        VWConfig.get().CLIENT_SHOW_ATROCITY_COUNTER,
-                        VWConfig.get().CLIENT_ENABLE_NOTIFIERS,
+                        Config.CLIENT_SHOW_ATROCITY_COUNTER.get(),
+                        Config.CLIENT_ENABLE_NOTIFIERS.get(),
 
-                        VWConfig.get().SERVER_BENEDICTION_HEALTH_THRESHOLD,
-                        VWConfig.get().SERVER_WOLF_SHARES_BENEDICTION_STACK,
-                        VWConfig.get().SERVER_ALWAYS_TRIGGER_BLESSING,
-                        VWConfig.get().SERVER_TELEPORT_AFTER_SAVE,
-                        VWConfig.get().SERVER_WOLF_TP_METHOD,
-                        VWConfig.get().SERVER_PLAYER_TP_METHOD,
-                        VWConfig.get().SERVER_WOLF_TP_ALL
+                        Config.SERVER_BENEDICTION_HEALTH_THRESHOLD.get(),
+                        Config.SERVER_WOLF_SHARES_BENEDICTION_STACK.get(),
+                        Config.SERVER_ALWAYS_TRIGGER_BLESSING.get(),
+                        Config.SERVER_TELEPORT_AFTER_SAVE.get(),
+                        Config.SERVER_WOLF_TP_METHOD.get(),
+                        Config.SERVER_PLAYER_TP_METHOD.get(),
+                        Config.SERVER_WOLF_TP_ALL.get()
         ));
     }
     public static void onPlayerJoinEvents(ClientPlayerNetworkEvent.LoggingIn event) {
