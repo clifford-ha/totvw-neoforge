@@ -1,6 +1,7 @@
 package cliffordha.totvw.client;
 
 import cliffordha.totvw.Config;
+import cliffordha.totvw.TOTVW;
 import cliffordha.totvw.registry.*;
 import cliffordha.totvw.registry.attachments.entity.PlayerAttachment;
 import cliffordha.totvw.tag.VWItemTags;
@@ -13,9 +14,7 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
@@ -29,19 +28,17 @@ import static cliffordha.totvw.item.scatteredpages.ScatteredPageTextColor.*;
 import static cliffordha.totvw.registry.VWEnchantments.entityEnchantmentLVL;
 import static cliffordha.totvw.util.VWUtil.TextUtil.*;
 
-@EventBusSubscriber
+@EventBusSubscriber(modid = TOTVW.MOD_ID)
 public class VWTooltips {
     @SubscribeEvent
     public static void register(ItemTooltipEvent event) {
-        Player playerClient = event.getContext().player();
-        if (playerClient == null) return;
-
-        onTooltip(playerClient, event.getItemStack(), event.getContext(), event.getToolTip());
+        if (event.getContext().player() == null) return;
+        onTooltip(event.getEntity(), event.getItemStack(), event.getToolTip());
     }
 
     private static Player player;
     private static Minecraft mc = Minecraft.getInstance();
-    private static void onTooltip(Player playerClient, ItemStack stack, Item.TooltipContext context, List<Component> lines) {
+    private static void onTooltip(Player playerClient, ItemStack stack, List<Component> lines) {
         if (mc == null) {
             return;
         }

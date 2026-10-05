@@ -7,8 +7,6 @@ import cliffordha.totvw.registry.VWItems;
 
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.loot.LootTableSubProvider;
 import net.minecraft.resources.Identifier;
@@ -17,7 +15,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
@@ -27,9 +24,6 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCon
 import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProvider;
 import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders;
 import net.neoforged.neoforge.registries.DeferredItem;
-import net.neoforged.neoforge.server.ServerLifecycleHooks;
-
-import java.util.concurrent.CompletableFuture;
 
 public class VWLootTables implements LootTableSubProvider {
     private static final Holder<ContextIntProvider> ONE_ROLL = ContextIntProviders.exactly(1);
@@ -42,8 +36,7 @@ public class VWLootTables implements LootTableSubProvider {
     public static final Identifier ID_ANCIENT_VERIXIUM_PILLARS = TOTVW.registerID("chests/verixium_pillar");
     public static final Identifier ID_VERDANT_VILLAGE_WEAPONSMITH = TOTVW.registerID("chests/village/verdant/weaponsmith");
 
-
-
+    public static final ResourceKey<LootTable> ANCIENT_CITY_LOOTS = createFromDefault("chests/ancient_city");
     public static final ResourceKey<LootTable> VERIXIUM_POWDER_TRIAL = createExtra("verixium_powder_trial");
     public static final ResourceKey<LootTable> VERIXIUM_UPGRADE_TEMPLATE_ARMORER = createExtra("verixium_upgrade_template_armorer");
     public static final ResourceKey<LootTable> ENCHANTS_TEMPLATE_TRIAL_OMINOUS = createExtra("enchants_template_trial_ominous");
@@ -70,7 +63,7 @@ public class VWLootTables implements LootTableSubProvider {
                 .add(LootItem.lootTableItem(block)
                 .apply(SetItemCountFunction.setCount(ContextIntProviders.exactly(count))));
     }
-    private static LootPool.Builder addEnchantedBookChance(HolderGetter.Provider provider, ResourceKey<Enchantment> ench, int lvl, float chance) {
+    private static LootPool.Builder addEnchantedBookChance(HolderGetter<Enchantment> provider, ResourceKey<Enchantment> ench, int lvl, float chance) {
         return LootPool.lootPool()
                 .setRolls(ONE_ROLL)
                 .when(LootItemRandomChanceCondition.randomChance(chance))
@@ -78,7 +71,7 @@ public class VWLootTables implements LootTableSubProvider {
                         .withEnchantment(provider.getOrThrow(ench), ContextIntProviders.exactly(lvl)))
                 .apply(SetItemCountFunction.setCount(ContextIntProviders.exactly(1))));
     }
-    private static LootPool.Builder addEnchantedBookChance(HolderGetter.Provider provider, ResourceKey<Enchantment> ench, int lvlA, int lvlB, float chance) {
+    private static LootPool.Builder addEnchantedBookChance(HolderGetter<Enchantment> provider, ResourceKey<Enchantment> ench, int lvlA, int lvlB, float chance) {
         return LootPool.lootPool()
                 .setRolls(ONE_ROLL)
                 .when(LootItemRandomChanceCondition.randomChance(chance))
@@ -105,16 +98,14 @@ public class VWLootTables implements LootTableSubProvider {
 
     @Override
     public void run() {
-        HolderGetter.Provider provider = (HolderGetter.Provider) context.lookup(Registries.ENCHANTMENT);
+        HolderGetter<Enchantment> provider = context.lookup(Registries.ENCHANTMENT);
 
         LootPool.Builder benedictionEnchantment = addEnchantedBookChance(provider, VWEnchantments.BENEDICTION_OF_THE_VERDANT_MOUNTAINS, 1, 0.05f);
         LootPool.Builder page1005 = addItemChance(VWItems.Pages.SP_ID_1005,1, 0.07f);
         LootPool.Builder verixiumTemplate = addItemChance(VWItems.VERIXIUM_ARMOR_UPGRADE_TEMPLATE,1, 0.07f);
 
         LootTable.Builder ANCIENT_CITY = LootTable.lootTable().withPool((benedictionEnchantment)).withPool((page1005)).withPool(verixiumTemplate);
-        context.accept(BuiltInLootTables.ANCIENT_CITY, ANCIENT_CITY);
-
-
+        context.accept(ANCIENT_CITY_LOOTS, ANCIENT_CITY);
 
         context.accept(VERIXIUM_POWDER_TRIAL,
                 LootTable.lootTable().withPool(
@@ -173,6 +164,7 @@ public class VWLootTables implements LootTableSubProvider {
                 LootTable.lootTable().withPool(
                     addItemChance(VWItems.EFFLORESCENCE_RUNESTONE_PLATE,1, 0.24f))
         );
+        /*
 
         context.accept(SOUL_RUNESTONE_FRAGMENT_FROM_VERIXIUM_PILLARS,
             LootTable.lootTable().withPool(
@@ -191,6 +183,6 @@ public class VWLootTables implements LootTableSubProvider {
         context.accept(PAGE_FROM_VERDANT_CAMPS,
             LootTable.lootTable().withPool(
                     addItemChance(VWItems.Pages.SP_ID_1006,1, 0.07f))
-        );
+        );*/
     }
 }

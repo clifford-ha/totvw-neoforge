@@ -17,6 +17,7 @@ public class VWLootModifiers extends GlobalLootModifierProvider {
         super(output, registries, TOTVW.MOD_ID);
     }
 
+    public static Identifier ANCIENT_CITY_CHEST = Identifier.withDefaultNamespace("chests/ancient_city");
     public static Identifier BASTION_TREASURE_CHEST = Identifier.withDefaultNamespace("chests/bastion_treasure");
     public static Identifier TRIAL_CHAMBERS_OMINOUS_RARE = Identifier.withDefaultNamespace("chests/trial_chambers/reward_ominous_rare");
     public static Identifier TRIAL_CHAMBERS_OMINOUS_UNIQUE = Identifier.withDefaultNamespace("chests/trial_chambers/reward_ominous_unique");
@@ -28,6 +29,11 @@ public class VWLootModifiers extends GlobalLootModifierProvider {
 
     @Override
     protected void start() {
+        this.add("ancient_city_additional_loot",
+                new AddTableLootModifier(Optional.of(Holder.direct(
+                        new LootTableIdCondition.Builder(ANCIENT_CITY_CHEST).build())),
+                        10, VWLootTables.ANCIENT_CITY_LOOTS));
+
         this.add("verixium_powder_from_trial_chambers",
                 new AddTableLootModifier(Optional.of(Holder.direct(
                         new LootTableIdCondition.Builder(TRIAL_CHAMBERS_RARE).build())),

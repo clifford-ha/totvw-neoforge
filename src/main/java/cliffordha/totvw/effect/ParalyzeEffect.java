@@ -77,6 +77,9 @@ public class ParalyzeEffect extends MobEffect {
                 removeAllModifiers(player, ID, PARALYZE_ATTRIBUTES);
             }
         }
+        if (!mob.hasEffect(PARALYZE)) {
+            removeModifiers(mob);
+        }
         return super.applyEffectTick(serverLevel, mob, amplification);
     }
 

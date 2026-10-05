@@ -3,10 +3,17 @@ package cliffordha.totvw.networking;
 import cliffordha.totvw.Config;
 import cliffordha.totvw.TOTVW;
 import cliffordha.totvw.networking.packets.ClientPrefsPayload;
+import cliffordha.totvw.networking.packets.OpenTetherBlacklistPayload;
+import cliffordha.totvw.networking.packets.TetherBlacklistPayload;
+import cliffordha.totvw.registry.attachments.PlayerPrefs;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
+import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
@@ -22,22 +29,24 @@ public class VWNetworking {
         //registrar.playToServer(TetherBlacklistPayload.TYPE, TetherBlacklistPayload.STREAM_CODEC, ServerboundPackets::handleTetherBlacklistUpdate);
     }
 
-    public static void sendPrefs() {
-        ClientPacketDistributor.sendToServer(
-                new ClientPrefsPayload(
-                        Config.CLIENT_SHOW_ATROCITY_COUNTER.get(),
-                        Config.CLIENT_ENABLE_NOTIFIERS.get(),
+    public static void sendPrefs(Player player) {
+        player.setData(PlayerPrefs.SHOW_ATROCITY_COUNTER, Config.CLIENT_SHOW_ATROCITY_COUNTER.get());
+        player.setData(PlayerPrefs.ENABLE_NOTIFIERS, Config.CLIENT_ENABLE_NOTIFIERS.get());
 
-                        Config.SERVER_BENEDICTION_HEALTH_THRESHOLD.get(),
-                        Config.SERVER_WOLF_SHARES_BENEDICTION_STACK.get(),
-                        Config.SERVER_ALWAYS_TRIGGER_BLESSING.get(),
-                        Config.SERVER_TELEPORT_AFTER_SAVE.get(),
-                        Config.SERVER_WOLF_TP_METHOD.get(),
-                        Config.SERVER_PLAYER_TP_METHOD.get(),
-                        Config.SERVER_WOLF_TP_ALL.get()
-        ));
+        player.setData(PlayerPrefs.BENEDICTION_HEALTH_THRESHOLD, Config.SERVER_BENEDICTION_HEALTH_THRESHOLD.get());
+        player.setData(PlayerPrefs.BENEDICTION_SHARE_STACK, Config.SERVER_WOLF_SHARES_BENEDICTION_STACK.get());
+        player.setData(PlayerPrefs.BENEDICTION_ALWAYS_TRIGGER_BLESSING, Config.SERVER_ALWAYS_TRIGGER_BLESSING.get());
+        player.setData(PlayerPrefs.BENEDICTION_TELEPORT_AFTER_SAVE, Config.SERVER_TELEPORT_AFTER_SAVE.get());
+        player.setData(PlayerPrefs.BENEDICTION_WOLF_TP_METHOD, Config.SERVER_WOLF_TP_METHOD.get());
+        player.setData(PlayerPrefs.BENEDICTION_PLAYER_TP_METHOD, Config.SERVER_PLAYER_TP_METHOD.get());
+        player.setData(PlayerPrefs.BENEDICTION_WOLF_TP_ALL, Config.SERVER_WOLF_TP_ALL.get());
     }
+
+    @SubscribeEvent
     public static void onPlayerJoinEvents(ClientPlayerNetworkEvent.LoggingIn event) {
-        sendPrefs();
+        Player player = event.getPlayer();
+        if (player.level() instanceof ServerLevel level) {
+            level.getServer().execute(() -> sendPrefs(player));
+        }
     }
 }

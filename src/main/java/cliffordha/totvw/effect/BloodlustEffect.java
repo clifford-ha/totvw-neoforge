@@ -74,6 +74,9 @@ public class BloodlustEffect extends MobEffect {
     @Override
     public boolean applyEffectTick(ServerLevel serverLevel, LivingEntity entity, int amplifier) {
         getDamage(entity, serverLevel, amplifier);
+        if (!entity.hasEffect(BLOODLUST)) {
+            removeModifiers(entity);
+        }
         return super.applyEffectTick(serverLevel, entity, amplifier);
     }
 

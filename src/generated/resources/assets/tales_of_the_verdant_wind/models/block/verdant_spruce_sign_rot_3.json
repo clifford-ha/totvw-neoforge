@@ -1,7 +1,0 @@
-{
-  "parent": "minecraft:block/template_sign_rot_3",
-  "textures": {
-    "all": "tales_of_the_verdant_wind:block/verdant_spruce_sign",
-    "particle": "tales_of_the_verdant_wind:block/verdant_spruce_planks"
-  }
-}

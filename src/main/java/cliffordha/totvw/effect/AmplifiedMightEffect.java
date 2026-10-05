@@ -62,6 +62,14 @@ public class AmplifiedMightEffect extends MobEffect {
         removeModifiers(mob);
     }
 
+    @Override
+    public boolean applyEffectTick(ServerLevel serverLevel, LivingEntity mob, int amplification) {
+        if (!mob.hasEffect(AMPLIFIED_MIGHT)) {
+            removeModifiers(mob);
+        }
+        return super.applyEffectTick(serverLevel, mob, amplification);
+    }
+
     private void removeModifiers(LivingEntity entity) {
         removeAllModifiers(entity, ID,
                 List.of(

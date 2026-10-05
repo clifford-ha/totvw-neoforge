@@ -16,6 +16,9 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.wolf.Wolf;
 import net.minecraft.world.entity.player.Player;
 
+import static cliffordha.totvw.registry.VWEffects.AMPLIFIED_MIGHT;
+import static cliffordha.totvw.registry.VWEffects.HAVOC;
+
 public class HavocEffect extends MobEffect {
     public static final ParticleOptions HAVOC_PARTICLE = new DustParticleOptions(VWColors.HAVOC_PARTICLE, 1.0f);
     public HavocEffect() {
@@ -50,6 +53,14 @@ public class HavocEffect extends MobEffect {
     @Override
     public boolean shouldApplyEffectTickThisTick(int tickCount, int amplification) {
         return true;
+    }
+
+    @Override
+    public boolean applyEffectTick(ServerLevel serverLevel, LivingEntity mob, int amplification) {
+        if (!mob.hasEffect(HAVOC)) {
+            removeHavoc(mob);
+        }
+        return super.applyEffectTick(serverLevel, mob, amplification);
     }
 
     @Override

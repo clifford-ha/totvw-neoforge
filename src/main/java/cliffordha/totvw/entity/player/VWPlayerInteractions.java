@@ -1,8 +1,10 @@
 package cliffordha.totvw.entity.player;
 
 import cliffordha.totvw.TOTVW;
+import cliffordha.totvw.networking.ServerboundPackets;
 import cliffordha.totvw.networking.packets.OpenTetherBlacklistPayload;
 import cliffordha.totvw.item.events.VWItemBlessings;
+import cliffordha.totvw.networking.packets.TetherBlacklistPayload;
 import cliffordha.totvw.registry.VWEnchantments;
 import cliffordha.totvw.registry.VWItems;
 import cliffordha.totvw.registry.VWSounds;
@@ -10,7 +12,11 @@ import cliffordha.totvw.registry.attachments.Runestone;
 import cliffordha.totvw.registry.attachments.entity.PlayerAttachment;
 import cliffordha.totvw.tag.VWItemTags;
 
+import net.minecraft.network.protocol.PacketFlow;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.network.protocol.game.ServerboundInteractPacket;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.network.ConfigurationTask;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -23,13 +29,17 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
+import net.neoforged.neoforge.common.extensions.ICommonPacketListener;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 import oshi.util.tuples.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 import static cliffordha.totvw.util.VWUtil.sendToChat;
 
