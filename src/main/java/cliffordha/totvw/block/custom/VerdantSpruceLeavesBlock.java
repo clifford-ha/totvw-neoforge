@@ -3,8 +3,10 @@ package cliffordha.totvw.block.custom;
 import cliffordha.totvw.registry.VWParticles;
 import cliffordha.totvw.world.VWBiomes;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.UntintedParticleLeavesBlock;
 import net.minecraft.world.level.block.sounds.AmbientLeavesBlockSoundPlayer;
@@ -33,5 +35,15 @@ public class VerdantSpruceLeavesBlock extends UntintedParticleLeavesBlock {
             level.addParticle(VWParticles.VERDANT_BIOMES_ENVIRONMENT_AMBIANCE.get(), glowX, glowY, glowZ, 13D, 15D, 13D );
         }
         super.animateTick(state, level, pos, random);
+    }
+
+    @Override
+    public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+        return true;
+    }
+
+    @Override
+    public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+        return 60;
     }
 }

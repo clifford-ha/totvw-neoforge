@@ -8,7 +8,7 @@ import cliffordha.totvw.entity.skills.RunestoneEffects;
 import cliffordha.totvw.entity.skills.VerdantWindBlessing;
 import cliffordha.totvw.registry.*;
 import cliffordha.totvw.registry.attachments.HavocType;
-import cliffordha.totvw.registry.attachments.PlayerPrefs;
+import cliffordha.totvw.registry.attachments.ClientPref;
 import cliffordha.totvw.registry.attachments.VWAttachments;
 import cliffordha.totvw.registry.attachments.entity.PlayerAttachment;
 import cliffordha.totvw.tag.VWBiomeTags;
@@ -104,7 +104,7 @@ public class VWPlayerBehaviors {
                         }
                     }
 
-                    float HEALTH_THRESHOLD = player.getData(PlayerPrefs.BENEDICTION_HEALTH_THRESHOLD) * 0.01f;
+                    float HEALTH_THRESHOLD = player.getData(ClientPref.BENEDICTION_HEALTH_THRESHOLD) * 0.01f;
                     if (player.getHealth() <= player.getMaxHealth() * HEALTH_THRESHOLD) {
                         VerdantWindBlessing.triggerBenedictionFromTick(player);
                     }
@@ -114,7 +114,7 @@ public class VWPlayerBehaviors {
                 PlayerCondition.tick(),
                 (player, _) -> {
 
-                    if (Config.LOG_ENCHANTMENT_SHOW_PLAYER_CD.get()) setPlayerConfiguration(player, 0);
+                    if (ClientPref.showPlayerLog(player)) setPlayerConfiguration(player, 0);
                     if (Config.SERVER_SKILL_COOLDOWNS.get()) {
                         depleteCooldown(player, PlayerAttachment.CD_BLESSING_OF_THE_VERDANT_WIND);
                         depleteCooldown(player, PlayerAttachment.CD_HAVOC);

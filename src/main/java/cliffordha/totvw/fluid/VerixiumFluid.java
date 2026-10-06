@@ -6,6 +6,7 @@ import cliffordha.totvw.registry.VWParticles;
 import cliffordha.totvw.tag.VWBiomeTags;
 import cliffordha.totvw.util.VWUtil;
 
+import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.util.Mth;
@@ -64,6 +65,10 @@ public class VerixiumFluid extends LiquidBlock {
         }
     }
 
+    public void tick(ServerLevel level, BlockPos pos, BlockState state) {
+        this.tick(state, level, pos, level.getRandom());
+    }
+
     @Override
     protected void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         if (!level.isClientSide()) {
@@ -82,7 +87,7 @@ public class VerixiumFluid extends LiquidBlock {
 
     @Override
     protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
-        this.tick(state, level, pos, random);
+        this.tick(level, pos, state);
         if (random.nextFloat() < 0.33f) {
             transformAdjacentBlocks(level, pos);
         }
@@ -102,8 +107,12 @@ public class VerixiumFluid extends LiquidBlock {
             BlockState neighborState = level.getBlockState(neighborPos);
             if (neighborState.is(Blocks.WATER)) {
                 level.setBlock(neighborPos, Blocks.DEEPSLATE.defaultBlockState(), Block.UPDATE_CLIENTS);
-                level.addParticle(ParticleTypes.LARGE_SMOKE, xx, yy, zz, 0.0F, 0.0F, 0.0F);
-                level.playSound(null, pos, SoundEvents.BASALT_BREAK, SoundSource.AMBIENT, 0.2F + level.getRandom().nextFloat() * 0.2F, 0.9F + level.getRandom().nextFloat() * 0.15F);
+                level.playSound(null, pos, SoundEvents.DEEPSLATE_BREAK, SoundSource.BLOCKS, 1.0F, 1.0F);
+                VWUtil.sendParticles(
+                        new BlockParticleOption(ParticleTypes.BLOCK_CRUMBLE, Blocks.DEEPSLATE.defaultBlockState()),
+                        level,
+                        pos,
+                        12, 0.5);
             } else if (neighborState.is(Blocks.LAVA)) {
                 level.setBlock(neighborPos, Blocks.DEEPSLATE.defaultBlockState(), Block.UPDATE_CLIENTS);
                 level.addParticle(ParticleTypes.LARGE_SMOKE, xx, yy, zz, 0.0F, 0.0F, 0.0F);
@@ -137,7 +146,7 @@ public class VerixiumFluid extends LiquidBlock {
         effectApplier.apply(InsideBlockEffectType.EXTINGUISH);
         effectApplier.apply(InsideBlockEffectType.CLEAR_FREEZE);
 
-        if (!(level instanceof ServerLevel) || !(entity instanceof LivingEntity livingEntity)) return;
+        if (!(level instanceof ServerLevel serverLevel) || !(entity instanceof LivingEntity livingEntity)) return;
 
         if (level.getGameTime() % 60 == 0) {
             if (VWUtil.isInBiome(livingEntity, VWBiomeTags.IS_VERDANT_BIOMES)) {
@@ -149,6 +158,7 @@ public class VerixiumFluid extends LiquidBlock {
             }
             whoIsThis(livingEntity);
         }
+        tick(serverLevel, pos, state);
     }
 
     public static int setTime(int min,  int sec) {return ((min * (20 * 60)) + (sec * 20));}

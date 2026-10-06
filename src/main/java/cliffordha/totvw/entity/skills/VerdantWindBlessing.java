@@ -10,7 +10,7 @@ import cliffordha.totvw.registry.VWEffects;
 import cliffordha.totvw.registry.VWEnchantments;
 import cliffordha.totvw.registry.VWSounds;
 import cliffordha.totvw.registry.attachments.Runestone;
-import cliffordha.totvw.registry.attachments.PlayerPrefs;
+import cliffordha.totvw.registry.attachments.ClientPref;
 import cliffordha.totvw.registry.attachments.entity.PlayerAttachment;
 import cliffordha.totvw.registry.attachments.entity.WolfAttachment;
 import cliffordha.totvw.util.VWUtil;
@@ -144,15 +144,15 @@ public class VerdantWindBlessing {
     }
     private static boolean wolfCanShareBenediction(Wolf wolf, Player player) {
         return wolf.getData(WolfAttachment.BENEDICTION) > 1
-                && player.getData(PlayerPrefs.BENEDICTION_SHARE_STACK)
-                && !player.getData(PlayerPrefs.BENEDICTION_ALWAYS_TRIGGER_BLESSING);
+                && player.getData(ClientPref.BENEDICTION_SHARE_STACK)
+                && !player.getData(ClientPref.BENEDICTION_ALWAYS_TRIGGER_BLESSING);
     }
     private static boolean canSaveWolf(Player player) {
         return VWEnchantments.entityEnchantmentLVL(player, EquipmentSlot.CHEST, VWEnchantments.BENEDICTION_OF_THE_VERDANT_MOUNTAINS) > 0
                 && player.getData(PlayerAttachment.CD_BLESSING_OF_THE_VERDANT_WIND) < 1;
     }
     private static float getHealthThreshold(Player player) {
-        return player.getData(PlayerPrefs.BENEDICTION_HEALTH_THRESHOLD) * 0.01f;
+        return player.getData(ClientPref.BENEDICTION_HEALTH_THRESHOLD) * 0.01f;
     }
     private static List<Wolf> getWolvesInRange(ServerLevel level, Player player, double range) {
         List<Wolf> get = level.getEntities(
@@ -211,7 +211,7 @@ public class VerdantWindBlessing {
             } else {
                 boolean canTP = wolf.canTeleport(wolf.level(), owner.level())
                         && wolf.level().dimensionType() == owner.level().dimensionType()
-                        && owner.getData(PlayerPrefs.BENEDICTION_TELEPORT_AFTER_SAVE);
+                        && owner.getData(ClientPref.BENEDICTION_TELEPORT_AFTER_SAVE);
                 if (canTP) {
                     tryTeleport(wolf, owner);
                 } else {
@@ -264,7 +264,7 @@ public class VerdantWindBlessing {
         if (wolf.distanceTo(owner) < 14) return;
         BlockPos playerPos = owner.blockPosition();
         BlockPos wolfPos = wolf.blockPosition();
-        if (owner.getData(PlayerPrefs.BENEDICTION_WOLF_TP_METHOD) < 1) {
+        if (owner.getData(ClientPref.BENEDICTION_WOLF_TP_METHOD) < 1) {
             if (isNotValidForTP(owner.level(), playerPos)) return;
             wolf.teleportToAroundBlockPos(playerPos);
         } else {

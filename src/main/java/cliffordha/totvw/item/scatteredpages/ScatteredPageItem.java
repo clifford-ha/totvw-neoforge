@@ -1,7 +1,7 @@
 package cliffordha.totvw.item.scatteredpages;
 
-import cliffordha.totvw.Config;
-import cliffordha.totvw.client.screen.ScatteredPageScreen;
+import cliffordha.totvw.ClientConfig;
+import cliffordha.totvw.client.VWClientScreens;
 import cliffordha.totvw.item.scatteredpages.contents.FirstBookSet;
 import cliffordha.totvw.item.scatteredpages.contents.MiscBookSet;
 import cliffordha.totvw.item.scatteredpages.handbooks.VWEffectsHandbook;
@@ -10,7 +10,6 @@ import cliffordha.totvw.item.scatteredpages.handbooks.VWFeaturesHandbook;
 import cliffordha.totvw.item.scatteredpages.handbooks.VWItemsHandbook;
 import cliffordha.totvw.registry.VWColors;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
@@ -66,7 +65,7 @@ public class ScatteredPageItem extends Item {
     public String[] getPages(Player player, int contents) {
         FirstBookSet.resolvePlayer(player);
         MiscBookSet.resolvePlayer(player);
-        if (player.isCreative() && !Config.CLIENT_ALLOW_LORE_SPOILERS.get()) {
+        if (player.isCreative() && !ClientConfig.CLIENT_ALLOW_LORE_SPOILERS.get()) {
             return invalidInSurvival;
         }
 
@@ -80,7 +79,7 @@ public class ScatteredPageItem extends Item {
 
     public static void showSpecifiedContent(LivingEntity caller, String title, String[] pages) {
         if (caller.level().isClientSide()) {
-            setScreen(title, pages);
+            VWClientScreens.openScatteredPage(title, pages);
         }
     }
 
@@ -112,7 +111,7 @@ public class ScatteredPageItem extends Item {
     }
 
     private static void setScreen(String title, String[] pages) {
-        Minecraft.getInstance().setScreenAndShow(new ScatteredPageScreen(title, pages));
+        VWClientScreens.openScatteredPage(title, pages);
     }
 
     @Override

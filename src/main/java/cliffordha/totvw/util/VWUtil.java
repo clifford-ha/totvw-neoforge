@@ -8,7 +8,7 @@ import cliffordha.totvw.item.scatteredpages.ScatteredPageTextColor;
 import cliffordha.totvw.item.scatteredpages.ScatteredPageTextStyle;
 import cliffordha.totvw.registry.VWColors;
 import cliffordha.totvw.registry.VWSounds;
-import cliffordha.totvw.registry.attachments.PlayerPrefs;
+import cliffordha.totvw.registry.attachments.ClientPref;
 import cliffordha.totvw.tag.VWBiomeTags;
 
 import net.minecraft.core.BlockPos;
@@ -284,27 +284,27 @@ public class VWUtil {
     public static void sendToChat(LivingEntity entity, boolean overlay, String... msg) {
         Player player = resolveRecipient(entity);
         if (player == null) return;
-        if (!player.getData(PlayerPrefs.ENABLE_NOTIFIERS)) return;
+        if (!player.getData(ClientPref.ENABLE_NOTIFIERS)) return;
         sendToMain(player, overlay, String.join("\n", msg));
     }
 
     public static void sendToChat(LivingEntity entity, int color, String... msg) {
         Player player = resolveRecipient(entity);
         if (player == null) return;
-        if (!player.getData(PlayerPrefs.ENABLE_NOTIFIERS)) return;
+        if (!player.getData(ClientPref.ENABLE_NOTIFIERS)) return;
         sendToMain(player, color, String.join("\n", msg));
     }
 
     public static void sendToChat(LivingEntity entity, int color, boolean overlay, String... msg) {
         Player player = resolveRecipient(entity);
         if (player == null) return;
-        if (!player.getData(PlayerPrefs.ENABLE_NOTIFIERS)) return;
+        if (!player.getData(ClientPref.ENABLE_NOTIFIERS)) return;
         sendToMain(player, color, overlay, String.join("\n", msg));
     }
 
 
     public static void playNotification(Player player) {
-        if (!player.getData(PlayerPrefs.ENABLE_NOTIFIERS)) return;
+        if (!player.getData(ClientPref.ENABLE_NOTIFIERS)) return;
         player.level().playSound(null, player.blockPosition(), VWSounds.NOTIFY.get(), SoundSource.PLAYERS);
     }
     public static boolean isNotValidForTP(Level level, BlockPos pos) {

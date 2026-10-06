@@ -6,6 +6,8 @@ import cliffordha.totvw.TOTVW;
 import cliffordha.totvw.fluid.VerixiumFluid;
 import cliffordha.totvw.world.tree.VWTreeGrowers;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.BlockFamilies;
@@ -15,8 +17,10 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.ColorRGBA;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.component.TooltipDisplay;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
 import net.minecraft.world.level.block.state.properties.WoodType;
 import net.minecraft.world.level.material.MapColor;
@@ -33,6 +37,7 @@ import java.util.function.Function;
 
 import static cliffordha.totvw.registry.VWBlocks.Util.*;
 
+@SuppressWarnings("NullableProblems")
 public class VWBlocks {
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(TOTVW.MOD_ID);
     public static final DeferredRegister.Items BLOCK_ITEMS = DeferredRegister.createItems(TOTVW.MOD_ID);
@@ -112,28 +117,68 @@ public class VWBlocks {
     public static final DeferredBlock<Block> VERDANT_MOSS_BLOCK = registerBlock("verdant_moss_block",
             properties -> new GrassBlock(properties
                     .mapColor(MapColor.WARPED_WART_BLOCK)
-            ),
+            ){
+                @Override
+                public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+                    return true;
+                }
+
+                @Override
+                public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+                    return 60;
+                }
+            },
             BlockBehaviour.Properties.ofFullCopy(Blocks.MOSS_BLOCK),
             true
     );
     public static final DeferredBlock<Block> VERDANT_SPRUCE_PLANKS = registerBlock("verdant_spruce_planks",
             properties -> new Block(properties
                     .mapColor(MapColor.WARPED_STEM)
-            ),
+            ){
+                @Override
+                public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+                    return true;
+                }
+
+                @Override
+                public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+                    return 20;
+                }
+            },
             BlockBehaviour.Properties.ofFullCopy(Blocks.SPRUCE_PLANKS),
             true
     );
     public static final DeferredBlock<Block> VERDANT_SPRUCE_SLAB = registerBlock("verdant_spruce_slab",
             properties -> new SlabBlock(properties
                     .mapColor(MapColor.WARPED_STEM)
-            ),
+            ){
+                @Override
+                public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+                    return true;
+                }
+
+                @Override
+                public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+                    return 20;
+                }
+            },
             BlockBehaviour.Properties.ofFullCopy(Blocks.SPRUCE_PLANKS),
             true
     );
     public static final DeferredBlock<Block> VERDANT_SPRUCE_STAIRS = registerBlock("verdant_spruce_stairs",
             properties -> new StairBlock(VERDANT_SPRUCE_PLANKS.get().defaultBlockState(), properties
                     .mapColor(MapColor.WARPED_STEM)
-            ),
+            ){
+                @Override
+                public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+                    return true;
+                }
+
+                @Override
+                public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+                    return 20;
+                }
+            },
             BlockBehaviour.Properties.ofFullCopy(Blocks.SPRUCE_STAIRS),
             true
     );
@@ -182,50 +227,130 @@ public class VWBlocks {
     public static final DeferredBlock<Block> VERDANT_SPRUCE_LOG = registerBlock("verdant_spruce_log",
             properties -> new RotatedPillarBlock(properties
                     .mapColor(MapColor.WARPED_NYLIUM)
-            ),
+            ){
+                @Override
+                public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+                    return true;
+                }
+
+                @Override
+                public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+                    return 20;
+                }
+            },
             BlockBehaviour.Properties.ofFullCopy(Blocks.SPRUCE_LOG),
             true
     );
     public static final DeferredBlock<Block> VERDANT_SPRUCE_WOOD = registerBlock("verdant_spruce_wood",
             properties -> new RotatedPillarBlock(properties
                     .mapColor(MapColor.WARPED_NYLIUM)
-            ),
+            ){
+                @Override
+                public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+                    return true;
+                }
+
+                @Override
+                public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+                    return 20;
+                }
+            },
             BlockBehaviour.Properties.ofFullCopy(Blocks.SPRUCE_WOOD),
             true
     );
     public static final DeferredBlock<Block> STRIPPED_VERDANT_SPRUCE_LOG = registerBlock("stripped_verdant_spruce_log",
-            RotatedPillarBlock::new,
+            properties -> new RotatedPillarBlock(properties){
+                @Override
+                public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+                    return true;
+                }
+
+                @Override
+                public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+                    return 20;
+                }
+            },
             BlockBehaviour.Properties.ofFullCopy(Blocks.SPRUCE_LOG).mapColor(MapColor.WARPED_NYLIUM),
             true
     );
     public static final DeferredBlock<Block> STRIPPED_VERDANT_SPRUCE_WOOD = registerBlock("stripped_verdant_spruce_wood",
-            RotatedPillarBlock::new,
+            properties -> new RotatedPillarBlock(properties){
+                @Override
+                public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+                    return true;
+                }
+
+                @Override
+                public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+                    return 20;
+                }
+            },
             BlockBehaviour.Properties.ofFullCopy(Blocks.SPRUCE_WOOD).mapColor(MapColor.WARPED_NYLIUM),
             true
     );
     public static final DeferredBlock<Block> VERDANT_SPRUCE_SIGN = registerBlock("verdant_spruce_sign",
             properties -> new VWStandingSignBlock(VERDANT_SPRUCE_WOOD_TYPE, properties
                     .mapColor(MapColor.WARPED_STEM)
-            ),
+            ){
+                @Override
+                public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+                    return true;
+                }
+
+                @Override
+                public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+                    return 20;
+                }
+            },
             BlockBehaviour.Properties.ofFullCopy(Blocks.SPRUCE_SIGN),
             false
     );
     public static final DeferredBlock<Block> VERDANT_SPRUCE_HANGING_SIGN = registerBlock("verdant_spruce_hanging_sign",
             properties -> new VWCeilingHangingSignBlock(VERDANT_SPRUCE_WOOD_TYPE, properties
                     .mapColor(MapColor.WARPED_STEM)
-            ),
+            ){
+                @Override
+                public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+                    return true;
+                }
+
+                @Override
+                public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+                    return 20;
+                }
+            },
             BlockBehaviour.Properties.ofFullCopy(Blocks.SPRUCE_HANGING_SIGN),
             false
     );
     public static final DeferredBlock<Block> VERDANT_SPRUCE_WALL_SIGN = registerBlock("verdant_spruce_wall_sign",
-            properties -> new VWWallSignBlock(VERDANT_SPRUCE_WOOD_TYPE, properties),
+            properties -> new VWWallSignBlock(VERDANT_SPRUCE_WOOD_TYPE, properties){
+                @Override
+                public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+                    return true;
+                }
+
+                @Override
+                public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+                    return 20;
+                }
+            },
             BlockBehaviour.Properties.ofFullCopy(Blocks.SPRUCE_WALL_SIGN)
                     .overrideDescription(descriptionId("verdant_spruce_sign"))
                     .overrideLootTable(lootTable("verdant_spruce_sign")),
             false
     );
     public static final DeferredBlock<Block> VERDANT_SPRUCE_WALL_HANGING_SIGN = registerBlock("verdant_spruce_wall_hanging_sign",
-            properties -> new VWWallHangingSignBlock(VERDANT_SPRUCE_WOOD_TYPE, properties),
+            properties -> new VWWallHangingSignBlock(VERDANT_SPRUCE_WOOD_TYPE, properties){
+                @Override
+                public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+                    return true;
+                }
+
+                @Override
+                public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+                    return 20;
+                }
+            },
             BlockBehaviour.Properties.ofFullCopy(Blocks.SPRUCE_WALL_HANGING_SIGN)
                     .overrideDescription(descriptionId("verdant_spruce_hanging_sign"))
                     .overrideLootTable(lootTable("verdant_spruce_hanging_sign")),
@@ -234,7 +359,17 @@ public class VWBlocks {
     public static final DeferredBlock<Block> VERDANT_SPRUCE_SHELF = registerBlock("verdant_spruce_shelf",
             properties -> new VWShelfBlock(properties
                     .mapColor(MapColor.WARPED_STEM)
-            ),
+            ){
+                @Override
+                public boolean isFlammable(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+                    return true;
+                }
+
+                @Override
+                public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
+                    return 20;
+                }
+            },
             BlockBehaviour.Properties.ofFullCopy(Blocks.SPRUCE_SHELF),
             true
     );

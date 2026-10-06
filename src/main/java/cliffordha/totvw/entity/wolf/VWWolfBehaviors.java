@@ -9,7 +9,7 @@ import cliffordha.totvw.entity.skills.RunestoneEffects;
 import cliffordha.totvw.entity.skills.VerdantWindBlessing;
 import cliffordha.totvw.registry.*;
 import cliffordha.totvw.registry.attachments.Runestone;
-import cliffordha.totvw.registry.attachments.PlayerPrefs;
+import cliffordha.totvw.registry.attachments.ClientPref;
 import cliffordha.totvw.registry.attachments.entity.WolfAttachment;
 import cliffordha.totvw.util.VWUtil;
 import cliffordha.totvw.entity.skill.WolfSkillDefinition;
@@ -138,7 +138,7 @@ public class VWWolfBehaviors {
                     //actions with owner check
                     if (owner == null) return;
 
-                    float HEALTH_THRESHOLD = owner.getData(PlayerPrefs.BENEDICTION_HEALTH_THRESHOLD) * 0.01f;
+                    float HEALTH_THRESHOLD = owner.getData(ClientPref.BENEDICTION_HEALTH_THRESHOLD) * 0.01f;
 
                     if (wolf.getHealth() <= wolf.getMaxHealth() * HEALTH_THRESHOLD) {
                         VerdantWindBlessing.triggerBenedictionFromTick(wolf);
@@ -161,9 +161,7 @@ public class VWWolfBehaviors {
                 }
         ));
         TICK_RULES.add(WolfBehaviorRule.forAny(
-                WolfCondition.newSoundsEnable()
-                        .and(WolfCondition.isInBiomes(VWBiomeTags.FOREST_WHERE_WOLVES_HOWL))
-                        .and(WolfCondition.tick(0, 30)),
+                WolfCondition.isInBiomes(VWBiomeTags.FOREST_WHERE_WOLVES_HOWL).and(WolfCondition.tick(0, 30)),
                 (wolf, level) -> {
                     if (wolf.isAngry()) return;
                     if (wolf.level().getMaxLocalRawBrightness(wolf.blockPosition()) > 11) return;
@@ -181,7 +179,7 @@ public class VWWolfBehaviors {
         TICK_RULES.add(WolfBehaviorRule.forAny(WolfCondition.tick(), (wolf, level) -> {
             runEffectsOnTick(wolf, level);
 
-            if (Config.LOG_ENCHANTMENT_SHOW_WOLF_CD.get()) setWolfConfiguration(wolf, 0);
+            if (ClientPref.showWolfLog(wolf)) setWolfConfiguration(wolf, 0);
             if (Config.SERVER_OTHER_COOLDOWNS.get()) {
                 depleteCooldown(wolf, WolfAttachment.TIMER_AIR_SUPPLY);
             }

@@ -1,11 +1,13 @@
 package cliffordha.totvw.entity.player;
 
 import cliffordha.totvw.registry.attachments.AttachmentUtil;
+import cliffordha.totvw.registry.attachments.ClientPref;
 import cliffordha.totvw.registry.attachments.HavocType;
 import cliffordha.totvw.registry.attachments.VWAttachments;
 import cliffordha.totvw.registry.attachments.entity.PlayerAttachment;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
+import net.neoforged.neoforge.attachment.AttachmentType;
 import oshi.util.tuples.Pair;
 
 import java.util.List;
@@ -30,7 +32,9 @@ public record PlayerStats(
         boolean hasReceivedEnchantmentsHandbook,
         boolean hasReceivedItemsHandbook,
         boolean hasReceivedFeaturesHandbook,
-        boolean hasReceivedEffectsHandbook
+        boolean hasReceivedEffectsHandbook,
+
+        List<?> listType
 ) {
     public static PlayerStats valueOf(Player player) {
         var sharedID = player.getData(VWAttachments.WOLF_PLAYER_SHARED_ID);
@@ -41,6 +45,8 @@ public record PlayerStats(
         boolean itemHandbook = player.getData(PlayerAttachment.RECEIVED_ITEMS_HANDBOOK) > 0;
         boolean featureHandbook = player.getData(PlayerAttachment.RECEIVED_FEATURES_HANDBOOK) > 0;
         boolean effectHandbook = player.getData(PlayerAttachment.RECEIVED_EFFECTS_HANDBOOK) > 0;
+
+        List<?> listType = ClientPref.getAttachmentTypes(player);
 
         return new PlayerStats(
                 player.getPlainTextName(),
@@ -61,7 +67,9 @@ public record PlayerStats(
                 enchantmentHandbook,
                 itemHandbook,
                 featureHandbook,
-                effectHandbook
+                effectHandbook,
+
+                listType
         );
     }
 }

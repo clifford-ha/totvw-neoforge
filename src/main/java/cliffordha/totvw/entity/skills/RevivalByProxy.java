@@ -5,7 +5,7 @@ import cliffordha.totvw.TOTVW;
 import cliffordha.totvw.item.custom.SoulRunestonePlate;
 import cliffordha.totvw.registry.VWColors;
 import cliffordha.totvw.registry.VWItems;
-import cliffordha.totvw.registry.attachments.PlayerPrefs;
+import cliffordha.totvw.registry.attachments.ClientPref;
 import cliffordha.totvw.registry.attachments.entity.PlayerAttachment;
 import cliffordha.totvw.registry.attachments.entity.WolfAttachment;
 
@@ -14,7 +14,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.EntityTypes;
@@ -38,7 +37,7 @@ public class RevivalByProxy {
         boolean hasTotem = entity.getMainHandItem().is(Items.TOTEM_OF_UNDYING) || entity.getOffhandItem().is(Items.TOTEM_OF_UNDYING);
         if (entity instanceof Player player && !hasTotem) {
             if (damageSource.is(DamageTypes.GENERIC_KILL)) return true;
-            if (!player.getData(PlayerPrefs.BENEDICTION_SHARE_STACK)) return true;
+            if (!player.getData(ClientPref.BENEDICTION_SHARE_STACK)) return true;
 
             Level getLevel = player.level();
             ServerLevel level = (ServerLevel) getLevel;
@@ -55,7 +54,7 @@ public class RevivalByProxy {
                     Wolf mainWolf = wolfWithStack.getFirst();
                     getTeleportToWolf(player, mainWolf, false, mainWolf);
 
-                    if (player.getData(PlayerPrefs.BENEDICTION_WOLF_TP_ALL)) {
+                    if (player.getData(ClientPref.BENEDICTION_WOLF_TP_ALL)) {
                         for (Wolf wolf : wolves) {
                             getTeleportToWolf(player, wolf, true, mainWolf);
                         }
@@ -113,12 +112,12 @@ public class RevivalByProxy {
     }
     private static void getTeleportToWolf(Player player, Wolf wolf, boolean tpAll, Wolf mainWolf) {
         if (!player.canTeleport(player.level(), wolf.level())) return;
-        if (!player.getData(PlayerPrefs.BENEDICTION_TELEPORT_AFTER_SAVE)) return;
+        if (!player.getData(ClientPref.BENEDICTION_TELEPORT_AFTER_SAVE)) return;
         if (player.distanceTo(wolf) < 16) return;
 
         BlockPos wolfPos = wolf.blockPosition();
         BlockPos playerPos = player.blockPosition();
-        boolean tpMode = player.getData(PlayerPrefs.BENEDICTION_PLAYER_TP_METHOD) < 1;
+        boolean tpMode = player.getData(ClientPref.BENEDICTION_PLAYER_TP_METHOD) < 1;
 
         if (tpAll) {
             BlockPos mainWolfPos = mainWolf.blockPosition();

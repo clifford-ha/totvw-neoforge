@@ -4,6 +4,8 @@ package cliffordha.totvw.registry;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.event.brewing.PotionBrewEvent;
 
 public class VWPotionBrewing {
     public static void register() {

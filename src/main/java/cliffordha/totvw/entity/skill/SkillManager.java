@@ -2,7 +2,7 @@ package cliffordha.totvw.entity.skill;
 
 import cliffordha.totvw.Config;
 import cliffordha.totvw.registry.VWSounds;
-import cliffordha.totvw.registry.attachments.PlayerPrefs;
+import cliffordha.totvw.registry.attachments.ClientPref;
 import cliffordha.totvw.registry.attachments.entity.PlayerAttachment;
 import cliffordha.totvw.registry.attachments.entity.WolfAttachment;
 import cliffordha.totvw.util.VWUtil;
@@ -75,7 +75,7 @@ public class SkillManager {
         }
     }
     private static boolean cannotPlaySound(Player player) {
-        return !player.getData(PlayerPrefs.ENABLE_NOTIFIERS);
+        return !player.getData(ClientPref.ENABLE_NOTIFIERS);
     }
 
     public static void processCDNotify(LivingEntity entity, Supplier<AttachmentType<Integer>> cooldown, Supplier<AttachmentType<Integer>> notify, int color, String... msg) {

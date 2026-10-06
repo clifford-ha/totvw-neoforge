@@ -1,6 +1,6 @@
 package cliffordha.totvw.item.scatteredpages.handbooks;
 
-import cliffordha.totvw.registry.attachments.PlayerPrefs;
+import cliffordha.totvw.registry.attachments.ClientPref;
 import net.minecraft.world.entity.player.Player;
 
 import static cliffordha.totvw.item.scatteredpages.ScatteredPageTextColor.*;
@@ -32,7 +32,7 @@ public class VWEnchantmentsHandbook {
     }
 
     private static String benedictionOfTheVerdantMountainsInfo(Player player) {
-        String HEALTH_THRESHOLD = (player.getData(PlayerPrefs.BENEDICTION_HEALTH_THRESHOLD)) + "%";
+        String HEALTH_THRESHOLD = (player.getData(ClientPref.BENEDICTION_HEALTH_THRESHOLD)) + "%";
 
         return titleBenediction.toUpperCase() + nextLine
                 + "This is the core enchantment that will provide access to features that are related to the Verdant Mountains, as well as the key to unlocking the full potential of other enchantments. This enchantment also gives " + cText(DARK_AQUA, "+3 ") + descAttackDMG + "."

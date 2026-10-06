@@ -1,6 +1,6 @@
 package cliffordha.totvw.client;
 
-import cliffordha.totvw.Config;
+import cliffordha.totvw.ClientConfig;
 import cliffordha.totvw.TOTVW;
 import cliffordha.totvw.registry.*;
 import cliffordha.totvw.registry.attachments.entity.PlayerAttachment;
@@ -18,6 +18,7 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 
 import java.util.ArrayList;
@@ -29,12 +30,14 @@ import static cliffordha.totvw.item.scatteredpages.ScatteredPageTextColor.*;
 import static cliffordha.totvw.registry.VWEnchantments.entityEnchantmentLVL;
 import static cliffordha.totvw.util.VWUtil.TextUtil.*;
 
+@Mod(value = TOTVW.MOD_ID, dist = Dist.CLIENT)
 @EventBusSubscriber(modid = TOTVW.MOD_ID, value = Dist.CLIENT)
 public class VWTooltips {
+
     @SubscribeEvent
-    public static void register(ItemTooltipEvent event) {
+    public static void registerTooltip(ItemTooltipEvent event) {
         if (event.getContext().player() == null) return;
-        onTooltip(event.getEntity(), event.getItemStack(), event.getToolTip());
+        onTooltip(event.getContext().player(), event.getItemStack(), event.getToolTip());
     }
 
     private static Player player;
@@ -114,7 +117,7 @@ public class VWTooltips {
         String LORE_verixiumIngot;
 
 
-        if (!Config.CLIENT_TRANSLATE_LANGUAGE.get()) {
+        if (ClientConfig.CLIENT_TRANSLATE_LANGUAGE.get()) {
             LORE_soulRunestonePlate = "My only regret is that I won't be able to be by your side as you grow up... and, do so forgive me for entrusting you with a heavy burden.";
             LORE_soulRunestoneFragment1 = "\"There will always be those who try to defy the absolute limit of this world. Though sacrifices were uncomfortably high, the ingenuity always take precedence to overcome the obstacles that stand in the way of the living.\"";
             LORE_soulRunestoneFragment2 = "\"But what good does constantly defying the very principles of nature have?\"";
@@ -326,7 +329,7 @@ public class VWTooltips {
         }
     }
     private static void addETForSurvival(List<Component> out, String... keys) {
-        if (player.isCreative() && !Config.CLIENT_ALLOW_LORE_SPOILERS.get()) return;
+        if (player.isCreative() && !ClientConfig.CLIENT_ALLOW_LORE_SPOILERS.get()) return;
         addExpandingText(out, keys);
     }
 }

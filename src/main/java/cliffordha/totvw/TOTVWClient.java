@@ -1,6 +1,7 @@
 package cliffordha.totvw;
 
 import cliffordha.totvw.client.VWModelLayerProvider;
+import cliffordha.totvw.client.VWTooltips;
 import cliffordha.totvw.fluid.VWFluidTypes;
 import cliffordha.totvw.keymapping.VWKeymap;
 import cliffordha.totvw.particle.BenedictionTriggerParticle;
@@ -11,6 +12,7 @@ import cliffordha.totvw.registry.*;
 import cliffordha.totvw.util.VWColorizeTextMixin;
 import cliffordha.totvw.util.VWEffectOverlays;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.color.block.BlockTintSources;
 import net.minecraft.client.model.object.boat.BoatModel;
 import net.minecraft.client.renderer.block.FluidModel;

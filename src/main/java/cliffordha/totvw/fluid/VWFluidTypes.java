@@ -4,7 +4,12 @@ import cliffordha.totvw.TOTVW;
 import cliffordha.totvw.registry.VWColors;
 import net.minecraft.client.Camera;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.ARGB;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.gamerules.GameRules;
+import net.minecraft.world.level.material.FluidState;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.fluids.FluidType;
@@ -21,15 +26,18 @@ public class VWFluidTypes {
     public static final Supplier<FluidType> VERIXIUM_FLUID_TYPE = FLUID_TYPES.register("verixium_fluid_type",
             () -> new FluidType(FluidType.Properties.create()
                     .isWaterLike(true)
-                    .canDrown(true)
-                    .canExtinguish(true)
-                    .canSwim(true)
-                    .density(1000)
-                    .viscosity(1000)
-                    .canConvertToSource(true)
-                    .canPushEntity(true)
-                    .supportsBoating(true)
-            ));
+            ) {
+                @Override
+                public boolean canConvertToSource(FluidState state, LevelReader reader, BlockPos pos) {
+                    if (reader instanceof ServerLevel level) {
+                        float random = level.getRandom().nextFloat();
+                        if (random < 0.007f) {
+                            return level.getGameRules().get(GameRules.WATER_SOURCE_CONVERSION);
+                        }
+                    }
+                    return false;
+                }
+            });
 
     public static IClientFluidTypeExtensions VERIXIUM_FLUID_EXTENSION = new IClientFluidTypeExtensions() {
         @Override

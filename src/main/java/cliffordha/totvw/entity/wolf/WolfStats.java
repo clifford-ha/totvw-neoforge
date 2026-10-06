@@ -32,9 +32,9 @@ public record WolfStats(
 ) {
     public static WolfStats valueOf(Wolf wolf) {
         var hasSoulID = wolf.getData(WolfAttachment.SOUL_ID);
-        String SOUL_ID = hasSoulID != AttachmentUtil.EMPTY_UUID ? String.valueOf(wolf.getData(WolfAttachment.SOUL_ID)) : "None";
+        String SOUL_ID = !hasSoulID.equals(AttachmentUtil.EMPTY_UUID) ? String.valueOf(wolf.getData(WolfAttachment.SOUL_ID)) : "None";
         var hasFamilyID = wolf.getData(WolfAttachment.FAMILY_ID);
-        String FAMILY_ID = hasFamilyID != AttachmentUtil.EMPTY_UUID ? String.valueOf(wolf.getData(WolfAttachment.FAMILY_ID)) : "None";
+        String FAMILY_ID = !hasFamilyID.equals(AttachmentUtil.EMPTY_UUID) ? String.valueOf(wolf.getData(WolfAttachment.FAMILY_ID)) : "None";
         String OWNER = wolf.getOwner() != null ? wolf.getOwner().getPlainTextName() : "None";
         String OWNER_UUID = wolf.getOwner() != null ? String.valueOf(wolf.getOwner().getUUID()) : "None";
         String SHARED_UUID = wolf.getOwner() != null ? String.valueOf(VWAttachments.getWolfPlayerSharedId(wolf)): "None";

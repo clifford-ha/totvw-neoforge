@@ -91,12 +91,20 @@ public abstract class WolfEntityMixin extends LivingEntity {
         addAttributeModifier(wolf, Attributes.SCALE, 0.2);
     }
 
-    @Inject(method = "canMate", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "canMate", at = @At("RETURN"), cancellable = true)
     private void canMate(Animal partner, CallbackInfoReturnable<Boolean> cir) {
         Wolf wolf = (Wolf) (Object) this;
 
         UUID wolfID = wolf.getData(WolfAttachment.FAMILY_ID);
         UUID partnerID = partner.getData(WolfAttachment.FAMILY_ID);
+
+        if (wolfID.equals(AttachmentUtil.EMPTY_UUID) || partnerID.equals(AttachmentUtil.EMPTY_UUID)) {
+            cir.setReturnValue(true);
+            return;
+        } else if (wolfID.equals(AttachmentUtil.EMPTY_UUID) && partnerID.equals(AttachmentUtil.EMPTY_UUID)) {
+            cir.setReturnValue(true);
+            return;
+        }
 
         cir.setReturnValue(!wolfID.equals(partnerID));
     }
@@ -115,15 +123,15 @@ public abstract class WolfEntityMixin extends LivingEntity {
             UUID familyIDPartner = wolfPartner.getData(WolfAttachment.FAMILY_ID);
             UUID empty = AttachmentUtil.EMPTY_UUID;
 
-            if (familyIDWolf != empty && familyIDPartner != empty) {
+            if (!familyIDWolf.equals(empty) && !familyIDPartner.equals(empty)) {
                 value = level.getRandom().nextBoolean() ? familyIDWolf : familyIDPartner;
                 baby.setData(WolfAttachment.FAMILY_ID, value);
 
-            } else if (familyIDWolf != empty && familyIDPartner == empty) {
+            } else if (!familyIDWolf.equals(empty) && familyIDPartner.equals(empty)) {
                 baby.setData(WolfAttachment.FAMILY_ID, familyIDWolf);
                 wolfPartner.setData(WolfAttachment.FAMILY_ID, familyIDWolf);
 
-            } else if (familyIDPartner != empty && familyIDWolf == empty) {
+            } else if (!familyIDPartner.equals(empty) && familyIDWolf.equals(empty)) {
                 baby.setData(WolfAttachment.FAMILY_ID, familyIDPartner);
                 wolf.setData(WolfAttachment.FAMILY_ID, familyIDPartner);
 

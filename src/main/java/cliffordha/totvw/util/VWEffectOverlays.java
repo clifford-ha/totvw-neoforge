@@ -1,5 +1,6 @@
 package cliffordha.totvw.util;
 
+import cliffordha.totvw.ClientConfig;
 import cliffordha.totvw.Config;
 import cliffordha.totvw.TOTVW;
 import cliffordha.totvw.registry.VWColors;
@@ -7,16 +8,12 @@ import cliffordha.totvw.registry.VWEffects;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.resources.Identifier;
 import net.minecraft.util.ARGB;
 import net.minecraft.util.Mth;
 import net.minecraft.util.Util;
 import net.minecraft.world.entity.player.Player;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 
-@EventBusSubscriber(modid = TOTVW.MOD_ID, value = Dist.CLIENT)
 public class VWEffectOverlays {
     private static final float BLOODLUST_PULSE_SPEED_MS = (float) (Math.PI * 2.0 / 2000.0);
 
@@ -74,20 +71,16 @@ public class VWEffectOverlays {
         return Mth.lerp(t, 0, max);
     }
     private static boolean overlaysDisabled() {
-        return !Config.CLIENT_ALLOW_EFFECT_OVERLAYS.get();
+        return !ClientConfig.CLIENT_ALLOW_EFFECT_OVERLAYS.get();
     }
     private static boolean allowBloodlustOverlay() {
         if (overlaysDisabled()) return false;
-        return Config.CLIENT_BLOODLUST_EFFECT_OVERLAY.get();
+        return ClientConfig.CLIENT_BLOODLUST_EFFECT_OVERLAY.get();
     }
     private static Player player() {
         return Minecraft.getInstance().player;
     }
     private static boolean notSurvival() {
         return player().isCreative() || player().isSpectator();
-    }
-
-    private static Identifier register(String name) {
-        return TOTVW.registerID(name);
     }
 }

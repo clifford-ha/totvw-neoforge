@@ -57,6 +57,7 @@ public class MiscBookSet {
     }
     private static String[] playerStats() {
         var stat = PlayerStats.valueOf(player);
+        List<?> pref = stat.listType();
 
         return addPage(
                 "UUID: " + stat.UUID() + nextLine
@@ -79,6 +80,18 @@ public class MiscBookSet {
                 + "Items: " + stat.hasReceivedItemsHandbook() + nextLine
                 + "Features: " + stat.hasReceivedFeaturesHandbook() + nextLine
                 + "Effects: " + stat.hasReceivedEffectsHandbook()
+
+                + nextParagraph
+                + "Show Atrocity Counter: " + pref.get(0) + nextLine
+                + "Enable Notifiers: " + pref.get(1) + nextLine
+                + "Benediction Health Threshold: " + pref.get(2) + nextLine
+                + "Benediction Share Stack: " + pref.get(3) + nextLine
+                + "Benediction Always Trigger Blessing: " + pref.get(4) + nextLine
+                + "Benediction Teleport After Save: " + pref.get(5) + nextLine
+                + "Benediction Wolf TP Method: " + pref.get(6) + nextLine
+                + "Benediction Player TP Method: " + pref.get(7) + nextLine
+                + "Benediction Wolf TP All: " + pref.get(8) + nextLine
+                + "Show Player Log: " + pref.get(9)
         );
     }
     private static String getPairs(List<Pair<String, UUID>> list) {

@@ -17,7 +17,10 @@ public record ClientPrefsPayload(
         boolean benedictionTeleportAfterSave,
         int benedictionWolfTPMethod,
         int benedictionPlayerTPMethod,
-        boolean benedictionWolfTPAll
+        boolean benedictionWolfTPAll,
+
+        boolean showWolfLog,
+        boolean showPlayerLog
 ) implements CustomPacketPayload {
     public static final CustomPacketPayload.Type<ClientPrefsPayload> TYPE =
             new CustomPacketPayload.Type<>(Identifier.fromNamespaceAndPath(TOTVW.MOD_ID, "client_prefs"));
@@ -34,6 +37,8 @@ public record ClientPrefsPayload(
                     ByteBufCodecs.INT, ClientPrefsPayload::benedictionWolfTPMethod,
                     ByteBufCodecs.INT, ClientPrefsPayload::benedictionPlayerTPMethod,
                     ByteBufCodecs.BOOL, ClientPrefsPayload::benedictionWolfTPAll,
+                    ByteBufCodecs.BOOL, ClientPrefsPayload::showWolfLog,
+                    ByteBufCodecs.BOOL, ClientPrefsPayload::showPlayerLog,
                     ClientPrefsPayload::new
             );
     @Override public CustomPacketPayload.Type<? extends CustomPacketPayload> type() {

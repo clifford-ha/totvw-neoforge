@@ -1,7 +1,7 @@
 package cliffordha.totvw.entity.player;
 
 import cliffordha.totvw.registry.VWColors;
-import cliffordha.totvw.registry.attachments.PlayerPrefs;
+import cliffordha.totvw.registry.attachments.ClientPref;
 import cliffordha.totvw.registry.attachments.entity.PlayerAttachment;
 
 import net.minecraft.server.level.ServerPlayer;
@@ -47,7 +47,7 @@ public class PlayerAtrocityCounter {
         }
     }
     private static void showAtrocityCounter(Player player, LivingEntity victim, int count) {
-        if (!player.getData(PlayerPrefs.SHOW_ATROCITY_COUNTER)) return;
+        if (!player.getData(ClientPref.SHOW_ATROCITY_COUNTER)) return;
         if (victim instanceof Wolf) {
             sendToChat(player, VWColors.BLOODLUST_EFFECT_MUTED, true, "Wolf atrocity count: " + count);
         } else if (victim instanceof Villager || victim instanceof WanderingTrader) {

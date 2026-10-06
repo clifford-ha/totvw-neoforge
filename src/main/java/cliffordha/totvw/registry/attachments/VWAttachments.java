@@ -4,7 +4,6 @@ import cliffordha.totvw.TOTVW;
 import cliffordha.totvw.registry.attachments.entity.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.LivingEntity;
-import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.attachment.AttachmentType;
 
 import java.util.List;
@@ -96,16 +95,16 @@ public class VWAttachments {
             HAS_ENTERED_NOLAYAN
     );
     public static final List<Supplier<? extends AttachmentType<?>>> PLAYER_PREFS = List.of(
-            PlayerPrefs.SHOW_ATROCITY_COUNTER,
-            PlayerPrefs.ENABLE_NOTIFIERS,
+            ClientPref.SHOW_ATROCITY_COUNTER,
+            ClientPref.ENABLE_NOTIFIERS,
 
-            PlayerPrefs.BENEDICTION_HEALTH_THRESHOLD,
-            PlayerPrefs.BENEDICTION_SHARE_STACK,
-            PlayerPrefs.BENEDICTION_ALWAYS_TRIGGER_BLESSING,
-            PlayerPrefs.BENEDICTION_TELEPORT_AFTER_SAVE,
-            PlayerPrefs.BENEDICTION_WOLF_TP_METHOD,
-            PlayerPrefs.BENEDICTION_PLAYER_TP_METHOD,
-            PlayerPrefs.BENEDICTION_WOLF_TP_ALL
+            ClientPref.BENEDICTION_HEALTH_THRESHOLD,
+            ClientPref.BENEDICTION_SHARE_STACK,
+            ClientPref.BENEDICTION_ALWAYS_TRIGGER_BLESSING,
+            ClientPref.BENEDICTION_TELEPORT_AFTER_SAVE,
+            ClientPref.BENEDICTION_WOLF_TP_METHOD,
+            ClientPref.BENEDICTION_PLAYER_TP_METHOD,
+            ClientPref.BENEDICTION_WOLF_TP_ALL
     );
     public static final int TOTAL = WOLF_ATTACHMENTS.size() + PLAYER_ATTACHMENTS.size() + VILLAGER_ATTACHMENTS.size() + MISC_ATTACHMENTS.size() + PLAYER_PREFS.size();
 

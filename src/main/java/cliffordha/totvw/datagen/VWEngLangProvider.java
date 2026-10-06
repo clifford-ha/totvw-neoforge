@@ -1,5 +1,6 @@
 package cliffordha.totvw.datagen;
 
+import cliffordha.totvw.ClientConfig;
 import cliffordha.totvw.Config;
 import cliffordha.totvw.TOTVW;
 import cliffordha.totvw.keymapping.VWKeymap;
@@ -265,7 +266,7 @@ public class VWEngLangProvider extends LanguageProvider {
         //DEV
         if (TOTVW.IN_DEVELOPMENT) {
             add(VWItems.DevItems.ATTACHMENTS_REMOVER, "Attachments Remover");
-            addConfigValue(Config.CLIENT_TRANSLATE_LANGUAGE, "Translate Language");
+            addConfigValue(ClientConfig.CLIENT_TRANSLATE_LANGUAGE, "Translate Language");
         }
     }
     
