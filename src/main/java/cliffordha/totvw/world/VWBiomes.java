@@ -14,7 +14,9 @@ public class VWBiomes {
     public static final ResourceKey<Biome> VERDANT_FOREST = registerBiomeKey("verdant_forest");
 
     public static void registerBiomes(FMLCommonSetupEvent event) {
-        Regions.register(new VWOverworldRegion());
+        event.enqueueWork(() -> {
+            Regions.register(new VWOverworldRegion());
+        });
     }
 
     public static void bootstrap(BootstrapContext<Biome> context) {

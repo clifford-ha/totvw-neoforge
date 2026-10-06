@@ -20,7 +20,7 @@ import java.util.List;
 import static cliffordha.totvw.registry.VWEffects.*;
 
 public class AmplifiedMightEffect extends MobEffect {
-    private final Identifier ID = VWIdentifiers.EFFECT_AMPLIFIED_MIGHT;
+    private static final Identifier ID = VWIdentifiers.EFFECT_AMPLIFIED_MIGHT;
     private final AttributeModifier.Operation ADD_VALUE = AttributeModifier.Operation.ADD_VALUE;
     private final AttributeModifier.Operation ADD_MULTIPLIED_TOTAL = AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL;
 
@@ -62,15 +62,7 @@ public class AmplifiedMightEffect extends MobEffect {
         removeModifiers(mob);
     }
 
-    @Override
-    public boolean applyEffectTick(ServerLevel serverLevel, LivingEntity mob, int amplification) {
-        if (!mob.hasEffect(AMPLIFIED_MIGHT)) {
-            removeModifiers(mob);
-        }
-        return super.applyEffectTick(serverLevel, mob, amplification);
-    }
-
-    private void removeModifiers(LivingEntity entity) {
+    public static void removeModifiers(LivingEntity entity) {
         removeAllModifiers(entity, ID,
                 List.of(
                         Attributes.ARMOR_TOUGHNESS,

@@ -6,27 +6,23 @@ import cliffordha.totvw.networking.packets.ClientPrefsPayload;
 import cliffordha.totvw.networking.packets.OpenTetherBlacklistPayload;
 import cliffordha.totvw.networking.packets.TetherBlacklistPayload;
 import cliffordha.totvw.registry.attachments.PlayerPrefs;
+
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
-import net.neoforged.neoforge.client.network.ClientPacketDistributor;
-import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 
 @EventBusSubscriber(modid = TOTVW.MOD_ID)
 public class VWNetworking {
     @SubscribeEvent
-    public static void registerPayloads(RegisterPayloadHandlersEvent registry) {
-        PayloadRegistrar registrar = registry.registrar("1");
-
-        //registrar.playToClient(OpenTetherBlacklistPayload.TYPE, OpenTetherBlacklistPayload.STREAM_CODEC);
-
-        //registrar.playToServer(ClientPrefsPayload.TYPE, ClientPrefsPayload.STREAM_CODEC, ServerboundPackets::handleClientPrefs);
-        //registrar.playToServer(TetherBlacklistPayload.TYPE, TetherBlacklistPayload.STREAM_CODEC, ServerboundPackets::handleTetherBlacklistUpdate);
+    public static void registerPayloads(RegisterPayloadHandlersEvent event) {
+        PayloadRegistrar registrar = event.registrar("1");
+        registrar.playToServer(ClientPrefsPayload.TYPE, ClientPrefsPayload.STREAM_CODEC, ServerboundPackets::handleClientPrefs);
+        registrar.playToServer(TetherBlacklistPayload.TYPE, TetherBlacklistPayload.STREAM_CODEC, ServerboundPackets::handleTetherBlacklistUpdate);
+        registrar.playToClient(OpenTetherBlacklistPayload.TYPE, OpenTetherBlacklistPayload.STREAM_CODEC, ClientboundPackets::handleOpenTetherBlacklist);
     }
 
     public static void sendPrefs(Player player) {

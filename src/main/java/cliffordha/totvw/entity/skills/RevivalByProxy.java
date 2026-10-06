@@ -88,14 +88,18 @@ public class RevivalByProxy {
         }
         return true;
     }
+    private static final String ATT = "neoforge:attachments";
+    private static final String BENEDICTION_KEY = TOTVW.MOD_ID + ":wolf_benediction";
+
     private static boolean checkWolfSouls(Player player, ServerLevel level, DamageSource damageSource) {
         if (!player.getInventory().contains(new ItemStack(VWItems.SOUL_RUNESTONE_PLATE.get()))) return true;
 
         List<CompoundTag> souls = player.getData(PlayerAttachment.WOLF_SOULS);
         if (souls.isEmpty()) return true;
 
-        CompoundTag stack = souls.stream().filter(soul -> soul.getCompoundOrEmpty("fabric:attachments")
-                .getIntOr(TOTVW.MOD_ID + ":wolf_benediction", 0) > 1)
+        CompoundTag stack = souls.stream().filter(soul -> soul.getCompoundOrEmpty(ATT)
+                .getCompoundOrEmpty(BENEDICTION_KEY)
+                .getIntOr("value", 0) > 1)
                 .findFirst()
                 .orElse(new CompoundTag());
 
@@ -153,13 +157,12 @@ public class RevivalByProxy {
         return equipment > 0;
     }
     private static void processRevivalThroughRunestone(ServerLevel level, Player player, List<CompoundTag> souls, CompoundTag stack, DamageSource source) {
-        CompoundTag attachments = stack.getCompoundOrEmpty("fabric:attachments").copy();
-        int count = attachments.getIntOr(TOTVW.MOD_ID + ":wolf_benediction", 0);
-        RandomSource random = level.getRandom();
-        Inventory inv = player.getInventory();
-
-        attachments.putInt(TOTVW.MOD_ID + ":wolf_benediction", count - 1);
-        stack.put("fabric:attachments", attachments);
+        CompoundTag attachments = stack.getCompoundOrEmpty(ATT).copy();
+        CompoundTag benediction = attachments.getCompoundOrEmpty(BENEDICTION_KEY).copy();
+        int count = benediction.getIntOr("value", 0);
+        benediction.putInt("value", count - 1);
+        attachments.put(BENEDICTION_KEY, benediction);
+        stack.put(ATT, attachments);
 
         souls.remove(stack);
         souls.add(stack);
@@ -169,6 +172,7 @@ public class RevivalByProxy {
         boolean checkDMGSource= source.is(DamageTypes.FELL_OUT_OF_WORLD) || source.is(DamageTypes.GENERIC_KILL);
         if (!checkDMGSource && souls.size() > 3 && random.nextFloat() < (0.33f + chance)) {
             SoulRunestonePlate.processAndSummonSouls(player, level, souls);
+            Inventory inv = player.getInventory();
 
             int slot = inv.findSlotMatchingItem(new ItemStack(VWItems.SOUL_RUNESTONE_PLATE.get()));
             inv.removeItem(slot, 1);

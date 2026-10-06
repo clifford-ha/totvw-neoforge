@@ -1,6 +1,7 @@
 package cliffordha.totvw.entity;
 
 import cliffordha.totvw.TOTVW;
+import cliffordha.totvw.effect.*;
 import cliffordha.totvw.entity.player.PlayerAtrocityCounter;
 import cliffordha.totvw.entity.skills.RevivalByProxy;
 import cliffordha.totvw.entity.player.VWPlayerBehaviors;
@@ -14,6 +15,7 @@ import cliffordha.totvw.registry.attachments.entity.PlayerAttachment;
 import cliffordha.totvw.registry.attachments.entity.WolfAttachment;
 import cliffordha.totvw.tag.VWBiomeTags;
 
+import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -21,6 +23,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.animal.wolf.Wolf;
 import net.minecraft.world.entity.monster.ElderGuardian;
@@ -28,11 +31,13 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.living.LivingIncomingDamageEvent;
+import net.neoforged.neoforge.event.entity.living.MobEffectEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import oshi.util.tuples.Pair;
 
@@ -50,8 +55,9 @@ public class VWGlobalEntityBehaviors {
     }
 
     @SubscribeEvent
-    private static void developmentTick(ServerTickEvent.Pre tickEvent) {
-        for (var serverLevel : tickEvent.getServer().getAllLevels()) {
+    public static void developmentTick(ServerTickEvent.Pre event) {
+        if (!TOTVW.IN_DEVELOPMENT) return;
+        for (var serverLevel : event.getServer().getAllLevels()) {
             serverLevel.getEntities(EntityTypes.PLAYER, _ -> true).forEach(player -> {
                 if (!player.entityTags().contains(player.getStringUUID() + "-reminderStamp")) {
                     sendToChat(player, VWColors.VERDANT_WIND, false, "TOTVW mod version is a development build.");
@@ -65,24 +71,62 @@ public class VWGlobalEntityBehaviors {
     }
 
     @SubscribeEvent
-    private static void allowDamageEvent(LivingIncomingDamageEvent event) {
-        event.setCanceled(
-                !allowDamageEvent(event.getEntity(), event.getSource(), event.getAmount())
-        );
+    public static void onEffectExpired(MobEffectEvent.Expired event) {
+        LivingEntity entity = event.getEntity();
+        Holder<MobEffect> effect = event.getEffectInstance().getEffect();
+
+        removeEffectAttributes(entity, effect);
     }
 
     @SubscribeEvent
-    private static void afterDeathEvent(LivingDeathEvent event) {
-        event.setCanceled(
-                RevivalByProxy.revivePlayerIfPossible(event.getEntity(), event.getSource())
-        );
+    public static void onEffectRemoved(MobEffectEvent.Remove event) {
+        LivingEntity entity = event.getEntity();
+        Holder<MobEffect> effect = event.getEffectInstance().getEffect();
+
+        removeEffectAttributes(entity, effect);
+    }
+
+    private static void removeEffectAttributes(LivingEntity entity, Holder<MobEffect> effect) {
+        if (effect.equals(VWEffects.AMPLIFIED_MIGHT)) {
+            AmplifiedMightEffect.removeModifiers(entity);
+        }
+        if (effect.equals(VWEffects.BLOODLUST)) {
+            BloodlustEffect.removeModifiers(entity);
+        }
+        if (effect.equals(VWEffects.BLESSING_OF_THE_VERDANT_WIND)) {
+            BlessingOfTheVerdantWindEffect.removeModifiers(entity);
+        }
+        if (effect.equals(VWEffects.PARALYZE)) {
+            ParalyzeEffect.removeModifiers(entity);
+        }
+        if (effect.equals(VWEffects.HAVOC)) {
+            HavocEffect.removeHavoc(entity);
+        }
+    }
+
+    @SubscribeEvent(priority = EventPriority.HIGH)
+    public static void onIncomingDamage(LivingIncomingDamageEvent event) {
+        if (!allowDamageEvent(event.getEntity(), event.getSource(), event.getAmount())) {
+            event.setCanceled(true);
+        }
+    }
+
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    public static void onAllowDeath(LivingDeathEvent event) {
+        if (!RevivalByProxy.revivePlayerIfPossible(event.getEntity(), event.getSource())) {
+            event.setCanceled(true);
+        }
+    }
+
+    @SubscribeEvent
+    public static void onDeath(LivingDeathEvent event) {
         afterDeathEvent(event.getEntity(), event.getSource());
         RunestoneEffects.reapplyLinkStatus(event.getEntity(), event.getSource());
     }
 
     @SubscribeEvent
-    private static void onDamageOrDeathEvent(LivingDamageEvent.Post afterDamageEvent) {
-        afterDamageEvent(afterDamageEvent.getEntity(), afterDamageEvent.getSource(), afterDamageEvent.getOriginalDamage());
+    public static void onAfterDamage(LivingDamageEvent.Post event) {
+        afterDamageEvent(event.getEntity(), event.getSource(), event.getOriginalDamage());
     }
 
     private static void afterDeathEvent(LivingEntity entity, DamageSource damageSource) {

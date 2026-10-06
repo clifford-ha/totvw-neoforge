@@ -14,7 +14,7 @@ public record TetherBlacklistPayload(int entityId, String entityTypeId, boolean 
     public static final StreamCodec<RegistryFriendlyByteBuf, TetherBlacklistPayload> STREAM_CODEC =
             StreamCodec.composite(
                     ByteBufCodecs.INT, TetherBlacklistPayload::entityId,
-                    ByteBufCodecs.STRING_UTF8, TetherBlacklistPayload::entityTypeId,
+                    ByteBufCodecs.stringUtf8(128), TetherBlacklistPayload::entityTypeId,
                     ByteBufCodecs.BOOL, TetherBlacklistPayload::blacklisted,
                     TetherBlacklistPayload::new
             );

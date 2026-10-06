@@ -2,12 +2,12 @@ package cliffordha.totvw;
 
 import cliffordha.totvw.datagen.VWDamageTypes;
 import cliffordha.totvw.fluid.VWFluidTypes;
-import cliffordha.totvw.networking.VWNetworking;
 import cliffordha.totvw.registry.*;
 import cliffordha.totvw.registry.attachments.AttachmentUtil;
 import cliffordha.totvw.registry.attachments.VWAttachments;
 import cliffordha.totvw.world.VWBiomes;
 import cliffordha.totvw.world.tree.VWRootPlacerTypes;
+
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
@@ -18,7 +18,7 @@ import net.neoforged.neoforge.event.server.ServerStartingEvent;
 
 @Mod(TOTVW.MOD_ID)
 public class TalesOfTheVerdantWind {
-    public static final boolean IN_DEVELOPMENT = true;
+    public static final boolean IN_DEVELOPMENT = false;
 
     public TalesOfTheVerdantWind(IEventBus modEventBus, ModContainer modContainer) {
         VWBlocks.register(modEventBus);
@@ -44,10 +44,9 @@ public class TalesOfTheVerdantWind {
         NeoForge.EVENT_BUS.register(this);
         NeoForge.EVENT_BUS.addListener(VWCommands::register);
 
-        modEventBus.addListener(VWNetworking::registerPayloads);
         modEventBus.addListener(VWBiomes::registerBiomes);
 
-        modContainer.registerConfig(ModConfig.Type.STARTUP, Config.SPEC);
+        modContainer.registerConfig(ModConfig.Type.SYNCED, Config.SPEC);
 
         VWPotionBrewing.register();
 

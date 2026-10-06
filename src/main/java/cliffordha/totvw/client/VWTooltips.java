@@ -15,6 +15,7 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
@@ -28,7 +29,7 @@ import static cliffordha.totvw.item.scatteredpages.ScatteredPageTextColor.*;
 import static cliffordha.totvw.registry.VWEnchantments.entityEnchantmentLVL;
 import static cliffordha.totvw.util.VWUtil.TextUtil.*;
 
-@EventBusSubscriber(modid = TOTVW.MOD_ID)
+@EventBusSubscriber(modid = TOTVW.MOD_ID, value = Dist.CLIENT)
 public class VWTooltips {
     @SubscribeEvent
     public static void register(ItemTooltipEvent event) {
@@ -253,7 +254,7 @@ public class VWTooltips {
     }
 
     private static void addVWItem(List<Component> out, String... text) {
-        if (player.isShiftKeyDown()) {
+        if (mc.hasShiftDown()) {
             out.add(Component.literal(Arrays.toString(text)).withColor(VWColors.VERDANT_WIND));
         } else {
             out.add(Component.literal("[VW] Active"));
@@ -261,7 +262,7 @@ public class VWTooltips {
     }
 
     private static void addMutedItalic(List<Component> out, String text) {
-        if (!player.isShiftKeyDown()) {
+        if (!mc.hasShiftDown()) {
             out.add(Component.literal(text)
                     .withColor(VWColors.GRAY)
                     .withStyle(ChatFormatting.ITALIC));
@@ -269,7 +270,7 @@ public class VWTooltips {
     }
 
     private static void addTextChestplate(List<Component> out, String... keys) {
-        if (player.isShiftKeyDown()) {
+        if (mc.hasShiftDown()) {
             out.add(Component.literal("Verdant Wind's Blessing").withColor(VWColors.VERDANT_WIND));
             for (String key : keys) {
                 List<FormattedText> wrapped = mc.font.getSplitter()
@@ -299,7 +300,7 @@ public class VWTooltips {
         out.add(Component.literal(""));
     }
     private static void addExpandingText(List<Component> out, int color, String... keys) {
-        if (player.isShiftKeyDown()) {
+        if (mc.hasShiftDown()) {
             for (String key : keys) {
                 List<FormattedText> wrapped = mc.font.getSplitter()
                         .splitLines(Component.translatable(key), 150, Style.EMPTY);
@@ -312,7 +313,7 @@ public class VWTooltips {
         }
     }
     private static void addExpandingText(List<Component> out, String... keys) {
-        if (player.isShiftKeyDown()) {
+        if (mc.hasShiftDown()) {
             for (String key : keys) {
                 List<FormattedText> wrapped = mc.font.getSplitter()
                         .splitLines(Component.translatable(key), 150, Style.EMPTY);

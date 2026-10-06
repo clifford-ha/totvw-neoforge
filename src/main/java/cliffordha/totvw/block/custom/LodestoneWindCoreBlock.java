@@ -114,7 +114,6 @@ public class LodestoneWindCoreBlock extends Block {
 
     @Override
     protected InteractionResult useItemOn(ItemStack itemStack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
-        String pName = player.getPlainTextName();
         boolean onSwitch = entityEnchantmentLVL(player, EquipmentSlot.CHEST, VWEnchantments.BENEDICTION_OF_THE_VERDANT_MOUNTAINS) > 0 && itemStack.isEmpty();
 
         if (onSwitch || itemStack.is(VWItems.VERIXIUM_PAPER)) {

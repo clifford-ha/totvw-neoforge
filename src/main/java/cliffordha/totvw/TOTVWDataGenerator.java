@@ -2,21 +2,13 @@ package cliffordha.totvw;
 
 import cliffordha.totvw.datagen.*;
 import cliffordha.totvw.loot.VWLootModifiers;
-import cliffordha.totvw.loot.VWLootTables;
-import cliffordha.totvw.registry.VWEnchantments;
 import cliffordha.totvw.tag.*;
-import net.minecraft.core.registries.Registries;
+
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.RegistryDataLoader;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.common.data.DatapackBuiltinEntriesProvider;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.concurrent.CompletableFuture;
 
 @EventBusSubscriber(modid = TOTVW.MOD_ID)
 public class TOTVWDataGenerator {
@@ -52,7 +44,5 @@ public class TOTVWDataGenerator {
 		DataGenerator generator = event.getGenerator();
 		PackOutput output = generator.getPackOutput();
 		var provider = event.getReloadableLookupProvider();
-
-
 	}
 }

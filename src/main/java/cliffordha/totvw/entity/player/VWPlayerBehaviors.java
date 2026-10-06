@@ -1,6 +1,7 @@
 package cliffordha.totvw.entity.player;
 
 import cliffordha.totvw.Config;
+import cliffordha.totvw.TOTVW;
 import cliffordha.totvw.entity.skill.PlayerSkillDefinition;
 import cliffordha.totvw.entity.skill.SkillManager;
 import cliffordha.totvw.entity.skills.RunestoneEffects;
@@ -25,6 +26,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.event.entity.living.LivingDamageEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
@@ -37,6 +39,7 @@ import static cliffordha.totvw.entity.skill.SkillManager.*;
 import static cliffordha.totvw.util.VWUtil.*;
 import static cliffordha.totvw.util.VWUtil.TimeUtil.*;
 
+@EventBusSubscriber(modid = TOTVW.MOD_ID)
 public class VWPlayerBehaviors {
     private static final List<PlayerBehaviorRule> ON_DAMAGE_RULES = new ArrayList<>();
     private static final List<PlayerBehaviorRule> TICK_RULES = new ArrayList<>();

@@ -36,7 +36,7 @@ public class VWLootTables implements LootTableSubProvider {
     public static final Identifier ID_ANCIENT_VERIXIUM_PILLARS = TOTVW.registerID("chests/verixium_pillar");
     public static final Identifier ID_VERDANT_VILLAGE_WEAPONSMITH = TOTVW.registerID("chests/village/verdant/weaponsmith");
 
-    public static final ResourceKey<LootTable> ANCIENT_CITY_LOOTS = createFromDefault("chests/ancient_city");
+    public static final ResourceKey<LootTable> ANCIENT_CITY_LOOTS = createExtra("ancient_city_loots");
     public static final ResourceKey<LootTable> VERIXIUM_POWDER_TRIAL = createExtra("verixium_powder_trial");
     public static final ResourceKey<LootTable> VERIXIUM_UPGRADE_TEMPLATE_ARMORER = createExtra("verixium_upgrade_template_armorer");
     public static final ResourceKey<LootTable> ENCHANTS_TEMPLATE_TRIAL_OMINOUS = createExtra("enchants_template_trial_ominous");
@@ -87,7 +87,7 @@ public class VWLootTables implements LootTableSubProvider {
         return ResourceKey.create(Registries.LOOT_TABLE, Identifier.withDefaultNamespace(path));
     }
     private static ResourceKey<LootTable> createExtra(String path) {
-        return ResourceKey.create(Registries.LOOT_TABLE, Identifier.withDefaultNamespace("extra/" + path));
+        return ResourceKey.create(Registries.LOOT_TABLE, TOTVW.registerID("extra/" + path));
     }
 
     private final LootTableSubProvider.Context context;

@@ -1,14 +1,16 @@
 package cliffordha.totvw;
 
 import cliffordha.totvw.client.VWModelLayerProvider;
-import cliffordha.totvw.client.VWTooltips;
 import cliffordha.totvw.fluid.VWFluidTypes;
 import cliffordha.totvw.keymapping.VWKeymap;
-import cliffordha.totvw.networking.VWNetworking;
 import cliffordha.totvw.particle.BenedictionTriggerParticle;
+import cliffordha.totvw.particle.MightParalyzeParticle;
 import cliffordha.totvw.particle.VerdantBiomesEnvironmentAmbiance;
 import cliffordha.totvw.particle.VerixiumPowderRainParticle;
 import cliffordha.totvw.registry.*;
+import cliffordha.totvw.util.VWColorizeTextMixin;
+import cliffordha.totvw.util.VWEffectOverlays;
+
 import net.minecraft.client.color.block.BlockTintSources;
 import net.minecraft.client.model.object.boat.BoatModel;
 import net.minecraft.client.renderer.block.FluidModel;
@@ -29,16 +31,14 @@ import net.neoforged.neoforge.client.event.*;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
-import net.neoforged.neoforge.common.NeoForge;
+
+import java.util.List;
 
 @Mod(value = TOTVW.MOD_ID, dist = Dist.CLIENT)
 @EventBusSubscriber(modid = TOTVW.MOD_ID, value = Dist.CLIENT)
 public class TOTVWClient {
     public TOTVWClient(ModContainer container) {
         container.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
-        //NeoForge.EVENT_BUS.addListener(VWTooltips::register);
-        //NeoForge.EVENT_BUS.addListener(VWNetworking::onPlayerJoinEvents);
-
         VWKeymap.register();
     }
 
@@ -46,6 +46,16 @@ public class TOTVWClient {
     static void onClientSetup(FMLClientSetupEvent event) {
         EntityRenderers.register(VWEntities.VERDANT_SPRUCE_BOAT.get(), context -> new BoatRenderer(context, VWModelLayerProvider.VERDANT_SPRUCE_BOAT));
         EntityRenderers.register(VWEntities.VERDANT_SPRUCE_CHEST_BOAT.get(), context -> new BoatRenderer(context, VWModelLayerProvider.VERDANT_SPRUCE_CHEST_BOAT));
+
+        VWColorizeTextMixin.register(VWColors.VERDANT_WIND, List.of(
+                "enchantment.tales_of_the_verdant_wind.benediction_of_the_verdant_mountains",
+                "item.minecraft.tipped_arrow.effect.sacred_verdant_potion",
+                "item.minecraft.potion.effect.sacred_verdant_potion",
+                "item.minecraft.splash_potion.effect.sacred_verdant_potion",
+                "item.minecraft.lingering_potion.effect.sacred_verdant_potion",
+                "effect.tales_of_the_verdant_wind.blessing_of_the_verdant_wind",
+                "effect.tales_of_the_verdant_wind.wind_veil"));
+        VWColorizeTextMixin.register(VWColors.BLOODLUST_EFFECT, List.of("effect.tales_of_the_verdant_wind.bloodlust"));
     }
 
     @SubscribeEvent
@@ -61,20 +71,15 @@ public class TOTVWClient {
 
     @SubscribeEvent
     public static void onClientTick(ClientTickEvent.Post event) {
-        while (VWKeymap.WOLF_CONFIG_PRESSED.get().consumeClick()) {
-            // IN HERE: WE ARE ON THE CLIENT!
-            //Minecraft.getInstance().player.sendSystemMessage(Component.literal("I have " + Minecraft.getInstance().player.getData(ModAttachmentTypes.MANA) + " Mana"));
-            //ClientPacketDistributor.sendToServer(new TestPacketC2S("Kaupenjoe", 67));
-        }
     }
 
     @SubscribeEvent
     public static void registerHUD(RegisterGuiLayersEvent event) {
+        VWEffectOverlays.register(event);
     }
 
     @SubscribeEvent
     public static void registerColoredBlocks(RegisterColorHandlersEvent.BlockTintSources event) {
-        //event.register(List.of(BlockTintSources.foliage()), ModBlocks.COLORED_LEAVES.get());
     }
 
     @SubscribeEvent
@@ -82,7 +87,7 @@ public class TOTVWClient {
         event.registerSpriteSet(VWParticles.BENEDICTION_TRIGGER_PARTICLE.get(), BenedictionTriggerParticle.BenedictionParticleProvider::new);
         event.registerSpriteSet(VWParticles.VERDANT_BIOMES_ENVIRONMENT_AMBIANCE.get(), VerdantBiomesEnvironmentAmbiance.VerdantBiomesEnvironmentAmbianceProvider::new);
         event.registerSpriteSet(VWParticles.VERIXIUM_POWDER_RAIN_PARTICLE.get(), VerixiumPowderRainParticle.VerixiumPowderRainParticleProvider::new);
-        event.registerSpriteSet(VWParticles.MIGHT_PARALYZE_PARTICLE.get(), VerixiumPowderRainParticle.VerixiumPowderRainParticleProvider::new);
+        event.registerSpriteSet(VWParticles.MIGHT_PARALYZE_PARTICLE.get(), MightParalyzeParticle.MightParalyzeParticleProvider::new);
     }
 
     @SubscribeEvent

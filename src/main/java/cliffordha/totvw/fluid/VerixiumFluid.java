@@ -2,10 +2,8 @@ package cliffordha.totvw.fluid;
 
 import cliffordha.totvw.registry.VWBlocks;
 import cliffordha.totvw.registry.VWFluids;
-import cliffordha.totvw.registry.VWItems;
 import cliffordha.totvw.registry.VWParticles;
 import cliffordha.totvw.tag.VWBiomeTags;
-import cliffordha.totvw.tag.VWFluidTags;
 import cliffordha.totvw.util.VWUtil;
 
 import net.minecraft.tags.BiomeTags;
@@ -19,11 +17,10 @@ import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.entity.npc.villager.Villager;
 import net.minecraft.world.entity.npc.wanderingtrader.WanderingTrader;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.Blocks;
-import org.jspecify.annotations.Nullable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
@@ -31,48 +28,31 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LiquidBlock;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.gamerules.GameRules;
-import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraft.world.level.material.FluidState;
 
 import java.util.Optional;
 
 import static cliffordha.totvw.util.VWUtil.addHiddenEffect;
+import static cliffordha.totvw.util.VWUtil.isInBiome;
 
 @SuppressWarnings("NullableProblems")
-public abstract class VerixiumFluid extends FlowingFluid {
+public class VerixiumFluid extends LiquidBlock {
     private static final Direction[] ALL_DIRECTIONS = { Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST, Direction.DOWN, Direction.UP};
 
-    @Override
-    public  Fluid getFlowing() { return VWFluids.FLOWING_VERIXIUM_FLUID.get(); }
+    public VerixiumFluid(Properties properties) {
+        super(VWFluids.FLOWING_VERIXIUM_FLUID.get(), properties);
+    }
 
     @Override
-    public  Fluid getSource() { return VWFluids.VERIXIUM_FLUID.get(); }
-
-    @Override
-    public Item getBucket() { return VWItems.VERIXIUM_FLUID_BUCKET.get(); }
-
-    @Override
-    public boolean isSame(Fluid fluid) { return fluid == VWFluids.VERIXIUM_FLUID || fluid == VWFluids.FLOWING_VERIXIUM_FLUID; }
-    
-    @Override
-    public void animateTick(final Level level, final BlockPos pos, final FluidState fluidState, final RandomSource random) {
+    public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
         double glowX = (double)pos.getX() + random.nextDouble() * 9.0 - 3.0;
         double glowY = (double)pos.getY() + random.nextDouble() * 3.0;
         double glowZ = (double)pos.getZ() + random.nextDouble() * 9.0 - 3.0;
 
-        if (!fluidState.isSource() && !(Boolean)fluidState.getValue(FALLING)) {
+        if (!state.getFluidState().isSource()) {
             if (random.nextInt(64) == 0) {
                 level.playLocalSound((double)pos.getX() + (double)0.5F, (double)pos.getY() + (double)0.5F, (double)pos.getZ() + (double)0.5F, SoundEvents.WATER_AMBIENT, SoundSource.AMBIENT, random.nextFloat() * 0.25F + 0.75F, random.nextFloat() + 0.5F, false);
             }
@@ -85,28 +65,33 @@ public abstract class VerixiumFluid extends FlowingFluid {
     }
 
     @Override
-    public void tick(ServerLevel level, BlockPos pos, BlockState blockState, FluidState fluidState) {
-        level.scheduleTick(pos, this, 20);
-        convertToDeepslate(level, pos);
+    protected void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+        if (!level.isClientSide()) {
+            level.scheduleTick(pos, this, 20);
+            convertToDeepslate(level, pos);
 
-        double randomD = level.getRandom().nextDouble();
-        float randomF = level.getRandom().nextFloat();
-        if (VWUtil.isInBiome(level, pos, BiomeTags.IS_NETHER) && randomF < 0.33f) {
-            level.destroyBlock(pos, false);
-            level.addParticle(ParticleTypes.SMOKE, (double)pos.getX() + randomD, (double)pos.getY() + randomD, (double)pos.getZ() + randomD, 0.0F, 0.0F, 0.0F);
-            level.playLocalSound(pos, SoundEvents.LAVA_EXTINGUISH, SoundSource.BLOCKS, 0.2F + randomF * 0.2F, 0.9F + randomF * 0.15F, false);
+            double randomD = level.getRandom().nextDouble();
+            float randomF = level.getRandom().nextFloat();
+            if (VWUtil.isInBiome(level, pos, BiomeTags.IS_NETHER) && randomF < 0.33f) {
+                level.destroyBlock(pos, false);
+                level.addParticle(ParticleTypes.SMOKE, (double) pos.getX() + randomD, (double) pos.getY() + randomD, (double) pos.getZ() + randomD, 0.0F, 0.0F, 0.0F);
+                level.playLocalSound(pos, SoundEvents.LAVA_EXTINGUISH, SoundSource.BLOCKS, 0.2F + randomF * 0.2F, 0.9F + randomF * 0.15F, false);
+            }
         }
-        super.tick(level, pos, blockState, fluidState);
     }
 
     @Override
-    protected void randomTick(ServerLevel level, BlockPos pos, FluidState fluidState, RandomSource random) {
-        if (random.nextFloat() < 0.33f) transformAdjacentBlocks(level, pos);
-        super.randomTick(level, pos, fluidState, random);
+    protected void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+        this.tick(state, level, pos, random);
+        if (random.nextFloat() < 0.33f) {
+            transformAdjacentBlocks(level, pos);
+        }
     }
 
     @Override
-    protected boolean isRandomlyTicking() {return true;}
+    protected boolean isRandomlyTicking(BlockState state) {
+        return true;
+    }
 
     private static void convertToDeepslate(ServerLevel level, BlockPos pos) {
         double xx = pos.getX();
@@ -147,34 +132,14 @@ public abstract class VerixiumFluid extends FlowingFluid {
         }
     }
 
-    @Nullable
     @Override
-    public ParticleOptions getDripParticle() { return VWParticles.VERDANT_BIOMES_ENVIRONMENT_AMBIANCE.get(); }
+    protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity, InsideBlockEffectApplier effectApplier, boolean isPrecise) {
+        effectApplier.apply(InsideBlockEffectType.EXTINGUISH);
+        effectApplier.apply(InsideBlockEffectType.CLEAR_FREEZE);
 
-    @Override
-    protected boolean canConvertToSource(ServerLevel world) {
-        float random = world.getRandom().nextFloat();
-        if (random < 0.007f) {
-            return world.getGameRules().get(GameRules.WATER_SOURCE_CONVERSION);
-        } else {
-            return false;
-        }
-    }
+        if (!(level instanceof ServerLevel) || !(entity instanceof LivingEntity livingEntity)) return;
 
-    @Override
-    protected void beforeDestroyingBlock(final LevelAccessor level, final BlockPos pos, final BlockState state) {
-        BlockEntity blockEntity = state.hasBlockEntity() ? level.getBlockEntity(pos) : null;
-        Block.dropResources(state, level, pos, blockEntity);
-    }
-
-    @Override
-    protected void entityInside(Level world,  BlockPos pos,  Entity entity, InsideBlockEffectApplier handler) {
-        handler.apply(InsideBlockEffectType.EXTINGUISH);
-        handler.apply(InsideBlockEffectType.CLEAR_FREEZE);
-
-        if (!(world instanceof ServerLevel) || !(entity instanceof LivingEntity livingEntity)) return;
-
-        if (world.getGameTime() % 60 == 0) {
+        if (level.getGameTime() % 60 == 0) {
             if (VWUtil.isInBiome(livingEntity, VWBiomeTags.IS_VERDANT_BIOMES)) {
                 if (livingEntity.is(EntityTypeTags.UNDEAD) || livingEntity.is(EntityTypeTags.ILLAGER)) return;
                 if (livingEntity.hasEffect(MobEffects.WITHER)) {
@@ -185,6 +150,7 @@ public abstract class VerixiumFluid extends FlowingFluid {
             whoIsThis(livingEntity);
         }
     }
+
     public static int setTime(int min,  int sec) {return ((min * (20 * 60)) + (sec * 20));}
     private static void whoIsThis(LivingEntity entity) {
         int bossTime;
@@ -241,9 +207,9 @@ public abstract class VerixiumFluid extends FlowingFluid {
     private static void evaluateSlowness(LivingEntity livingEntity) {
         int defaultDuration;
         int defaultAmp;
-        boolean inVerdantBiome = livingEntity.level().getBiome(livingEntity.blockPosition()).is(VWBiomeTags.IS_VERDANT_BIOMES);
-        boolean inForest = livingEntity.level().getBiome(livingEntity.blockPosition()).is(BiomeTags.IS_FOREST);
-        boolean inEnd = livingEntity.level().getBiome(livingEntity.blockPosition()).is(BiomeTags.IS_END);
+        boolean inVerdantBiome = isInBiome(livingEntity, VWBiomeTags.IS_VERDANT_BIOMES);
+        boolean inForest = isInBiome(livingEntity, BiomeTags.IS_FOREST);
+        boolean inEnd = isInBiome(livingEntity, BiomeTags.IS_END);
         if (inVerdantBiome) {
             defaultDuration = setTime(0, 3);
             defaultAmp = 0;
@@ -261,49 +227,15 @@ public abstract class VerixiumFluid extends FlowingFluid {
     }
 
     @Override
-    protected int getSlopeFindDistance( LevelReader world) { return 3; }
-
-    @Override
-    protected  BlockState createLegacyBlock( FluidState state) {
-        return VWBlocks.VERIXIUM_FLUID.get().defaultBlockState().setValue(LiquidBlock.LEVEL, getLegacyLevel(state)); }
-
-    @Override
-    public int getDropOff( LevelReader world) { return 1; }
-
-    @Override
-    public int getTickDelay( LevelReader world) { return 5; }
-
-    @Override
-    public boolean canBeReplacedWith(final FluidState state, final BlockGetter level, final BlockPos pos, final Fluid other, final Direction direction) {
-        return direction == Direction.DOWN && !other.is(VWFluidTags.VERIXIUM_FLUID);
+    protected boolean canBeReplaced(BlockState state, Fluid fluid) {
+        return !fluid.isSame(VWFluids.VERIXIUM_FLUID.get()) || !fluid.isSame(VWFluids.FLOWING_VERIXIUM_FLUID.get());
     }
 
     @Override
-    protected float getExplosionResistance() { return 100.0F; }
+    public float getExplosionResistance(BlockState state, BlockGetter level, BlockPos pos, Explosion explosion) {
+        return 100.0f;
+    }
 
     @Override
     public  Optional<SoundEvent> getPickupSound() { return Optional.of(SoundEvents.BUCKET_FILL); }
-
-    public static class Source extends VerixiumFluid {
-        @Override
-        public int getAmount( FluidState state) { return 8; }
-
-        @Override
-        public boolean isSource( FluidState state) { return true; }
-    }
-
-    public static class Flowing extends VerixiumFluid {
-        @Override
-        protected void createFluidStateDefinition(final StateDefinition.Builder<Fluid, FluidState> builder) {
-            super.createFluidStateDefinition(builder);
-            builder.add(LEVEL); }
-
-        @Override
-        public int getAmount(final FluidState fluidState) {
-            return fluidState.getValue(LEVEL);
-        }
-
-        @Override
-        public boolean isSource( FluidState fluidState) { return false; }
-    }
 }

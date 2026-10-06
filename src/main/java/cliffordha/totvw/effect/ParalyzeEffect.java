@@ -20,7 +20,7 @@ import java.util.List;
 import static cliffordha.totvw.registry.VWEffects.*;
 
 public class ParalyzeEffect extends MobEffect {
-    private final Identifier ID = VWIdentifiers.EFFECT_PARALYZE;
+    private static final Identifier ID = VWIdentifiers.EFFECT_PARALYZE;
 
     public ParalyzeEffect() {
         super(MobEffectCategory.NEUTRAL, VWColors.PARALYZE);
@@ -77,9 +77,6 @@ public class ParalyzeEffect extends MobEffect {
                 removeAllModifiers(player, ID, PARALYZE_ATTRIBUTES);
             }
         }
-        if (!mob.hasEffect(PARALYZE)) {
-            removeModifiers(mob);
-        }
         return super.applyEffectTick(serverLevel, mob, amplification);
     }
 
@@ -94,7 +91,7 @@ public class ParalyzeEffect extends MobEffect {
         );
     }
 
-    private void removeModifiers(LivingEntity entity) {
+    public static void removeModifiers(LivingEntity entity) {
         if (entity instanceof Mob mob && !entity.is(EntityTypes.PLAYER)) {
             mob.setNoAi(false);
         } else if (entity instanceof Player) {

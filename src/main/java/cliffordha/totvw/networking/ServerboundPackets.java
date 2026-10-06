@@ -5,9 +5,11 @@ import cliffordha.totvw.networking.packets.TetherBlacklistPayload;
 import cliffordha.totvw.registry.attachments.PlayerPrefs;
 import cliffordha.totvw.registry.attachments.Runestone;
 import cliffordha.totvw.registry.attachments.entity.WolfAttachment;
+
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.animal.wolf.Wolf;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
@@ -19,12 +21,12 @@ public class ServerboundPackets {
         ServerPlayer player = (ServerPlayer) context.player();
         player.setData(PlayerPrefs.ENABLE_NOTIFIERS, payload.enableNotifiers());
         player.setData(PlayerPrefs.SHOW_ATROCITY_COUNTER, payload.showAtrocityCounter());
-        player.setData(PlayerPrefs.BENEDICTION_HEALTH_THRESHOLD, payload.benedictionLowHealthThreshold());
+        player.setData(PlayerPrefs.BENEDICTION_HEALTH_THRESHOLD, Mth.clamp(payload.benedictionLowHealthThreshold(), 15, 90));
         player.setData(PlayerPrefs.BENEDICTION_SHARE_STACK, payload.benedictionShareStack());
         player.setData(PlayerPrefs.BENEDICTION_ALWAYS_TRIGGER_BLESSING, payload.benedictionAlwaysTriggerBlessing());
         player.setData(PlayerPrefs.BENEDICTION_TELEPORT_AFTER_SAVE, payload.benedictionTeleportAfterSave());
-        player.setData(PlayerPrefs.BENEDICTION_WOLF_TP_METHOD, payload.benedictionWolfTPMethod());
-        player.setData(PlayerPrefs.BENEDICTION_PLAYER_TP_METHOD, payload.benedictionPlayerTPMethod());
+        player.setData(PlayerPrefs.BENEDICTION_WOLF_TP_METHOD, Mth.clamp(payload.benedictionWolfTPMethod(), 0, 1));
+        player.setData(PlayerPrefs.BENEDICTION_PLAYER_TP_METHOD, Mth.clamp(payload.benedictionPlayerTPMethod(), 0, 1));
         player.setData(PlayerPrefs.BENEDICTION_WOLF_TP_ALL, payload.benedictionWolfTPAll());
     }
     public static void handleTetherBlacklistUpdate(TetherBlacklistPayload payload, IPayloadContext context) {

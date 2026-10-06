@@ -1,6 +1,7 @@
 package cliffordha.totvw.entity.wolf;
 
 import cliffordha.totvw.Config;
+import cliffordha.totvw.TOTVW;
 import cliffordha.totvw.datagen.VWDamageTypes;
 import cliffordha.totvw.effect.HavocEffect;
 import cliffordha.totvw.entity.player.EntityEnchants;
@@ -52,7 +53,7 @@ import static cliffordha.totvw.entity.skill.SkillManager.*;
 import static cliffordha.totvw.util.VWUtil.*;
 import static cliffordha.totvw.util.VWUtil.TimeUtil.*;
 
-@EventBusSubscriber
+@EventBusSubscriber(modid = TOTVW.MOD_ID)
 public class VWWolfBehaviors {
     public static final Supplier<SoundEvent>[] DISTANT_HOWL_SOUNDS = new Supplier[]{
             VWSounds.WOLF_HOWL_A,

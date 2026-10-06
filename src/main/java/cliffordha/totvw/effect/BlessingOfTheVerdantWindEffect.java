@@ -23,7 +23,7 @@ import java.util.List;
 import static cliffordha.totvw.registry.VWEffects.*;
 
 public class BlessingOfTheVerdantWindEffect extends MobEffect {
-    private final Identifier ID = VWIdentifiers.EFFECT_BLESSING_OF_THE_VERDANT_WIND;
+    private static final Identifier ID = VWIdentifiers.EFFECT_BLESSING_OF_THE_VERDANT_WIND;
     private static final DustParticleOptions blessing = new DustParticleOptions(VWColors.VERDANT_WIND, 1.0f);
 
     public BlessingOfTheVerdantWindEffect() {
@@ -70,9 +70,6 @@ public class BlessingOfTheVerdantWindEffect extends MobEffect {
                 entity.removeEffect(PARALYZE);
             }
         }
-        if (!entity.hasEffect(BLESSING_OF_THE_VERDANT_WIND)) {
-            removeModifiers(entity);
-        }
         return super.applyEffectTick(serverLevel, entity, amplifier);
     }
 
@@ -86,7 +83,7 @@ public class BlessingOfTheVerdantWindEffect extends MobEffect {
         removeModifiers(entity);
     }
 
-    private void removeModifiers(LivingEntity entity) {
+    public static void removeModifiers(LivingEntity entity) {
         removeAllModifiers(entity, ID,
                 List.of(
                         Attributes.ATTACK_DAMAGE,

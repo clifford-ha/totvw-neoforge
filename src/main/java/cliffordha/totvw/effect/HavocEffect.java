@@ -56,14 +56,6 @@ public class HavocEffect extends MobEffect {
     }
 
     @Override
-    public boolean applyEffectTick(ServerLevel serverLevel, LivingEntity mob, int amplification) {
-        if (!mob.hasEffect(HAVOC)) {
-            removeHavoc(mob);
-        }
-        return super.applyEffectTick(serverLevel, mob, amplification);
-    }
-
-    @Override
     public void onMobRemoved(ServerLevel level, LivingEntity entity, int amplifier, Entity.RemovalReason reason) {
         removeHavoc(entity);
     }

@@ -12,51 +12,19 @@ import net.minecraft.util.ARGB;
 import net.minecraft.util.Mth;
 import net.minecraft.util.Util;
 import net.minecraft.world.entity.player.Player;
-import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.api.distmarker.Dist;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.fml.common.Mod;
-import net.neoforged.neoforge.client.event.ScreenEvent;
+import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 
-@EventBusSubscriber(modid = TOTVW.MOD_ID)
+@EventBusSubscriber(modid = TOTVW.MOD_ID, value = Dist.CLIENT)
 public class VWEffectOverlays {
     private static final float BLOODLUST_PULSE_SPEED_MS = (float) (Math.PI * 2.0 / 2000.0);
 
     private VWEffectOverlays() {}
 
-    @SubscribeEvent
-    public static void register(ScreenEvent.Render.Post event) {
-        bloodlustOverlay(event.getGuiGraphics(), new DeltaTracker() {
-            @Override
-            public float getGameTimeDeltaTicks() {
-                return 0;
-            }
-
-            @Override
-            public float getGameTimeDeltaPartialTick(boolean ignoreFrozenGame) {
-                return 0;
-            }
-
-            @Override
-            public float getRealtimeDeltaTicks() {
-                return 0;
-            }
-        });
-        paralyzeOverlay(event.getGuiGraphics(), new DeltaTracker() {
-            @Override
-            public float getGameTimeDeltaTicks() {
-                return 0;
-            }
-
-            @Override
-            public float getGameTimeDeltaPartialTick(boolean ignoreFrozenGame) {
-                return 0;
-            }
-
-            @Override
-            public float getRealtimeDeltaTicks() {
-                return 0;
-            }
-        });
+    public static void register(RegisterGuiLayersEvent event) {
+        event.registerBelowAll(TOTVW.registerID("bloodlust_overlay"), VWEffectOverlays::bloodlustOverlay);
+        event.registerBelowAll(TOTVW.registerID("paralyze_overlay"), VWEffectOverlays::paralyzeOverlay);
     }
     private static int getWidth() {return Minecraft.getInstance().getWindow().getGuiScaledWidth();}
     private static int getHeight() {return Minecraft.getInstance().getWindow().getGuiScaledHeight();}

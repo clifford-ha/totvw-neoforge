@@ -24,11 +24,10 @@ public class VWFluidTypes {
                     .canDrown(true)
                     .canExtinguish(true)
                     .canSwim(true)
-                    .density(100)
-                    .viscosity(100)
+                    .density(1000)
+                    .viscosity(1000)
                     .canConvertToSource(true)
                     .canPushEntity(true)
-                    .lightLevel(9)
                     .supportsBoating(true)
             ));
 

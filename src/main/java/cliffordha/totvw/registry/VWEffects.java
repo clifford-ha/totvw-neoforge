@@ -4,7 +4,6 @@ import cliffordha.totvw.TOTVW;
 
 import cliffordha.totvw.effect.*;
 import net.minecraft.core.Holder;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.effect.MobEffect;
@@ -16,7 +15,6 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.List;
-import java.util.function.Supplier;
 
 import static cliffordha.totvw.TOTVW.sendClassRegisterLog;
 

@@ -30,8 +30,8 @@ import static cliffordha.totvw.registry.VWEffects.*;
 import static cliffordha.totvw.registry.VWEnchantments.entityEnchantmentLVL;
 
 public class BloodlustEffect extends MobEffect {
-    private final Identifier ID = VWIdentifiers.EFFECT_BLOODLUST;
-    private final Identifier ID_ADDITIONAL = VWIdentifiers.EFFECT_BLOODLUST_ADDITIONAL;
+    private static final Identifier ID = VWIdentifiers.EFFECT_BLOODLUST;
+    private static final Identifier ID_ADDITIONAL = VWIdentifiers.EFFECT_BLOODLUST_ADDITIONAL;
 
     public BloodlustEffect() {
         super(MobEffectCategory.HARMFUL, VWColors.BLOODLUST_EFFECT);
@@ -74,9 +74,6 @@ public class BloodlustEffect extends MobEffect {
     @Override
     public boolean applyEffectTick(ServerLevel serverLevel, LivingEntity entity, int amplifier) {
         getDamage(entity, serverLevel, amplifier);
-        if (!entity.hasEffect(BLOODLUST)) {
-            removeModifiers(entity);
-        }
         return super.applyEffectTick(serverLevel, entity, amplifier);
     }
 
@@ -140,7 +137,7 @@ public class BloodlustEffect extends MobEffect {
         }
         entity.removeEffect(VWEffects.BLOODLUST);
     }
-    private void removeModifiers(LivingEntity entity) {
+    public static void removeModifiers(LivingEntity entity) {
         removeAllModifiers(entity, ID,
                 List.of(
                         Attributes.ATTACK_DAMAGE,

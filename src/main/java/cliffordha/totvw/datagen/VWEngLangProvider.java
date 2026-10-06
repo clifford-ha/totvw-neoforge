@@ -164,7 +164,7 @@ public class VWEngLangProvider extends LanguageProvider {
 
 
         // POTIONS
-        add("effect.tales-of-the-verdant-wind.bloodlust.description", "Gives massive attack buff in exchange for constant damage while the effect is active");
+        add("effect.tales_of_the_verdant_wind.bloodlust.description", "Gives massive attack buff in exchange for constant damage while the effect is active");
 
         add("item.minecraft.potion.effect.sacred_verdant_potion", "Sacred Verdant Potion");
         add("item.minecraft.splash_potion.effect.sacred_verdant_potion", "Sacred Verdant Splash Potion");

@@ -1,10 +1,8 @@
 package cliffordha.totvw.entity.player;
 
 import cliffordha.totvw.TOTVW;
-import cliffordha.totvw.networking.ServerboundPackets;
 import cliffordha.totvw.networking.packets.OpenTetherBlacklistPayload;
 import cliffordha.totvw.item.events.VWItemBlessings;
-import cliffordha.totvw.networking.packets.TetherBlacklistPayload;
 import cliffordha.totvw.registry.VWEnchantments;
 import cliffordha.totvw.registry.VWItems;
 import cliffordha.totvw.registry.VWSounds;
@@ -12,11 +10,7 @@ import cliffordha.totvw.registry.attachments.Runestone;
 import cliffordha.totvw.registry.attachments.entity.PlayerAttachment;
 import cliffordha.totvw.tag.VWItemTags;
 
-import net.minecraft.network.protocol.PacketFlow;
-import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.network.protocol.game.ServerboundInteractPacket;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.server.network.ConfigurationTask;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -28,18 +22,14 @@ import net.minecraft.world.item.Items;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.attachment.AttachmentType;
-import net.neoforged.neoforge.client.network.ClientPacketDistributor;
-import net.neoforged.neoforge.common.extensions.ICommonPacketListener;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
-import net.neoforged.neoforge.network.handling.IPayloadContext;
+import net.neoforged.neoforge.network.PacketDistributor;
 import oshi.util.tuples.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
-import java.util.function.Supplier;
 
 import static cliffordha.totvw.util.VWUtil.sendToChat;
 
@@ -47,20 +37,20 @@ import static cliffordha.totvw.util.VWUtil.sendToChat;
 public class VWPlayerInteractions {
 
     @SubscribeEvent
-    public static void onInteractEvents(PlayerInteractEvent.EntityInteract interact) {
-        if (interact.getEntity() instanceof Player player) {
-            interact.setCancellationResult(
-                    onEntityInteractEvent(player, interact.getTarget(), interact.getHand())
-            );
+    public static void onInteractEvents(PlayerInteractEvent.EntityInteract event) {
+        InteractionResult result = onEntityInteractEvent(event.getEntity(), event.getTarget(), event.getHand());
+        if (result != InteractionResult.PASS) {
+            event.setCanceled(true);
+            event.setCancellationResult(result);
         }
     }
 
     @SubscribeEvent
     public static void onRightClickItemEvent(PlayerInteractEvent.RightClickItem event) {
-        if (event.getEntity() instanceof Player player) {
-            event.setCancellationResult(
-                    onUseItemEvent(player)
-            );
+        InteractionResult result = onUseItemEvent(event.getEntity());
+        if (result != InteractionResult.PASS) {
+            event.setCanceled(true);
+            event.setCancellationResult(result);
         }
     }
 
@@ -74,7 +64,7 @@ public class VWPlayerInteractions {
         if (player.isShiftKeyDown() && entity instanceof Wolf wolf
                 && wolf.getOwner() == player && Runestone.hasTether(wolf)) {
             if (player instanceof ServerPlayer serverPlayer) {
-                ClientPacketDistributor.sendToServer(new OpenTetherBlacklistPayload(wolf.getId()));
+                PacketDistributor.sendToPlayer(serverPlayer, new OpenTetherBlacklistPayload(wolf.getId()));
             }
             return InteractionResult.SUCCESS;
         }

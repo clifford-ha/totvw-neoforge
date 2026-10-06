@@ -3,6 +3,7 @@ package cliffordha.totvw.registry;
 import cliffordha.totvw.block.*;
 import cliffordha.totvw.block.custom.*;
 import cliffordha.totvw.TOTVW;
+import cliffordha.totvw.fluid.VerixiumFluid;
 import cliffordha.totvw.world.tree.VWTreeGrowers;
 
 import net.minecraft.core.particles.ParticleTypes;
@@ -74,7 +75,7 @@ public class VWBlocks {
             true
     );
     public static final DeferredBlock<LiquidBlock> VERIXIUM_FLUID = BLOCKS.registerBlock(
-            "verixium_fluid", properties -> new LiquidBlock(VWFluids.FLOWING_VERIXIUM_FLUID.get(),
+            "verixium_fluid", properties -> new VerixiumFluid(
                     properties
                             .noCollision()
                             .strength(100.0F)
@@ -84,6 +85,7 @@ public class VWBlocks {
                             .replaceable()
                             .mapColor(MapColor.WARPED_NYLIUM)
                             .sound(SoundType.EMPTY)
+                            .lightLevel(_ -> 9)
             )
     );
     public static final DeferredBlock<Block> VERDANT_SPRUCE_LEAVES = registerBlock("verdant_spruce_leaves",
