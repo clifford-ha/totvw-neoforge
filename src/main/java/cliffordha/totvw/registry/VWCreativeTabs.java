@@ -97,15 +97,15 @@ public class VWCreativeTabs {
                     output.accept(Pages.PLAYER_STATS);
                     output.accept(Pages.SP_ID_TEST);
                     output.accept(Pages.SP_ID_1000);
+
+                    output.accept(Pages.SP_ID_3000);
+                    output.accept(Pages.SP_ID_3001);
+                    output.accept(Pages.SP_ID_3002);
                 }
                 output.accept(Pages.ENCHANTMENTS_HANDBOOK);
                 output.accept(Pages.EFFECTS_HANDBOOK);
                 output.accept(Pages.ITEMS_HANDBOOK);
                 output.accept(Pages.FEATURES_HANDBOOK);
-
-                output.accept(Pages.SP_ID_3000);
-                output.accept(Pages.SP_ID_3001);
-                output.accept(Pages.SP_ID_3002);
 
                 output.accept(Pages.SP_ID_1001);
                 output.accept(Pages.SP_ID_1002);

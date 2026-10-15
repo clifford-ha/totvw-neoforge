@@ -35,8 +35,9 @@ public class VWRecipeProvider extends RecipeProvider {
     }
 
     private void stonecutter(RecipeCategory category, ItemLike result, ItemLike base, int count) {
-        SingleItemRecipeBuilder dyeRecipe = SingleItemRecipeBuilder.stonecutting(Ingredient.of(base), category, result, count).unlockedBy(getHasName(base), this.has(base));
-        dyeRecipe.save(this.output, getRecipeOutputName(result, base));
+        SingleItemRecipeBuilder.stonecutting(Ingredient.of(base), category, result, count)
+                .unlockedBy(getHasName(base), this.has(base))
+                .save(this.output, getRecipeOutputName(result, base));
     }
 
     private void dyeFromIridescentGlass(ItemLike... items) {

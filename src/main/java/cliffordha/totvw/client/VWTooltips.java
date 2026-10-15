@@ -18,7 +18,6 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 
 import java.util.ArrayList;
@@ -30,7 +29,6 @@ import static cliffordha.totvw.item.scatteredpages.ScatteredPageTextColor.*;
 import static cliffordha.totvw.registry.VWEnchantments.entityEnchantmentLVL;
 import static cliffordha.totvw.util.VWUtil.TextUtil.*;
 
-@Mod(value = TOTVW.MOD_ID, dist = Dist.CLIENT)
 @EventBusSubscriber(modid = TOTVW.MOD_ID, value = Dist.CLIENT)
 public class VWTooltips {
 
@@ -41,11 +39,10 @@ public class VWTooltips {
     }
 
     private static Player player;
-    private static Minecraft mc = Minecraft.getInstance();
+    private static Minecraft mc() {
+        return Minecraft.getInstance();
+    }
     private static void onTooltip(Player playerClient, ItemStack stack, List<Component> lines) {
-        if (mc == null) {
-            return;
-        }
         player = playerClient;
         List<Component> injected = new ArrayList<>();
 
@@ -92,67 +89,26 @@ public class VWTooltips {
 
         boolean ACTIVE_BENEDICTION = entityEnchantmentLVL(player, EquipmentSlot.CHEST, VWEnchantments.BENEDICTION_OF_THE_VERDANT_MOUNTAINS) > 0;
 
-        // this translation block looks awful ngl
-        String unset = "Not yet set";
-
         String itemVerixiumArmor = "A light yet durable armor";
         String itemVerixium = "A subtle hint of wind emanates from this item...";
 
-        String LORE_soulRunestonePlate;
-        String LORE_soulRunestoneFragment1;
-        String LORE_soulRunestoneFragment2;
-        String LORE_soulRunestoneFragment3;
-        String LORE_soulRunestoneFragment4;
+        String LORE_soulRunestonePlate = "My only regret is that I won't be able to be by your side as you grow up... and, do so forgive me for entrusting you with a heavy burden.";
+        String LORE_soulRunestoneFragment1 = "\"There will always be those who try to defy the absolute limit of this world. Though sacrifices were uncomfortably high, the ingenuity always take precedence to overcome the obstacles that stand in the way of the living.\"";
+        String LORE_soulRunestoneFragment2 = "\"But what good does constantly defying the very principles of nature have?\"";
+        String LORE_soulRunestoneFragment3 = "\"Prior to the Wind's ascent, the people of ∎∎∎∎ tried to preserve the memories from the stream of time. Only then did they realize that a soul can be ∎∎∎∎∎ and ∎∎∎∎∎∎∎∎.\"";
+        String LORE_soulRunestoneFragment4 = "\"Perhaps... my authority will quench their hatred. Onward, I shall entrust the duties of taking care of our people to each and everyone of you till the day 'I' return.\"";
 
-        String LORE_genesisRunestonePlate;
-        String LORE_efflorescenceRunestonePlate;
-        String LORE_tetherRunestonePlate;
-        String LORE_havocRunestonePlate;
+        String LORE_genesisRunestonePlate = "A fragment of unknown origin...";
+        String LORE_efflorescenceRunestonePlate = "You feel as though you are revitalized by the subtle powered contained by this item...";
+        String LORE_tetherRunestonePlate = "You can feel a strange connection to the world itself... Perhaps you can use it for something great?";
+        String LORE_havocRunestonePlate = "It appears this item is fluctuating on its own...";
 
-        String LORE_verixiumChunk;
-        String LORE_condensedVerixium0;
-        String LORE_condensedVerixium1;
-        String LORE_verixiumShard;
-        String LORE_verixiumPowder;
-        String LORE_verixiumIngot;
-
-
-        if (ClientConfig.CLIENT_TRANSLATE_LANGUAGE.get()) {
-            LORE_soulRunestonePlate = "My only regret is that I won't be able to be by your side as you grow up... and, do so forgive me for entrusting you with a heavy burden.";
-            LORE_soulRunestoneFragment1 = "\"There will always be those who try to defy the absolute limit of this world. Though sacrifices were uncomfortably high, the ingenuity always take precedence to overcome the obstacles that stand in the way of the living.\"";
-            LORE_soulRunestoneFragment2 = "\"But what good does constantly defying the very principles of nature have?\"";
-            LORE_soulRunestoneFragment3 = "\"Prior to the Wind's ascent, the people of ∎∎∎∎ tried to preserve the memories from the stream of time. Only then did they realize that a soul can be ∎∎∎∎∎ and ∎∎∎∎∎∎∎∎.\"";
-            LORE_soulRunestoneFragment4 = "\"Perhaps... my authority will quench their hatred. Onward, I shall entrust the duties of taking care of our people to each and everyone of you till the day 'I' return.\"";
-
-            LORE_genesisRunestonePlate = "A fragment of unknown origin...";
-            LORE_efflorescenceRunestonePlate = "You feel as though you are revitalized by the subtle powered contained by this item...";
-            LORE_tetherRunestonePlate = "You can feel a strange connection to the world itself... Perhaps you can use it for something great?";
-            LORE_havocRunestonePlate = "It appears this item is fluctuating on its own...";
-
-            LORE_verixiumChunk = "\"For the land that they call 'home' and for the people they protect.\"";
-            LORE_condensedVerixium0 = "\"For the land that they call 'home' and for the people they protect.";
-            LORE_condensedVerixium1 = "O God of the Verdant Winds...\"";
-            LORE_verixiumShard = "\"Bless us, so we may reap a bountiful harvest.\"";
-            LORE_verixiumPowder = "\"Guide us, so we may never be swept by the floods of fiery lies.\"";
-            LORE_verixiumIngot = "\"Protect us, so we may defend your land and people from the perils of the creatures from beyond.\"";
-        } else {
-            LORE_soulRunestonePlate = unset;
-            LORE_soulRunestoneFragment1 = unset;
-            LORE_soulRunestoneFragment2 = unset;
-            LORE_soulRunestoneFragment3 = unset;
-            LORE_soulRunestoneFragment4 = unset;
-            LORE_genesisRunestonePlate = unset;
-            LORE_efflorescenceRunestonePlate = unset;
-            LORE_tetherRunestonePlate = unset;
-            LORE_havocRunestonePlate = unset;
-
-            LORE_verixiumChunk = unset;
-            LORE_condensedVerixium0 = unset;
-            LORE_condensedVerixium1 = unset;
-            LORE_verixiumShard = unset;
-            LORE_verixiumPowder = unset;
-            LORE_verixiumIngot = unset;
-        }
+        String LORE_verixiumChunk = "\"For the land that they call 'home' and for the people they protect.\"";
+        String LORE_condensedVerixium0 = "\"For the land that they call 'home' and for the people they protect.";
+        String LORE_condensedVerixium1 = "O God of the Verdant Winds...\"";
+        String LORE_verixiumShard = "\"Bless us, so we may reap a bountiful harvest.\"";
+        String LORE_verixiumPowder = "\"Guide us, so we may never be swept by the floods of fiery lies.\"";
+        String LORE_verixiumIngot = "\"Protect us, so we may defend your land and people from the perils of the creatures from beyond.\"";
 
         if (stack.is(VWItemTags.RUNESTONE_PLATES)) {
             if (stack.is(VWItems.GENESIS_RUNESTONE_PLATE)) {
@@ -257,7 +213,7 @@ public class VWTooltips {
     }
 
     private static void addVWItem(List<Component> out, String... text) {
-        if (mc.hasShiftDown()) {
+        if (mc().hasShiftDown()) {
             out.add(Component.literal(Arrays.toString(text)).withColor(VWColors.VERDANT_WIND));
         } else {
             out.add(Component.literal("[VW] Active"));
@@ -265,7 +221,7 @@ public class VWTooltips {
     }
 
     private static void addMutedItalic(List<Component> out, String text) {
-        if (!mc.hasShiftDown()) {
+        if (!mc().hasShiftDown()) {
             out.add(Component.literal(text)
                     .withColor(VWColors.GRAY)
                     .withStyle(ChatFormatting.ITALIC));
@@ -273,10 +229,10 @@ public class VWTooltips {
     }
 
     private static void addTextChestplate(List<Component> out, String... keys) {
-        if (mc.hasShiftDown()) {
+        if (mc().hasShiftDown()) {
             out.add(Component.literal("Verdant Wind's Blessing").withColor(VWColors.VERDANT_WIND));
             for (String key : keys) {
-                List<FormattedText> wrapped = mc.font.getSplitter()
+                List<FormattedText> wrapped = mc().font.getSplitter()
                         .splitLines(Component.translatable(key), 200, Style.EMPTY);
                 for (FormattedText line : wrapped) {
                     out.add(Component.literal(line.getString())
@@ -291,7 +247,7 @@ public class VWTooltips {
     }
     private static void addText(List<Component> out, String... keys) {
         for (String key : keys) {
-            List<FormattedText> wrapped = mc.font.getSplitter()
+            List<FormattedText> wrapped = mc().font.getSplitter()
                     .splitLines(Component.translatable(key), 150, Style.EMPTY);
             for (FormattedText line : wrapped) {
                 out.add(Component.literal(line.getString())
@@ -303,9 +259,9 @@ public class VWTooltips {
         out.add(Component.literal(""));
     }
     private static void addExpandingText(List<Component> out, int color, String... keys) {
-        if (mc.hasShiftDown()) {
+        if (mc().hasShiftDown()) {
             for (String key : keys) {
-                List<FormattedText> wrapped = mc.font.getSplitter()
+                List<FormattedText> wrapped = mc().font.getSplitter()
                         .splitLines(Component.translatable(key), 150, Style.EMPTY);
                 for (FormattedText line : wrapped) {
                     out.add(Component.literal(line.getString()).withColor(color));
@@ -316,9 +272,9 @@ public class VWTooltips {
         }
     }
     private static void addExpandingText(List<Component> out, String... keys) {
-        if (mc.hasShiftDown()) {
+        if (mc().hasShiftDown()) {
             for (String key : keys) {
-                List<FormattedText> wrapped = mc.font.getSplitter()
+                List<FormattedText> wrapped = mc().font.getSplitter()
                         .splitLines(Component.translatable(key), 150, Style.EMPTY);
                 for (FormattedText line : wrapped) {
                     out.add(Component.literal(line.getString()).withColor(VWColors.VERDANT_WIND_MUTED));
@@ -329,7 +285,7 @@ public class VWTooltips {
         }
     }
     private static void addETForSurvival(List<Component> out, String... keys) {
-        if (player.isCreative() && !ClientConfig.CLIENT_ALLOW_LORE_SPOILERS.get()) return;
+        if (player.isCreative() && !ClientConfig.ALLOW_LORE_SPOILERS.get()) return;
         addExpandingText(out, keys);
     }
 }

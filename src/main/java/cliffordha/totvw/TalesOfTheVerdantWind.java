@@ -21,8 +21,8 @@ public class TalesOfTheVerdantWind {
     public static final boolean IN_DEVELOPMENT = false;
 
     public TalesOfTheVerdantWind(IEventBus modEventBus, ModContainer modContainer) {
-        modContainer.registerConfig(ModConfig.Type.CLIENT, ClientConfig.CLIENT);
-        modContainer.registerConfig(ModConfig.Type.LOCAL, Config.SYNCED);
+        modContainer.registerConfig(ModConfig.Type.LOCAL, ClientConfig.CLIENT);
+        modContainer.registerConfig(ModConfig.Type.SYNCED, Config.SYNCED);
 
         VWBlocks.register(modEventBus);
         VWItems.register(modEventBus);
@@ -53,8 +53,6 @@ public class TalesOfTheVerdantWind {
 
         AttachmentUtil.registerAttachments(modEventBus);
         VWAttachments.register();
-
-        ClientConfig.register();
     }
 
     @SubscribeEvent

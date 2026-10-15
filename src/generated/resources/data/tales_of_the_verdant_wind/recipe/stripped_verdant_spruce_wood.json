@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "group": "bark",
+  "key": {
+    "#": "tales_of_the_verdant_wind:stripped_verdant_spruce_log"
+  },
+  "pattern": [
+    "##",
+    "##"
+  ],
+  "result": {
+    "count": 3,
+    "id": "tales_of_the_verdant_wind:stripped_verdant_spruce_wood"
+  }
+}

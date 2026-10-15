@@ -3,6 +3,7 @@ package cliffordha.totvw;
 import net.neoforged.neoforge.common.ModConfigSpec;
 
 public class ClientConfig {
+    private ClientConfig() {}
     private static final String DESC_TRANSLATE_LANGUAGE =
             """
                     When circumstances are met, certain item
@@ -100,52 +101,50 @@ public class ClientConfig {
 
 
     private static final ModConfigSpec.Builder BUILDER = new ModConfigSpec.Builder();
+    public static final ModConfigSpec.BooleanValue ALLOW_EFFECT_OVERLAYS = BUILDER
+            .comment(DESC_EFFECT_OVERLAYS).define("allowEffectOverlays", true);
 
-    public static final ModConfigSpec.BooleanValue CLIENT_TRANSLATE_LANGUAGE = BUILDER
-            .comment(DESC_TRANSLATE_LANGUAGE).define("clientTranslateLanguage", false);
+    public static final ModConfigSpec.BooleanValue ALLOW_BLOODLUST_EFFECT_OVERLAY = BUILDER
+            .comment(DESC_BLOODLUST_EFFECT_OVERLAY).define("allowBloodlustEffectOverlay", false);
 
-    public static final ModConfigSpec.BooleanValue CLIENT_ALLOW_EFFECT_OVERLAYS = BUILDER
-            .comment(DESC_EFFECT_OVERLAYS).define("clientAllowEffectOverlays", true);
+    public static final ModConfigSpec.BooleanValue ENABLE_NOTIFIERS = BUILDER
+            .comment(DESC_NOTIFIERS).define("enableNotifiers", true);
 
-    public static final ModConfigSpec.BooleanValue CLIENT_BLOODLUST_EFFECT_OVERLAY = BUILDER
-            .comment(DESC_BLOODLUST_EFFECT_OVERLAY).define("clientBloodlustEffectOverlay", false);
+    public static final ModConfigSpec.BooleanValue SHOW_ATROCITY_COUNTER = BUILDER
+            .comment(DESC_ATROCITY_COUNTER).define("showAtrocityCounter", false);
 
-    public static final ModConfigSpec.BooleanValue CLIENT_ENABLE_NOTIFIERS = BUILDER
-            .comment(DESC_NOTIFIERS).define("clientEnableNotifiers", true);
-
-    public static final ModConfigSpec.BooleanValue CLIENT_SHOW_ATROCITY_COUNTER = BUILDER
-            .comment(DESC_ATROCITY_COUNTER).define("clientShowAtrocityCounter", false);
-
-    public static final ModConfigSpec.BooleanValue CLIENT_ALLOW_LORE_SPOILERS = BUILDER
-            .comment(DESC_LORE_SPOILERS).define("clientAllowLoreSpoilers", false);
+    public static final ModConfigSpec.BooleanValue ALLOW_LORE_SPOILERS = BUILDER
+            .comment(DESC_LORE_SPOILERS).define("allowLoreSpoilers", false);
 
 
-    public static final ModConfigSpec.IntValue SERVER_BENEDICTION_HEALTH_THRESHOLD = BUILDER
-            .comment(DESC_B_HEALTH_THRESHOLD).defineInRange("serverBenedictionHealthThreshold", 30, 15, 90);
+    public static final ModConfigSpec.IntValue BENEDICTION_HEALTH_THRESHOLD = BUILDER
+            .comment(DESC_B_HEALTH_THRESHOLD).defineInRange("benedictionHealthThreshold", 30, 15, 90);
 
-    public static final ModConfigSpec.BooleanValue SERVER_WOLF_SHARES_BENEDICTION_STACK = BUILDER
-            .comment(DESC_B_SHARE_STACK).define("serverWolfSharesBenedictionStack", true);
+    public static final ModConfigSpec.BooleanValue WOLF_SHARES_BENEDICTION_STACK = BUILDER
+            .comment(DESC_B_SHARE_STACK).define("wolfSharesBenedictionStack", true);
 
-    public static final ModConfigSpec.BooleanValue SERVER_ALWAYS_TRIGGER_BLESSING = BUILDER
-            .comment(DESC_B_ALWAYS_TRIGGER).define("serverAlwaysTriggerBlessing", false);
+    public static final ModConfigSpec.BooleanValue ALWAYS_TRIGGER_BLESSING = BUILDER
+            .comment(DESC_B_ALWAYS_TRIGGER).define("alwaysTriggerBlessing", false);
 
-    public static final ModConfigSpec.BooleanValue SERVER_TELEPORT_AFTER_SAVE = BUILDER
-            .comment(DESC_B_TP_AFTER_SAVE).define("serverTeleportAfterSave", true);
+    public static final ModConfigSpec.BooleanValue TELEPORT_AFTER_SAVE = BUILDER
+            .comment(DESC_B_TP_AFTER_SAVE).define("teleportAfterSave", true);
 
-    public static final ModConfigSpec.IntValue SERVER_WOLF_TP_METHOD = BUILDER
-            .comment(DESC_B_WOLF_TP_METHOD).defineInRange("serverWolfTPMethod", 0, 0, 1);
+    public static final ModConfigSpec.IntValue WOLF_TP_METHOD = BUILDER
+            .comment(DESC_B_WOLF_TP_METHOD).defineInRange("wolfTPMethod", 0, 0, 1);
 
-    public static final ModConfigSpec.IntValue SERVER_PLAYER_TP_METHOD = BUILDER
-            .comment(DESC_B_PLAYER_TP_METHOD).defineInRange("serverPlayerTPMethod", 0, 0, 1);
+    public static final ModConfigSpec.IntValue PLAYER_TP_METHOD = BUILDER
+            .comment(DESC_B_PLAYER_TP_METHOD).defineInRange("playerTPMethod", 0, 0, 1);
 
-    public static final ModConfigSpec.BooleanValue SERVER_WOLF_TP_ALL = BUILDER
-            .comment(DESC_TP_ALL_WOLF).define("serverWolfTPAll", false);
+    public static final ModConfigSpec.BooleanValue WOLF_TP_ALL = BUILDER
+            .comment(DESC_TP_ALL_WOLF).define("wolfTPAll", false);
 
 
     public static final ModConfigSpec.BooleanValue LOG_ENCHANTMENT_SHOW_PLAYER_CD = BUILDER.define("logEnchantmentShowPlayerCD", false);
     public static final ModConfigSpec.BooleanValue LOG_ENCHANTMENT_SHOW_WOLF_CD = BUILDER.define("logEnchantmentShowWolfCD", false);
 
     public static final ModConfigSpec CLIENT = BUILDER.build();
-    public static void register() {
+
+    public static ClientConfig getInstance() {
+        return new ClientConfig();
     }
 }

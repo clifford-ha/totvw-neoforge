@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "tales_of_the_verdant_wind:bloodlust",
+      "required": false
+    },
+    {
+      "id": "tales_of_the_verdant_wind:bleeding",
+      "required": false
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "values": [
+    {
+      "id": "tales_of_the_verdant_wind:benediction_of_the_verdant_mountains",
+      "required": false
+    },
+    {
+      "id": "tales_of_the_verdant_wind:wolf_armor_enhancement_kit",
+      "required": false
+    },
+    {
+      "id": "tales_of_the_verdant_wind:wolf_effect_poisoning",
+      "required": false
+    },
+    {
+      "id": "tales_of_the_verdant_wind:wolf_effect_withering",
+      "required": false
+    },
+    {
+      "id": "tales_of_the_verdant_wind:wolf_effect_bloodlust",
+      "required": false
+    },
+    {
+      "id": "tales_of_the_verdant_wind:wolf_effect_gnawing",
+      "required": false
+    }
+  ]
+}

@@ -15,18 +15,15 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.animal.wolf.Wolf;
 import net.minecraft.world.entity.player.Player;
-import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Mod(value = TOTVW.MOD_ID, dist = Dist.DEDICATED_SERVER)
-@EventBusSubscriber(modid = TOTVW.MOD_ID, value = Dist.DEDICATED_SERVER)
+@EventBusSubscriber(modid = TOTVW.MOD_ID)
 public class ServerboundPackets {
     public static void handleClientPrefs(ClientPrefsPayload payload, IPayloadContext context) {
         ServerPlayer player = (ServerPlayer) context.player();
@@ -71,15 +68,15 @@ public class ServerboundPackets {
     }
 
     public static void sendPrefs(Player player) {
-        player.setData(ClientPref.SHOW_ATROCITY_COUNTER, ClientConfig.CLIENT_SHOW_ATROCITY_COUNTER.get());
-        player.setData(ClientPref.ENABLE_NOTIFIERS, ClientConfig.CLIENT_ENABLE_NOTIFIERS.get());
+        player.setData(ClientPref.SHOW_ATROCITY_COUNTER, ClientConfig.SHOW_ATROCITY_COUNTER.get());
+        player.setData(ClientPref.ENABLE_NOTIFIERS, ClientConfig.ENABLE_NOTIFIERS.get());
 
-        player.setData(ClientPref.BENEDICTION_HEALTH_THRESHOLD, ClientConfig.SERVER_BENEDICTION_HEALTH_THRESHOLD.get());
-        player.setData(ClientPref.BENEDICTION_SHARE_STACK, ClientConfig.SERVER_WOLF_SHARES_BENEDICTION_STACK.get());
-        player.setData(ClientPref.BENEDICTION_ALWAYS_TRIGGER_BLESSING, ClientConfig.SERVER_ALWAYS_TRIGGER_BLESSING.get());
-        player.setData(ClientPref.BENEDICTION_TELEPORT_AFTER_SAVE, ClientConfig.SERVER_TELEPORT_AFTER_SAVE.get());
-        player.setData(ClientPref.BENEDICTION_WOLF_TP_METHOD, ClientConfig.SERVER_WOLF_TP_METHOD.get());
-        player.setData(ClientPref.BENEDICTION_PLAYER_TP_METHOD, ClientConfig.SERVER_PLAYER_TP_METHOD.get());
-        player.setData(ClientPref.BENEDICTION_WOLF_TP_ALL, ClientConfig.SERVER_WOLF_TP_ALL.get());
+        player.setData(ClientPref.BENEDICTION_HEALTH_THRESHOLD, ClientConfig.BENEDICTION_HEALTH_THRESHOLD.get());
+        player.setData(ClientPref.BENEDICTION_SHARE_STACK, ClientConfig.WOLF_SHARES_BENEDICTION_STACK.get());
+        player.setData(ClientPref.BENEDICTION_ALWAYS_TRIGGER_BLESSING, ClientConfig.ALWAYS_TRIGGER_BLESSING.get());
+        player.setData(ClientPref.BENEDICTION_TELEPORT_AFTER_SAVE, ClientConfig.TELEPORT_AFTER_SAVE.get());
+        player.setData(ClientPref.BENEDICTION_WOLF_TP_METHOD, ClientConfig.WOLF_TP_METHOD.get());
+        player.setData(ClientPref.BENEDICTION_PLAYER_TP_METHOD, ClientConfig.PLAYER_TP_METHOD.get());
+        player.setData(ClientPref.BENEDICTION_WOLF_TP_ALL, ClientConfig.WOLF_TP_ALL.get());
     }
 }

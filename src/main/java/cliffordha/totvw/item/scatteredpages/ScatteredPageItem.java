@@ -65,7 +65,7 @@ public class ScatteredPageItem extends Item {
     public String[] getPages(Player player, int contents) {
         FirstBookSet.resolvePlayer(player);
         MiscBookSet.resolvePlayer(player);
-        if (player.isCreative() && !ClientConfig.CLIENT_ALLOW_LORE_SPOILERS.get()) {
+        if (player.isCreative() && !ClientConfig.ALLOW_LORE_SPOILERS.get()) {
             return invalidInSurvival;
         }
 

@@ -1,7 +1,6 @@
 package cliffordha.totvw.util;
 
 import cliffordha.totvw.ClientConfig;
-import cliffordha.totvw.Config;
 import cliffordha.totvw.TOTVW;
 import cliffordha.totvw.registry.VWColors;
 import cliffordha.totvw.registry.VWEffects;
@@ -71,11 +70,11 @@ public class VWEffectOverlays {
         return Mth.lerp(t, 0, max);
     }
     private static boolean overlaysDisabled() {
-        return !ClientConfig.CLIENT_ALLOW_EFFECT_OVERLAYS.get();
+        return !ClientConfig.ALLOW_EFFECT_OVERLAYS.get();
     }
     private static boolean allowBloodlustOverlay() {
         if (overlaysDisabled()) return false;
-        return ClientConfig.CLIENT_BLOODLUST_EFFECT_OVERLAY.get();
+        return ClientConfig.ALLOW_BLOODLUST_EFFECT_OVERLAY.get();
     }
     private static Player player() {
         return Minecraft.getInstance().player;

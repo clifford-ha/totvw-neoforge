@@ -52,6 +52,7 @@ public class TetherRunestonePlate extends Item {
 
     @Override
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
+        if (player.getCooldowns().isOnCooldown(new ItemStack(this))) return InteractionResult.FAIL;
         if (level instanceof ServerLevel serverLevel && player.isCrouching()) {
             List<Wolf> recall = new ArrayList<>(serverLevel.getEntities(EntityTypes.WOLF,
                     t -> t.getOwner() == player
@@ -103,6 +104,7 @@ public class TetherRunestonePlate extends Item {
                     }
                     sendToChat(player, true, "Recalled " + recall.size() + " nearby tamed wolves.");
                 }
+                player.getCooldowns().addCooldown(new ItemStack(this), 100);
                 return InteractionResult.SUCCESS_SERVER;
             }
         }

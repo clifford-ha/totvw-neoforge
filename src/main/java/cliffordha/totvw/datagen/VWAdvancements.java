@@ -139,7 +139,7 @@ public class VWAdvancements extends AdvancementSubProvider {
                     .parent(root)
                     .display(VWItems.VERIXIUM_FLUID_BUCKET.get(),
                             title("Tastes Like Ink"),
-                            description("Fill a bucked with Verixium fluid"),
+                            description("Fill a bucket with Verixium fluid"),
                             AdvancementType.TASK,
                             true, true, false)
                     .addCriterion(tastesLikeInkID,

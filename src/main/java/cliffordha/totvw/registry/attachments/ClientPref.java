@@ -16,33 +16,33 @@ public class ClientPref {
     private static final String p = "benediction_";
 
     public static Supplier<AttachmentType<Boolean>> SHOW_ATROCITY_COUNTER = registerBool(
-            "show_atrocity_counter", ClientConfig.CLIENT_SHOW_ATROCITY_COUNTER
+            "show_atrocity_counter", ClientConfig.SHOW_ATROCITY_COUNTER
     );
     public static Supplier<AttachmentType<Boolean>> ENABLE_NOTIFIERS = registerBool(
-            "enable_notifiers", ClientConfig.CLIENT_ENABLE_NOTIFIERS
+            "enable_notifiers", ClientConfig.ENABLE_NOTIFIERS
     );
 
 
     public static Supplier<AttachmentType<Integer>> BENEDICTION_HEALTH_THRESHOLD = registerInt(
-            p + "health_threshold", ClientConfig.SERVER_BENEDICTION_HEALTH_THRESHOLD
+            p + "health_threshold", ClientConfig.BENEDICTION_HEALTH_THRESHOLD
     );
     public static Supplier<AttachmentType<Boolean>> BENEDICTION_SHARE_STACK = registerBool(
-            p + "share_stack", ClientConfig.SERVER_WOLF_SHARES_BENEDICTION_STACK
+            p + "share_stack", ClientConfig.WOLF_SHARES_BENEDICTION_STACK
     );
     public static Supplier<AttachmentType<Boolean>> BENEDICTION_ALWAYS_TRIGGER_BLESSING = registerBool(
-            p + "always_trigger_blessing", ClientConfig.SERVER_ALWAYS_TRIGGER_BLESSING
+            p + "always_trigger_blessing", ClientConfig.ALWAYS_TRIGGER_BLESSING
     );
     public static Supplier<AttachmentType<Boolean>> BENEDICTION_TELEPORT_AFTER_SAVE = registerBool(
-            p + "teleport_after_save", ClientConfig.SERVER_TELEPORT_AFTER_SAVE
+            p + "teleport_after_save", ClientConfig.TELEPORT_AFTER_SAVE
     );
     public static Supplier<AttachmentType<Integer>> BENEDICTION_WOLF_TP_METHOD = registerInt(
-            p + "wolf_tp_method", ClientConfig.SERVER_WOLF_TP_METHOD
+            p + "wolf_tp_method", ClientConfig.WOLF_TP_METHOD
     );
     public static Supplier<AttachmentType<Integer>> BENEDICTION_PLAYER_TP_METHOD = registerInt(
-            p + "player_tp_method", ClientConfig.SERVER_PLAYER_TP_METHOD
+            p + "player_tp_method", ClientConfig.PLAYER_TP_METHOD
     );
     public static Supplier<AttachmentType<Boolean>> BENEDICTION_WOLF_TP_ALL = registerBool(
-            p + "wolf_tp_all", ClientConfig.SERVER_WOLF_TP_ALL
+            p + "wolf_tp_all", ClientConfig.WOLF_TP_ALL
     );
 
 

@@ -1,9 +1,7 @@
 package cliffordha.totvw;
 
 import cliffordha.totvw.client.VWModelLayerProvider;
-import cliffordha.totvw.client.VWTooltips;
 import cliffordha.totvw.fluid.VWFluidTypes;
-import cliffordha.totvw.keymapping.VWKeymap;
 import cliffordha.totvw.particle.BenedictionTriggerParticle;
 import cliffordha.totvw.particle.MightParalyzeParticle;
 import cliffordha.totvw.particle.VerdantBiomesEnvironmentAmbiance;
@@ -12,7 +10,6 @@ import cliffordha.totvw.registry.*;
 import cliffordha.totvw.util.VWColorizeTextMixin;
 import cliffordha.totvw.util.VWEffectOverlays;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.color.block.BlockTintSources;
 import net.minecraft.client.model.object.boat.BoatModel;
 import net.minecraft.client.renderer.block.FluidModel;
@@ -41,7 +38,7 @@ import java.util.List;
 public class TOTVWClient {
     public TOTVWClient(ModContainer container) {
         container.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
-        VWKeymap.register();
+        //VWKeymap.register();
     }
 
     @SubscribeEvent
@@ -68,7 +65,7 @@ public class TOTVWClient {
 
     @SubscribeEvent
     public static void registerKeymapping(RegisterKeyMappingsEvent event) {
-        event.register(VWKeymap.WOLF_CONFIG_PRESSED.get());
+        //event.register(VWKeymap.WOLF_CONFIG_PRESSED.get());
     }
 
     @SubscribeEvent

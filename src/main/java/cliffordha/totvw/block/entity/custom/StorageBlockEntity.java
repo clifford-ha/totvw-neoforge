@@ -68,7 +68,7 @@ public class StorageBlockEntity extends RandomizableContainerBlockEntity {
 
     @Override
     public Component getDisplayName() {
-        return Component.translatable("container.tales-of-the-verdant-wind.storage_box");
+        return Component.literal("Verdant Storage Box");
     }
 
     @Override

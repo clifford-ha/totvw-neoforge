@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "group": "verixium_armors",
+  "key": {
+    "X": "tales_of_the_verdant_wind:verixium_ingot"
+  },
+  "pattern": [
+    "XXX",
+    "X X",
+    "X X"
+  ],
+  "result": {
+    "id": "tales_of_the_verdant_wind:verixium_leggings"
+  }
+}

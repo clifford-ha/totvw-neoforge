@@ -1,0 +1,9 @@
+{
+  "type": "neoforge:add_table",
+  "condition": {
+    "type": "neoforge:loot_table_id",
+    "loot_table_id": "minecraft:chests/bastion_treasure"
+  },
+  "priority": 10,
+  "table": "tales_of_the_verdant_wind:extra/havoc_runestone_from_bastion"
+}

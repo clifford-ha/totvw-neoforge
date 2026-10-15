@@ -187,7 +187,7 @@ public class VWEnchantmentsHandbook {
                         + cText(DARK_AQUA, "#".repeat(64))
                         + addSeparator
                         + bold("AUTHOR'S NOTE") + nextLine
-                        + "Some settings of the mod can be configured. You can edit these by manually accessing the config file \"tales-of-the-verdant-wind.toml\" or through other means like Mod Menu."
+                        + "Some settings of the mod can be configured. You can edit these by manually accessing the config file \"tales-of-the-verdant-wind.<type>.toml\" or through other means like Mod Menu."
         );
     }
 }

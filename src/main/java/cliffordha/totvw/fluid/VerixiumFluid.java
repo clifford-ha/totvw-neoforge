@@ -33,6 +33,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.FluidState;
 
 import java.util.Optional;
 
@@ -67,6 +68,18 @@ public class VerixiumFluid extends LiquidBlock {
 
     public void tick(ServerLevel level, BlockPos pos, BlockState state) {
         this.tick(state, level, pos, level.getRandom());
+        this.initTick(level, pos.above(), state);
+        this.initTick(level, pos.below(), state);
+        this.initTick(level, pos.north(), state);
+        this.initTick(level, pos.south(), state);
+        this.initTick(level, pos.east(), state);
+        this.initTick(level, pos.west(), state);
+    }
+    private void initTick(ServerLevel level, BlockPos pos, BlockState state) {
+        VerixiumFluid fluid = level.getBlockState(pos).getBlock() instanceof VerixiumFluid ? (VerixiumFluid) level.getBlockState(pos).getBlock() : null;
+        if (fluid != null) {
+            fluid.tick(state, level, pos, level.getRandom());
+        }
     }
 
     @Override

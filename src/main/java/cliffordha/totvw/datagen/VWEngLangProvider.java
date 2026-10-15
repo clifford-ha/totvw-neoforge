@@ -1,7 +1,5 @@
 package cliffordha.totvw.datagen;
 
-import cliffordha.totvw.ClientConfig;
-import cliffordha.totvw.Config;
 import cliffordha.totvw.TOTVW;
 import cliffordha.totvw.keymapping.VWKeymap;
 import cliffordha.totvw.registry.*;
@@ -237,36 +235,36 @@ public class VWEngLangProvider extends LanguageProvider {
         add(TOTVW.MOD_ID, "Tales of the Verdant Wind");
 
         // MOD CONFIG
-        add(config("clientTranslateLanguage"), "Client Translate Language");
-        add(config("clientEnableNotifiers"), "Client Enable Notifiers");
-        add(config("clientShowAtrocityCounter"), "Show Atrocity Counter");
-        add(config("clientModSounds"), "Client Mod Sounds");
-        add(config("clientAllowLoreSpoilers"), "Client Allow Lore Spoilers");
-        add(config("clientAllowEffectOverlays"), "Client Allow Effect Overlays");
-        add(config("clientBloodlustEffectOverlay"), "Client Bloodlust Effect Overlay");
+        add(config("enableNotifiers"), "Enable Notifiers");
+        add(config("showAtrocityCounter"), "Show Atrocity Counter");
+        add(config("modSounds"), "Mod Sounds");
+        add(config("allowLoreSpoilers"), "Allow Lore Spoilers");
+        add(config("allowEffectOverlays"), "Allow Effect Overlays");
+        add(config("allowBloodlustEffectOverlay"), "Bloodlust Effect Overlay");
 
-        add(config("serverWolfDamageDistribution"), "Server Wolf Damage Distribution");
-
-        add(config("serverBenedictionHealthThreshold"), "Server Benediction Health Threshold");
-        add(config("serverWolfPlayerScanDistance"), "Server Wolf Player Scan Distance");
-        add(config("serverAlwaysTriggerBlessing"), "Server Always Trigger Blessing");
-        add(config("serverWolfSharesBenedictionStack"), "Server Wolf Shares Benediction Stack");
-        add(config("serverTeleportAfterSave"), "Server Teleport After Save");
-        add(config("serverPlayerTPMethod"), "Server Player TP Method");
-        add(config("serverWolfTPMethod"), "Server Wolf TP Method");
-        add(config("serverWolfTPAll"), "Server Wolf TP All");
-
-        add(config("serverSkillCooldowns"), "Server Skill Cooldowns");
-        add(config("serverItemCooldowns"), "Server Item Cooldowns");
-        add(config("serverOtherCooldowns"), "Server Other Cooldowns");
+        add(config("benedictionHealthThreshold"), "Benediction Health Threshold");
+        add(config("alwaysTriggerBlessing"), "Always Trigger Blessing");
+        add(config("wolfSharesBenedictionStack"), "Wolf Shares Benediction Stack");
+        add(config("teleportAfterSave"), "Teleport After Save");
+        add(config("wolfTPMethod"), "Wolf TP Method");
+        add(config("playerTPMethod"), "Player TP Method");
+        add(config("wolfTPAll"), "Wolf TP All");
 
         add(config("logEnchantmentShowWolfCD"), "Show Wolf CD");
         add(config("logEnchantmentShowPlayerCD"), "Show Player CD");
 
+
+        add(config("wolfDamageDistribution"), "Wolf Damage Distribution");
+        add(config("wolfPlayerScanDistance"), "Wolf Player Scan Distance");
+        add(config("serverSkillCooldowns"), "Skill Cooldowns");
+        add(config("serverItemCooldowns"), "Item Cooldowns");
+        add(config("serverOtherCooldowns"), "Other Cooldowns");
+
+
+
         //DEV
         if (TOTVW.IN_DEVELOPMENT) {
             add(VWItems.DevItems.ATTACHMENTS_REMOVER, "Attachments Remover");
-            addConfigValue(ClientConfig.CLIENT_TRANSLATE_LANGUAGE, "Translate Language");
         }
     }
     
