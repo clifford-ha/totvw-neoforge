@@ -1,0 +1,13 @@
+{
+  "double_trade_price_enchantments": [],
+  "gives": {
+    "id": "minecraft:emerald"
+  },
+  "max_uses": 64.0,
+  "reputation_discount": 0.05,
+  "wants": {
+    "count": 4.0,
+    "id": "tales_of_the_verdant_wind:verixium_powder"
+  },
+  "xp": 20.0
+}

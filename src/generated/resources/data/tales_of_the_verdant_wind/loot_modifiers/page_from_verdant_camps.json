@@ -1,0 +1,11 @@
+{
+  "type": "neoforge:add_table",
+  "conditions": [
+    {
+      "condition": "neoforge:loot_table_id",
+      "loot_table_id": "tales_of_the_verdant_wind:chests/verdant_camp_valuables"
+    }
+  ],
+  "priority": 10,
+  "table": "tales_of_the_verdant_wind:chests/verdant_camp_valuables"
+}

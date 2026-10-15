@@ -1,0 +1,32 @@
+{
+  "parent": "tales_of_the_verdant_wind:tales_of_the_verdant_wind",
+  "criteria": {
+    "tastes_like_ink": {
+      "conditions": {
+        "items": [
+          {
+            "items": "tales_of_the_verdant_wind:verixium_fluid_bucket"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "background": "tales_of_the_verdant_wind:tastes_like_ink",
+    "description": {
+      "color": "#247D66",
+      "text": "Fill a bucket with Verixium fluid"
+    },
+    "icon": {
+      "id": "tales_of_the_verdant_wind:verixium_fluid_bucket"
+    },
+    "title": "Tastes Like Ink"
+  },
+  "requirements": [
+    [
+      "tastes_like_ink"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

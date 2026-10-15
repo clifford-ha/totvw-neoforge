@@ -1,0 +1,26 @@
+{
+  "pools": [
+    {
+      "conditions": [
+        {
+          "chance": 0.07,
+          "condition": "minecraft:random_chance"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "tales_of_the_verdant_wind:genesis_runestone_plate"
+        }
+      ],
+      "functions": [
+        {
+          "count": 1.0,
+          "function": "minecraft:set_count"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "tales_of_the_verdant_wind:extra/genesis_runestone_from_end_city"
+}

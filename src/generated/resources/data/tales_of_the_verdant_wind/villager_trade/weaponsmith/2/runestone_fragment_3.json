@@ -1,0 +1,16 @@
+{
+  "additional_wants": {
+    "count": 7.0,
+    "id": "tales_of_the_verdant_wind:verixium_shard"
+  },
+  "double_trade_price_enchantments": [],
+  "gives": {
+    "id": "tales_of_the_verdant_wind:soul_runestone_fragment_3"
+  },
+  "max_uses": 1.0,
+  "wants": {
+    "count": 48.0,
+    "id": "minecraft:emerald"
+  },
+  "xp": 30.0
+}

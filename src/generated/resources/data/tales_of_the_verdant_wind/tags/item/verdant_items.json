@@ -1,0 +1,15 @@
+{
+  "values": [
+    "tales_of_the_verdant_wind:verixium_chunk",
+    "tales_of_the_verdant_wind:condensed_verixium",
+    "tales_of_the_verdant_wind:verixium_shard",
+    "tales_of_the_verdant_wind:verixium_powder",
+    "tales_of_the_verdant_wind:verixium_ingot",
+    "tales_of_the_verdant_wind:verixium_paper",
+    "tales_of_the_verdant_wind:verixium_fluid_bucket",
+    "tales_of_the_verdant_wind:verixium_armor_upgrade_template",
+    "#tales_of_the_verdant_wind:verixium_armor",
+    "#tales_of_the_verdant_wind:verixium_weapon",
+    "#tales_of_the_verdant_wind:verixium_tool"
+  ]
+}

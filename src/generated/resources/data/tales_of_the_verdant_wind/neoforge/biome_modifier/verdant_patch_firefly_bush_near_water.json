@@ -1,0 +1,6 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "#tales_of_the_verdant_wind:is_verdant_forest",
+  "features": "minecraft:patch_firefly_bush_near_water",
+  "step": "local_modifications"
+}

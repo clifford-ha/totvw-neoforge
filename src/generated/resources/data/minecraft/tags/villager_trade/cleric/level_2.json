@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "tales_of_the_verdant_wind:cleric/2/verixium_powder",
+      "required": false
+    },
+    {
+      "id": "tales_of_the_verdant_wind:cleric/2/emerald",
+      "required": false
+    }
+  ]
+}

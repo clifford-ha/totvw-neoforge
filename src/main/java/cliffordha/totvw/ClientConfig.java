@@ -3,12 +3,6 @@ package cliffordha.totvw;
 import net.neoforged.neoforge.common.ModConfigSpec;
 
 public class ClientConfig {
-    private ClientConfig() {}
-    private static final String DESC_TRANSLATE_LANGUAGE =
-            """
-                    When circumstances are met, certain item
-                    tooltips will show untranslated version of the text""";
-
     private static final String DESC_EFFECT_OVERLAYS =
             "When enabled, certain mob effects will affect the screen.";
 
@@ -143,8 +137,4 @@ public class ClientConfig {
     public static final ModConfigSpec.BooleanValue LOG_ENCHANTMENT_SHOW_WOLF_CD = BUILDER.define("logEnchantmentShowWolfCD", false);
 
     public static final ModConfigSpec CLIENT = BUILDER.build();
-
-    public static ClientConfig getInstance() {
-        return new ClientConfig();
-    }
 }

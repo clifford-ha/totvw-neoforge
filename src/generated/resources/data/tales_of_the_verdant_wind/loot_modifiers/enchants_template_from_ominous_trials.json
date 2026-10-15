@@ -1,0 +1,11 @@
+{
+  "type": "neoforge:add_table",
+  "conditions": [
+    {
+      "condition": "neoforge:loot_table_id",
+      "loot_table_id": "minecraft:chests/trial_chambers/reward_ominous_rare"
+    }
+  ],
+  "priority": 10,
+  "table": "tales_of_the_verdant_wind:extra/enchants_template_trial_ominous"
+}

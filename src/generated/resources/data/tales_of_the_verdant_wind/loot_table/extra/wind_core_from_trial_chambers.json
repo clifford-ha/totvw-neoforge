@@ -1,0 +1,26 @@
+{
+  "pools": [
+    {
+      "conditions": [
+        {
+          "chance": 0.12,
+          "condition": "minecraft:random_chance"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "count": 1.0,
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name": "tales_of_the_verdant_wind:lodestone_wind_core"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "tales_of_the_verdant_wind:extra/wind_core_from_trial_chambers"
+}
