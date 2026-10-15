@@ -74,7 +74,7 @@ public class VWBlocks {
                     .requiresCorrectToolForDrops()
                     .noOcclusion()
                     .lightLevel(_ -> 15)
-                    .pushReaction(PushReaction.POPPED)
+                    .pushReaction(PushReaction.DESTROY)
                     .strength(1.5F, 90F)),
             BlockBehaviour.Properties.of(),
             true
@@ -84,7 +84,7 @@ public class VWBlocks {
                     properties
                             .noCollision()
                             .strength(100.0F)
-                            .pushReaction(PushReaction.POPPED)
+                            .pushReaction(PushReaction.DESTROY)
                             .noLootTable()
                             .liquid()
                             .replaceable()
@@ -400,7 +400,7 @@ public class VWBlocks {
                     .strength(50.0f, 100.0f)
                     .sound(SoundType.STONE)
                     .mapColor(MapColor.STONE)
-                    .pushReaction(PushReaction.IMMOVEABLE)
+                    .pushReaction(PushReaction.IGNORE)
                     .lightLevel((state) -> state.getValue(LodestoneWindCoreBlock.ACTIVE) ? 15 : 0)
             ),
             BlockBehaviour.Properties.of(),

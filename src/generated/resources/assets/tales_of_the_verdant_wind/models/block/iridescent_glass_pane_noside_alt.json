@@ -1,9 +1,0 @@
-{
-  "parent": "minecraft:block/template_glass_pane_noside_alt",
-  "textures": {
-    "pane": {
-      "force_translucent": true,
-      "sprite": "tales_of_the_verdant_wind:block/iridescent_glass"
-    }
-  }
-}

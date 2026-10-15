@@ -6,7 +6,6 @@ import cliffordha.totvw.registry.*;
 import cliffordha.totvw.registry.attachments.AttachmentUtil;
 import cliffordha.totvw.registry.attachments.VWAttachments;
 import cliffordha.totvw.world.VWBiomes;
-import cliffordha.totvw.world.tree.VWRootPlacerTypes;
 
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -21,8 +20,8 @@ public class TalesOfTheVerdantWind {
     public static final boolean IN_DEVELOPMENT = false;
 
     public TalesOfTheVerdantWind(IEventBus modEventBus, ModContainer modContainer) {
-        modContainer.registerConfig(ModConfig.Type.LOCAL, ClientConfig.CLIENT);
-        modContainer.registerConfig(ModConfig.Type.SYNCED, Config.SYNCED);
+        modContainer.registerConfig(ModConfig.Type.COMMON, ClientConfig.CLIENT);
+        modContainer.registerConfig(ModConfig.Type.SERVER, Config.SYNCED);
 
         VWBlocks.register(modEventBus);
         VWItems.register(modEventBus);
@@ -38,8 +37,6 @@ public class TalesOfTheVerdantWind {
 
         VWDamageTypes.register();
         VWEnchantments.register();
-
-        VWRootPlacerTypes.register(modEventBus);
 
         VWSounds.register(modEventBus);
         VWParticles.register(modEventBus);

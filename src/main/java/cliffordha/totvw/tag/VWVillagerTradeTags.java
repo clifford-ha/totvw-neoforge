@@ -1,6 +1,5 @@
 package cliffordha.totvw.tag;
 
-import cliffordha.totvw.TOTVW;
 import cliffordha.totvw.datagen.villager.VWVillagerTrades;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
@@ -11,7 +10,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class VWVillagerTradeTags extends VillagerTradesTagsProvider {
     public VWVillagerTradeTags(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider) {
-        super(output, lookupProvider, TOTVW.MOD_ID);
+        super(output, lookupProvider);
     }
 
     @Override

@@ -6,11 +6,8 @@ import net.minecraft.client.resources.model.EquipmentClientInfo;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.equipment.EquipmentAsset;
-import net.minecraft.world.item.equipment.trim.TrimMaterial;
-import net.minecraft.world.item.equipment.trim.TrimMaterials;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,9 +34,6 @@ public class VWEquipmentAssetProvider implements DataProvider {
                 .addLayers(EquipmentClientInfo.LayerType.HORSE_BODY,
                         new EquipmentClientInfo.Layer(TOTVW.registerID("verixium_horse_armor")))
 
-                .replaceTrimPalette(
-                        TrimMaterials.DIAMOND,
-                        Identifier.withDefaultNamespace("trim/diamond_darker"))
                 .build());
     }
 

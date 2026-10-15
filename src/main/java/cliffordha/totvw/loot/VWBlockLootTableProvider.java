@@ -3,9 +3,11 @@ package cliffordha.totvw.loot;
 import cliffordha.totvw.registry.VWItems;
 import cliffordha.totvw.registry.VWBlocks;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.loot.BlockLootSubProvider;
-import net.minecraft.data.loot.LootTableSubProvider;
+import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.flag.FeatureFlags;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.LootPool;
@@ -13,14 +15,15 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition;
-import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders;
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
+import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import net.neoforged.neoforge.registries.DeferredBlock;
 
 import java.util.Set;
 
 public class VWBlockLootTableProvider extends BlockLootSubProvider {
-    public VWBlockLootTableProvider(LootTableSubProvider.Context context) {
-        super(Set.of(), FeatureFlags.REGISTRY.allFlags(), context);
+    public VWBlockLootTableProvider(HolderLookup.Provider registries) {
+        super(Set.of(), FeatureFlags.REGISTRY.allFlags(), registries);
     }
 
     @Override
@@ -36,15 +39,15 @@ public class VWBlockLootTableProvider extends BlockLootSubProvider {
         this.add(VWBlocks.VERIXIUM_POWDER_BLOCK, LootTable.lootTable()
                 .withPool(LootPool.lootPool()
                         .add(LootItem.lootTableItem(VWItems.VERIXIUM_POWDER)
-                                .apply(SetItemCountFunction.setCount(ContextIntProviders.between(3, 9)))
+                                .apply(SetItemCountFunction.setCount(UniformGenerator.between(3, 9)))
                                 .when(doesNotHaveSilkTouch())
                         )
                         .add(LootItem.lootTableItem(VWBlocks.VERIXIUM_POWDER_BLOCK)
-                                .apply(SetItemCountFunction.setCount(ContextIntProviders.exactly(1)))
+                                .apply(SetItemCountFunction.setCount(ConstantValue.exactly(1)))
                                 .when(hasSilkTouch())
                         )
                         .add(LootItem.lootTableItem(VWItems.VERIXIUM_POWDER)
-                                .apply(SetItemCountFunction.setCount(ContextIntProviders.between(0, 9)))
+                                .apply(SetItemCountFunction.setCount(UniformGenerator.between(0, 9)))
                                 .when(ExplosionCondition.survivesExplosion())
                         )
                 )

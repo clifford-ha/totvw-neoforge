@@ -6,7 +6,8 @@ import cliffordha.totvw.tag.VWItemTags;
 import cliffordha.totvw.util.VWUtil;
 
 import net.minecraft.advancements.Advancement;
-import net.minecraft.core.registries.MultiRegistryBootstrap;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.world.item.Items;
@@ -17,27 +18,35 @@ import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Blocks;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 import static net.minecraft.data.recipes.SingleItemRecipeBuilder.stonecutting;
 
 public class VWRecipeProvider extends RecipeProvider {
-    public VWRecipeProvider(BootstrapContext<Recipe<?>> recipeOutput, BootstrapContext<Advancement> advancementOutput) {
-        super(recipeOutput, advancementOutput);
+    public VWRecipeProvider(HolderLookup.Provider registries, RecipeOutput output) {
+        super(registries, output);
     }
 
-    public static MultiRegistryBootstrap create() {
-        return RecipeProvider.asBootstrap(VWRecipeProvider::new);
-    }
+    public static class Runner extends RecipeProvider.Runner {
+        public Runner(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> registries) {
+            super(packOutput, registries);
+        }
 
-    private static String getRecipeOutputName(final ItemLike product, final ItemLike material) {
-        String itemName = getItemName(product);
-        return "stonecutting_" + itemName + "_from_" + getItemName(material);
+        @Override
+        protected RecipeProvider createRecipeProvider(HolderLookup.Provider registries, RecipeOutput output) {
+            return new VWRecipeProvider(registries, output);
+        }
+
+        @Override
+        public String getName() {
+            return "VW Recipe Provider";
+        }
     }
 
     private void stonecutter(RecipeCategory category, ItemLike result, ItemLike base, int count) {
         SingleItemRecipeBuilder.stonecutting(Ingredient.of(base), category, result, count)
                 .unlockedBy(getHasName(base), this.has(base))
-                .save(this.output, getRecipeOutputName(result, base));
+                .save(this.output, "stonecutting_" + getHasName(result) + "_from_" + getHasName(base));
     }
 
     private void dyeFromIridescentGlass(ItemLike... items) {

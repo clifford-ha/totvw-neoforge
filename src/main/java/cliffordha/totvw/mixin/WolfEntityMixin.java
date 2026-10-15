@@ -28,7 +28,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.Mth;
-import net.minecraft.util.Prediction;
 import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.*;
 import net.minecraft.world.damagesource.DamageSource;
@@ -320,7 +319,7 @@ public abstract class WolfEntityMixin extends LivingEntity {
             Runestone RUNESTONE_TYPE = wolf.getData(WolfAttachment.RUNESTONE_TYPE);
 
             if (stack.is(Items.SHEARS) && !RUNESTONE_TYPE.equals(Runestone.EMPTY)) {
-                wolf.drop(Runestone.getStack(RUNESTONE_TYPE), false, Prediction.SERVER_ONLY);
+                wolf.drop(Runestone.getStack(RUNESTONE_TYPE), false, false);
                 wolf.removeData(WolfAttachment.RUNESTONE_TYPE);
                 level.playSound(null, wolf.blockPosition(), SoundEvents.SHEEP_SHEAR, SoundSource.NEUTRAL);
                 sendToChat(player, true, name + "'s runestone has been removed.");
@@ -438,7 +437,7 @@ public abstract class WolfEntityMixin extends LivingEntity {
             sendToChat(player, true, name + " already uses this runestone type.");
             return InteractionResult.FAIL;
         } else {
-            wolf.drop(Runestone.getStack(current), false, Prediction.SERVER_ONLY);
+            wolf.drop(Runestone.getStack(current), false, false);
             wolf.setData(WolfAttachment.RUNESTONE_TYPE, type);
             consumeItem(player, stack);
             sendToChat(this, true, name + "'s Runestone buff has been changed to " + type.getBuff() + ".");

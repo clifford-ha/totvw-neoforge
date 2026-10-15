@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "tales_of_the_verdant_wind:item/verixium_spear"
-  }
-}
