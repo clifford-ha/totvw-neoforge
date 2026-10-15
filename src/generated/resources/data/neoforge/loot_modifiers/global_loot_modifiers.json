@@ -1,0 +1,18 @@
+{
+  "entries": [
+    "tales_of_the_verdant_wind:ancient_city_additional_loot",
+    "tales_of_the_verdant_wind:verixium_powder_from_trial_chambers",
+    "tales_of_the_verdant_wind:verixium_upgrade_template_from_village_armorer",
+    "tales_of_the_verdant_wind:enchants_template_from_ominous_trials",
+    "tales_of_the_verdant_wind:wind_core_from_trial_chambers",
+    "tales_of_the_verdant_wind:pages_from_village_armorer",
+    "tales_of_the_verdant_wind:pages_from_pillager_outpost",
+    "tales_of_the_verdant_wind:genesis_runestone_from_end_city",
+    "tales_of_the_verdant_wind:havoc_runestone_from_bastion",
+    "tales_of_the_verdant_wind:efflorescence_runestone_from_desert_pyramid",
+    "tales_of_the_verdant_wind:soul_runestone_fragment_from_ancient_pillars",
+    "tales_of_the_verdant_wind:soul_runestone_fragment_from_verdant_weaponsmith",
+    "tales_of_the_verdant_wind:page_from_verdant_camps"
+  ],
+  "replace": false
+}

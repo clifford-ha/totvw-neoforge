@@ -34,76 +34,76 @@ public class VWLootModifiers extends GlobalLootModifierProvider {
         this.add("ancient_city_additional_loot",
                 new AddTableLootModifier(new LootItemCondition[] {
                         new LootTableIdCondition.Builder(ANCIENT_CITY_CHEST).build(),
-                        }, 10, VWLootTables.ANCIENT_CITY_LOOTS));
+                        }, VWLootTables.ANCIENT_CITY_LOOTS));
 
         this.add("verixium_powder_from_trial_chambers",
                 new AddTableLootModifier(new LootItemCondition[] {
                         new LootTableIdCondition.Builder(TRIAL_CHAMBERS_RARE).build(),
-                        }, 10, VWLootTables.VERIXIUM_POWDER_TRIAL));
+                        }, VWLootTables.VERIXIUM_POWDER_TRIAL));
 
         this.add("verixium_upgrade_template_from_village_armorer",
                 new AddTableLootModifier(new LootItemCondition[] {
                         new LootTableIdCondition.Builder(VILLAGER_ARMORER).build(),
-                        }, 10, VWLootTables.VERIXIUM_UPGRADE_TEMPLATE_ARMORER));
+                        }, VWLootTables.VERIXIUM_UPGRADE_TEMPLATE_ARMORER));
 
         this.add("enchants_template_from_ominous_trials",
                 new AddTableLootModifier(new LootItemCondition[] {
                         new LootTableIdCondition.Builder(TRIAL_CHAMBERS_OMINOUS_RARE).build(),
-                        }, 10, VWLootTables.ENCHANTS_TEMPLATE_TRIAL_OMINOUS
+                        }, VWLootTables.ENCHANTS_TEMPLATE_TRIAL_OMINOUS
                 ));
 
         this.add("wind_core_from_trial_chambers",
                 new AddTableLootModifier(new LootItemCondition[] {
                         new LootTableIdCondition.Builder(TRIAL_CHAMBERS_OMINOUS_UNIQUE).build(),
-                        }, 10, VWLootTables.WIND_CORE_FROM_TRIAL_CHAMBERS
+                        }, VWLootTables.WIND_CORE_FROM_TRIAL_CHAMBERS
                 ));
 
         this.add("pages_from_village_armorer",
                 new AddTableLootModifier(new LootItemCondition[] {
                         new LootTableIdCondition.Builder(VILLAGER_ARMORER).build(),
-                        }, 10, VWLootTables.PAGES_FROM_VILLAGE_ARMORER
+                        }, VWLootTables.PAGES_FROM_VILLAGE_ARMORER
                 ));
 
         this.add("pages_from_pillager_outpost",
                 new AddTableLootModifier(new LootItemCondition[] {
                         new LootTableIdCondition.Builder(PILLAGER_OUTPOST_CHEST).build(),
-                        }, 10, VWLootTables.PAGES_FROM_PILLAGER_OUTPOST
+                        }, VWLootTables.PAGES_FROM_PILLAGER_OUTPOST
                 ));
 
         this.add("genesis_runestone_from_end_city",
                 new AddTableLootModifier(new LootItemCondition[] {
                         new LootTableIdCondition.Builder(END_CITY_TREASURE_CHEST).build(),
-                        }, 10, VWLootTables.GENESIS_RUNESTONE_FROM_END_CITY
+                        }, VWLootTables.GENESIS_RUNESTONE_FROM_END_CITY
                 ));
 
         this.add("havoc_runestone_from_bastion",
                 new AddTableLootModifier(new LootItemCondition[] {
                         new LootTableIdCondition.Builder(BASTION_TREASURE_CHEST).build(),
-                        }, 10, VWLootTables.HAVOC_RUNESTONE_FROM_BASTION
+                        }, VWLootTables.HAVOC_RUNESTONE_FROM_BASTION
                 ));
 
         this.add("efflorescence_runestone_from_desert_pyramid",
                 new AddTableLootModifier(new LootItemCondition[] {
                         new LootTableIdCondition.Builder(DESERT_PYRAMID_CHEST).build(),
-                        }, 10, VWLootTables.EFFLORESCENCE_RUNESTONE_FROM_DESERT_PYRAMID
+                        }, VWLootTables.EFFLORESCENCE_RUNESTONE_FROM_DESERT_PYRAMID
                 ));
 
         this.add("soul_runestone_fragment_from_ancient_pillars",
                 new AddTableLootModifier(new LootItemCondition[] {
                         new LootTableIdCondition.Builder(VWLootTables.ID_ANCIENT_VERIXIUM_PILLARS).build(),
-                        }, 10, VWLootTables.SOUL_RUNESTONE_FRAGMENT_FROM_VERIXIUM_PILLARS
+                        }, VWLootTables.SOUL_RUNESTONE_FRAGMENT_FROM_VERIXIUM_PILLARS
                 ));
 
         this.add("soul_runestone_fragment_from_verdant_weaponsmith",
                 new AddTableLootModifier(new LootItemCondition[] {
                         new LootTableIdCondition.Builder(VWLootTables.ID_VERDANT_VILLAGE_WEAPONSMITH).build(),
-                        }, 10, VWLootTables.SOUL_RUNESTONE_FRAGMENT_FROM_VERDANT_WEAPONSMITH
+                        }, VWLootTables.SOUL_RUNESTONE_FRAGMENT_FROM_VERDANT_WEAPONSMITH
                 ));
 
         this.add("page_from_verdant_camps",
                 new AddTableLootModifier(new LootItemCondition[] {
                         new LootTableIdCondition.Builder(VWLootTables.ID_PAGE_FROM_VERDANT_CAMPS).build(),
-                        }, 10, VWLootTables.PAGE_FROM_VERDANT_CAMPS
+                        }, VWLootTables.PAGE_FROM_VERDANT_CAMPS
                 ));
     }
 }

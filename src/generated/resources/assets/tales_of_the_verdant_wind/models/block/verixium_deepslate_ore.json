@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "tales_of_the_verdant_wind:block/verixium_deepslate_ore"
+  }
+}

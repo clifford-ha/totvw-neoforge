@@ -1,0 +1,10 @@
+{
+  "type": "neoforge:add_table",
+  "conditions": [
+    {
+      "condition": "neoforge:loot_table_id",
+      "loot_table_id": "tales_of_the_verdant_wind:chests/village/verdant/weaponsmith"
+    }
+  ],
+  "table": "tales_of_the_verdant_wind:chests/village/verdant/weaponsmith"
+}

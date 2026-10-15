@@ -36,8 +36,6 @@ public class TOTVWDataGenerator {
 		generator.addProvider(true, new VWBiomeTags(output, provider));
 		generator.addProvider(true, new VWDamageTypeTags(output, provider));
 
-		generator.addProvider(true, new VWDatapackProvider(output, provider));
-
 		generator.addProvider(true, new VWSoundsProvider(output));
 		generator.addProvider(true, new VWEngLangProvider(output));
 		generator.addProvider(true, new VWLootModifiers(output, provider));
@@ -45,11 +43,14 @@ public class TOTVWDataGenerator {
 		generator.addProvider(true, new VWDatamapProvider(output, provider));
 		generator.addProvider(true, new VWAdvancements(output, provider));
 
+		var datapackProvider = generator.addProvider(true, new VWDatapackProvider(output, provider));
+		var datapackLookup = datapackProvider.getRegistryProvider();
+
 		generator.addProvider(true, new LootTableProvider(output, Collections.emptySet(),
 				List.of(
 						new LootTableProvider.SubProviderEntry(VWBlockLootTableProvider::new, LootContextParamSets.BLOCK),
 						new LootTableProvider.SubProviderEntry(VWLootTables::new, LootContextParamSets.ALL_PARAMS)
-				), provider));
+				), datapackLookup));
 	}
 
 	@SubscribeEvent

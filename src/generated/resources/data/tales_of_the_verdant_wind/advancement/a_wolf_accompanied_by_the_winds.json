@@ -1,0 +1,43 @@
+{
+  "parent": "tales_of_the_verdant_wind:condensed_wind",
+  "criteria": {
+    "a_wolf_accompanied_by_the_winds": {
+      "conditions": {
+        "entity": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "type": "minecraft:wolf"
+            }
+          }
+        ],
+        "item": {
+          "items": "tales_of_the_verdant_wind:verixium_wolf_armor"
+        }
+      },
+      "trigger": "minecraft:player_interacted_with_entity"
+    }
+  },
+  "display": {
+    "background": "tales_of_the_verdant_wind:a_wolf_accompanied_by_the_winds",
+    "description": {
+      "color": "#247D66",
+      "text": "Give your companion Verixium armor"
+    },
+    "frame": "challenge",
+    "icon": {
+      "id": "tales_of_the_verdant_wind:verixium_wolf_armor"
+    },
+    "title": {
+      "color": "#00FFD0",
+      "text": "A Wolf Accompanied by The Winds"
+    }
+  },
+  "requirements": [
+    [
+      "a_wolf_accompanied_by_the_winds"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

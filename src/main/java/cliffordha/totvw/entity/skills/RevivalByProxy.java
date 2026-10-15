@@ -16,7 +16,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
-import net.minecraft.world.entity.EntityTypes;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.wolf.Wolf;
 import net.minecraft.world.entity.player.Inventory;
@@ -45,7 +45,7 @@ public class RevivalByProxy {
             double distance = Config.SERVER_WOLF_PLAYER_SCAN_DISTANCE.get() * 16;
             AttachmentType<Integer> BENEDICTION_STACK = WolfAttachment.BENEDICTION.get();
 
-            List<Wolf> wolves = level.getEntities(EntityTypes.WOLF, player.getBoundingBox().inflate(distance), wolf ->
+            List<Wolf> wolves = level.getEntities(EntityType.WOLF, player.getBoundingBox().inflate(distance), wolf ->
                     wolf.getOwner() != null && wolf.getOwner().is(player));
 
             if (!wolves.isEmpty()) {

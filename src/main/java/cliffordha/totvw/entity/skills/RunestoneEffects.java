@@ -143,7 +143,7 @@ public class RunestoneEffects {
                 addEffect(victim, VWEffects.PARALYZE, sec(2), 0);
             }
             addOrStackEffect(player, MobEffects.SPEED, sec(6), 0, true);
-            victim.knockback(1.3, victim.getXRot(), victim.getYHeadRot(), level.damageSources().explosion(null), 2);
+            victim.knockback(1.3, victim.getXRot(), victim.getYHeadRot());
 
         } else if (type == HavocType.VOID) {
             victim.teleportTo(victim.getX(), -200, victim.getZ());

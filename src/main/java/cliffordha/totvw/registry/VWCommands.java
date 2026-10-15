@@ -11,7 +11,7 @@ import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.EntityTypes;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.animal.wolf.Wolf;
 import net.minecraft.world.entity.player.Inventory;
@@ -127,7 +127,7 @@ public class VWCommands {
 
                     ServerLevel level = player.level();
                     List<Wolf> wolves = level.getEntities(
-                            EntityTypes.WOLF,
+                            EntityType.WOLF,
                             player.getBoundingBox().inflate(16),
                             t -> t.getOwner() == player);
                     
@@ -159,7 +159,7 @@ public class VWCommands {
                         ServerLevel level = player.level();
 
                         List<Wolf> wolves = level.getEntities(
-                                EntityTypes.WOLF,
+                                EntityType.WOLF,
                                 player.getBoundingBox().inflate(16),
                                 t -> t.getOwner() == player);
 
@@ -319,7 +319,7 @@ public class VWCommands {
                     }
 
                     ServerLevel level = player.level();
-                    List<Wolf> wolves = level.getEntities(EntityTypes.WOLF,
+                    List<Wolf> wolves = level.getEntities(EntityType.WOLF,
                             player.getBoundingBox().inflate(32),
                             wolf -> wolf.isTame() && wolf.getUUID() != player.getUUID());
 
@@ -346,7 +346,7 @@ public class VWCommands {
                     }
 
                     ServerLevel level = player.level();
-                    List<Wolf> wolves = level.getEntities(EntityTypes.WOLF,
+                    List<Wolf> wolves = level.getEntities(EntityType.WOLF,
                             player.getBoundingBox().inflate(32),
                             wolf -> wolf.isTame() && wolf.getOwner() == player);
 

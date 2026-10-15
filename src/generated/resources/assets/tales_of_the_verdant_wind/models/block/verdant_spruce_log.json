@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "tales_of_the_verdant_wind:block/verdant_spruce_log_top",
+    "side": "tales_of_the_verdant_wind:block/verdant_spruce_log"
+  }
+}

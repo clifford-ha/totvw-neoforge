@@ -9,6 +9,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.random.WeightedList;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.util.valueproviders.UniformInt;
@@ -100,8 +101,8 @@ public class VWConfiguredFeatures {
                                         Blocks.AIR.defaultBlockState(),
                                         Blocks.AIR.defaultBlockState()
                                 ),
-                                context.lookup(Registries.BLOCK).getOrThrow(BlockTags.FEATURES_CANNOT_REPLACE),
-                                context.lookup(Registries.BLOCK).getOrThrow(BlockTags.GEODE_INVALID_BLOCKS)
+                                BlockTags.FEATURES_CANNOT_REPLACE,
+                                BlockTags.GEODE_INVALID_BLOCKS
                         ),
                         new GeodeLayerSettings(
                                 1.7,
@@ -152,7 +153,7 @@ public class VWConfiguredFeatures {
                 )
         );
 
-        HolderSet<Block> mossReplaceable = context.lookup(Registries.BLOCK).getOrThrow(VWBlockTags.VERDANT_MOSS_REPLACEABLE);
+        TagKey<Block> mossReplaceable = VWBlockTags.VERDANT_MOSS_REPLACEABLE;
         register(context, VERDANT_MOSS_PATCH_CONFIGURED_KEY, Feature.VEGETATION_PATCH,
                 new VegetationPatchConfiguration(
                         mossReplaceable,
@@ -173,10 +174,7 @@ public class VWConfiguredFeatures {
 
         context.register(VERIXIUM_FLUID_POND_CONFIGURED_KEY, new ConfiguredFeature<>(Feature.LAKE, new LakeFeature.Configuration(
                 BlockStateProvider.simple(VWBlocks.VERIXIUM_FLUID.get().defaultBlockState()),
-                BlockStateProvider.simple(Blocks.DEEPSLATE),
-                BlockPredicate.alwaysTrue(),
-                BlockPredicate.matchesTag(VWBlockTags.VERDANT_MOSS_REPLACEABLE),
-                BlockPredicate.matchesTag(VWBlockTags.VERDANT_MOSS_REPLACEABLE)
+                BlockStateProvider.simple(Blocks.DEEPSLATE)
         )));
 
 
@@ -190,8 +188,7 @@ public class VWConfiguredFeatures {
                         ConstantInt.of(0),
                         UniformInt.of(2, 3)
                 ),
-                new TwoLayersFeatureSize(0, 0, 0),
-                BlockStateProvider.simple(Blocks.DIRT)
+                new TwoLayersFeatureSize(0, 0, 0)
         ).build());
 
         register(context, VERDANT_SPRUCE_TREE_CONFIGURED_KEY, Feature.TREE, new TreeConfiguration.TreeConfigurationBuilder(
@@ -203,8 +200,7 @@ public class VWConfiguredFeatures {
                         UniformInt.of(0, 1),
                         UniformInt.of(2, 3)
                 ),
-                new TwoLayersFeatureSize(1, 1, 2),
-                BlockStateProvider.simple(Blocks.DIRT)
+                new TwoLayersFeatureSize(1, 1, 2)
         ).build());
 
         register(context, ANCIENT_VERDANT_SPRUCE_TREE_CONFIGURED_KEY, Feature.TREE, new TreeConfiguration.TreeConfigurationBuilder(
@@ -216,8 +212,7 @@ public class VWConfiguredFeatures {
                         ConstantInt.of(0),
                         UniformInt.of(2, 9)
                 ),
-                new TwoLayersFeatureSize(1, 1, 2),
-                BlockStateProvider.simple(Blocks.DIRT)
+                new TwoLayersFeatureSize(1, 1, 2)
         ).build());
 
         register(context, VERDANT_FARMLANDS_DISK, Feature.DISK, new DiskConfiguration(

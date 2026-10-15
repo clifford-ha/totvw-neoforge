@@ -1,0 +1,24 @@
+{
+  "layers": {
+    "horse_body": [
+      {
+        "texture": "tales_of_the_verdant_wind:verixium_horse_armor"
+      }
+    ],
+    "humanoid": [
+      {
+        "texture": "tales_of_the_verdant_wind:verixium0"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "tales_of_the_verdant_wind:verixium1"
+      }
+    ],
+    "wolf_body": [
+      {
+        "texture": "tales_of_the_verdant_wind:verixium_wolf_armor"
+      }
+    ]
+  }
+}

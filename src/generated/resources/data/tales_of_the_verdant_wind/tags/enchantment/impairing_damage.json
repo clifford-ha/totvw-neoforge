@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "tales_of_the_verdant_wind:wolf_effect_oozing",
+      "required": false
+    },
+    {
+      "id": "tales_of_the_verdant_wind:wolf_effect_lifting",
+      "required": false
+    }
+  ]
+}

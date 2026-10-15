@@ -10,31 +10,22 @@ import cliffordha.totvw.worldgen.dimension.VWDimensions;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementType;
-import net.minecraft.advancements.predicates.ItemPredicate;
-import net.minecraft.advancements.predicates.LocationPredicate;
-import net.minecraft.advancements.predicates.entity.EntityPredicate;
-import net.minecraft.advancements.triggers.InventoryChangeTrigger;
-import net.minecraft.advancements.triggers.PlayerInteractTrigger;
-import net.minecraft.advancements.triggers.PlayerTrigger;
-import net.minecraft.core.HolderGetter;
+import net.minecraft.advancements.criterion.*;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.advancements.AdvancementProvider;
 import net.minecraft.data.advancements.AdvancementSubProvider;
-import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
-import net.minecraft.world.entity.EntityTypes;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.Block;
+import net.minecraft.world.entity.EntityType;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
-import static net.minecraft.advancements.triggers.InventoryChangeTrigger.TriggerInstance.hasItems;
+import static net.minecraft.advancements.criterion.InventoryChangeTrigger.TriggerInstance.hasItems;
 
 public class VWAdvancements extends AdvancementProvider {
     public VWAdvancements(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
@@ -118,7 +109,7 @@ public class VWAdvancements extends AdvancementProvider {
                     .addCriterion(aWolfAccompaniedByTheWindsID,
                             PlayerInteractTrigger.TriggerInstance.itemUsedOnEntity(
                                     ItemPredicate.Builder.item().of(items, VWItems.VERIXIUM_WOLF_ARMOR),
-                                    Optional.of(EntityPredicate.wrap(EntityPredicate.Builder.entity().of(entityTypes, EntityTypes.WOLF)))))
+                                    Optional.of(EntityPredicate.wrap(EntityPredicate.Builder.entity().of(entityTypes, EntityType.WOLF)))))
                     .save(consumer, TOTVW.registerID(aWolfAccompaniedByTheWindsID));
 
             String aLightCompanionID = "a_light_companion";
@@ -133,7 +124,7 @@ public class VWAdvancements extends AdvancementProvider {
                     .addCriterion(aLightCompanionID,
                             PlayerInteractTrigger.TriggerInstance.itemUsedOnEntity(
                                     ItemPredicate.Builder.item().of(items, VWItems.SOUL_RUNESTONE_PLATE),
-                                    Optional.of(EntityPredicate.wrap(EntityPredicate.Builder.entity().of(entityTypes, EntityTypes.WOLF)))))
+                                    Optional.of(EntityPredicate.wrap(EntityPredicate.Builder.entity().of(entityTypes, EntityType.WOLF)))))
                     .save(consumer, TOTVW.registerID(aLightCompanionID));
 
             String tastesLikeInkID = "tastes_like_ink";
@@ -196,7 +187,7 @@ public class VWAdvancements extends AdvancementProvider {
                     .addCriterion(boundByAnInvisibleThreadID,
                             PlayerInteractTrigger.TriggerInstance.itemUsedOnEntity(
                                     ItemPredicate.Builder.item().of(items, VWItems.TETHER_RUNESTONE_PLATE),
-                                    Optional.of(EntityPredicate.wrap(EntityPredicate.Builder.entity().of(entityTypes, EntityTypes.WOLF)))))
+                                    Optional.of(EntityPredicate.wrap(EntityPredicate.Builder.entity().of(entityTypes, EntityType.WOLF)))))
                     .save(consumer, TOTVW.registerID(boundByAnInvisibleThreadID));
 
             String holderOfLifeID = "holder_of_life";
@@ -212,7 +203,7 @@ public class VWAdvancements extends AdvancementProvider {
                     .addCriterion(holderOfLifeID,
                             PlayerInteractTrigger.TriggerInstance.itemUsedOnEntity(
                                     ItemPredicate.Builder.item().of(items, VWItems.EFFLORESCENCE_RUNESTONE_PLATE),
-                                    Optional.of(EntityPredicate.wrap(EntityPredicate.Builder.entity().of(entityTypes, EntityTypes.WOLF)))))
+                                    Optional.of(EntityPredicate.wrap(EntityPredicate.Builder.entity().of(entityTypes, EntityType.WOLF)))))
                     .save(consumer, TOTVW.registerID(holderOfLifeID));
 
             String deathlyDefianceID = "deathly_defiance";
@@ -227,7 +218,7 @@ public class VWAdvancements extends AdvancementProvider {
                     .addCriterion(deathlyDefianceID,
                             PlayerInteractTrigger.TriggerInstance.itemUsedOnEntity(
                                     ItemPredicate.Builder.item().of(items, VWItems.HAVOC_RUNESTONE_PLATE),
-                                    Optional.of(EntityPredicate.wrap(EntityPredicate.Builder.entity().of(entityTypes, EntityTypes.WOLF)))))
+                                    Optional.of(EntityPredicate.wrap(EntityPredicate.Builder.entity().of(entityTypes, EntityType.WOLF)))))
                     .save(consumer, TOTVW.registerID(deathlyDefianceID));
         }
     }

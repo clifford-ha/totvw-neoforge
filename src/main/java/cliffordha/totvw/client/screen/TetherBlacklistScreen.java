@@ -15,7 +15,6 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.ai.attributes.DefaultAttributes;
 import net.minecraft.world.entity.animal.wolf.Wolf;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
@@ -45,7 +44,7 @@ public class TetherBlacklistScreen extends Screen {
 
         for (var e : BuiltInRegistries.ENTITY_TYPE.entrySet()) {
             EntityType<?> type = e.getValue();
-            if (type == EntityTypes.PLAYER) continue;
+            if (type == EntityType.PLAYER) continue;
             if (!DefaultAttributes.hasSupplier(type)) continue;
 
             String id = e.getKey().identifier().toString();

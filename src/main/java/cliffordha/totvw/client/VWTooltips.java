@@ -34,8 +34,8 @@ public class VWTooltips {
 
     @SubscribeEvent
     public static void registerTooltip(ItemTooltipEvent event) {
-        if (event.getContext().player() == null) return;
-        onTooltip(event.getContext().player(), event.getItemStack(), event.getToolTip());
+        if (event.getEntity() == null) return;
+        onTooltip(event.getEntity(), event.getItemStack(), event.getToolTip());
     }
 
     private static Player player;

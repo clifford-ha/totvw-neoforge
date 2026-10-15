@@ -216,7 +216,7 @@ public class VWPlayerBehaviors {
         if (TICK_RULES.isEmpty()) return;
         for (var serverLevel : event.getServer().getAllLevels()) {
             serverLevel.getEntities(
-                    EntityTypes.PLAYER,
+                    EntityType.PLAYER,
                     _ -> true
             ).forEach(player -> {
                 for (PlayerBehaviorRule rule : TICK_RULES) {

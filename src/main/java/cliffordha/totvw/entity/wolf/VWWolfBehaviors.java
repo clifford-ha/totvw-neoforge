@@ -311,7 +311,7 @@ public class VWWolfBehaviors {
             int ACTIVE_LIFTING = enchantment.getLifting();
             if (victim.hasEffect(MobEffects.LEVITATION)) {
                 double random = level.getRandom().nextDouble();
-                victim.knockback(random, ACTIVE_LIFTING, random, level.damageSources().flyIntoWall(), ACTIVE_LIFTING);
+                victim.knockback(ACTIVE_LIFTING, random, ACTIVE_LIFTING);
             } else {
                 addHiddenEffect(victim, MobEffects.LEVITATION, 10, ACTIVE_LIFTING * 3);
             }
@@ -330,7 +330,7 @@ public class VWWolfBehaviors {
                     removeEffect(victim, MobEffects.REGENERATION);
                 }
             }
-            boolean checkVictim = victim.is(EntityTypes.PLAYER) || victim.getMaxHealth() > 20.0;
+            boolean checkVictim = victim.is(EntityType.PLAYER) || victim.getMaxHealth() > 20.0;
             if (checkVictim && !SkillManager.isOnCooldown(wolf, PARALYZER) && !victim.hasEffect(VWEffects.PARALYZE)) {
                 int min = 60;
                 addHiddenEffect(victim, VWEffects.PARALYZE, paralyzeTime, 0);
@@ -601,7 +601,7 @@ public class VWWolfBehaviors {
 
         for (var serverLevel : event.getServer().getAllLevels()) {
             serverLevel.getEntities(
-                    EntityTypes.WOLF,
+                    EntityType.WOLF,
                     _ -> true
             ).forEach(wolf -> {
                 for (WolfBehaviorRule rule : TICK_RULES) {

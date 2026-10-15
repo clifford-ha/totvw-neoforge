@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab",
+  "textures": {
+    "bottom": "tales_of_the_verdant_wind:block/verdant_spruce_planks",
+    "side": "tales_of_the_verdant_wind:block/verdant_spruce_planks",
+    "top": "tales_of_the_verdant_wind:block/verdant_spruce_planks"
+  }
+}
