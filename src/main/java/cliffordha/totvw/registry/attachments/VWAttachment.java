@@ -1,0 +1,138 @@
+package cliffordha.totvw.registry.attachments;
+
+import cliffordha.totvw.TOTVW;
+import cliffordha.totvw.registry.attachments.entity.*;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.neoforged.neoforge.attachment.AttachmentType;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.function.Supplier;
+
+import static cliffordha.totvw.registry.attachments.AttachmentUtil.*;
+
+public class VWAttachment {
+    public static final Supplier<AttachmentType<Boolean>> HAS_VERDANT_OMEN = registerBool("has_verdant_omen");
+
+    public static final Supplier<AttachmentType<Integer>> PRESSURE_DIFFERENCE = registerInt("pressure_difference");
+    public static final Supplier<AttachmentType<Boolean>> HAS_IMPLODED = registerBool("has_imploded");
+
+    public static final Supplier<AttachmentType<Integer>> VERDANT_BLOOM_STACK = registerInt("verdant_bloom_stack");
+    public static final Supplier<AttachmentType<Integer>> SCORCHING_HEAT = registerInt("scorching_heat");
+
+    public static final Supplier<AttachmentType<BlockPos>> LAST_OVERWORLD_POS = registerBlockPos("last_overworld_pos", true);
+    public static final Supplier<AttachmentType<BlockPos>> LAST_NOLAYAN_POS = registerBlockPos("last_nolayan_pos", true);
+    public static final Supplier<AttachmentType<Boolean>> HAS_ENTERED_NOLAYAN = registerBool("has_entered_nolayan", true);
+
+    public static final Supplier<AttachmentType<Integer>> ARCTIC_AFFLICTION = registerInt("arctic_affliction");
+    public static final Supplier<AttachmentType<Integer>> FROST_BOUND_TIMER = registerInt("frost_bound_timer");
+    public static final Supplier<AttachmentType<BlockPos>> FROST_BOUND_POS = registerBlockPos("frost_bound_pos");
+
+    public static final Supplier<AttachmentType<Collection<MobEffectInstance>>> MOB_EFFECTS = registerEffectsCollection("mob_effects");
+    public static final Supplier<AttachmentType<HavocData>> HAVOC_DATA = registerHavocData("havoc_data");
+    public static final Supplier<AttachmentType<Integer>> LIFT_DURATION = registerUnsyncedInt("list_duration");
+
+
+
+    public static final List<Supplier<? extends AttachmentType<?>>> WOLF_ATTACHMENTS = List.of(
+            WolfAttachment.IS_VERDANT_TYPE,
+            WolfAttachment.IS_VILLAGE_GUARD,
+            WolfAttachment.TIMER_AIR_SUPPLY,
+            WolfAttachment.NOTIFY_AIR_SUPPLY,
+            WolfAttachment.CD_BLESSING_OF_THE_VERDANT_WIND,
+            WolfAttachment.CD_BLOODLUST_SKILL_PARALYZE,
+            WolfAttachment.CD_MIGHT_SKILL_RUPTURE,
+            WolfAttachment.CD_IGNORE_HIGH_DAMAGE,
+            WolfAttachment.NOTIFY_MIGHT_SKILL_RUPTURE,
+            WolfAttachment.NOTIFY_BLOODLUST_SKILL_PARALYZE,
+            WolfAttachment.NOTIFY_BLESSING_OF_THE_VERDANT_WIND,
+            WolfAttachment.BENEDICTION,
+            WolfAttachment.SOUL_ID,
+            WolfAttachment.FAMILY_ID,
+            WolfAttachment.TRY_SAVE_POINTS,
+            WolfAttachment.TRY_SAVE_STATUS,
+            WolfAttachment.RETURN_POINT,
+            WolfAttachment.AGGRESSOR_LIST,
+            WolfAttachment.TRUSTED_PLAYERS,
+            WolfAttachment.TETHERED_ENTITY_TYPES,
+            WolfAttachment.RUNESTONE_TYPE,
+            WolfAttachment.TETHER_DATA,
+            WolfAttachment.ATTACK_CYCLE,
+            WolfAttachment.FLASH_FREEZE_STACK,
+            WolfAttachment.FRAGMENT_DATA,
+            WolfAttachment.CD_WOLF_FRAGMENT_SUMMON
+    );
+    public static final List<Supplier<? extends AttachmentType<?>>> PLAYER_ATTACHMENTS = List.of(
+            PlayerAttachment.RANDOM_INT_10,
+            PlayerAttachment.CD_ALLIANCE_REQUEST,
+            PlayerAttachment.BLOCK_ALLIANCE_REQUEST,
+
+            PlayerAttachment.RECEIVED_ENCHANTMENTS_HANDBOOK,
+            PlayerAttachment.RECEIVED_EFFECTS_HANDBOOK,
+            PlayerAttachment.RECEIVED_ITEMS_HANDBOOK,
+            PlayerAttachment.RECEIVED_FEATURES_HANDBOOK,
+
+            PlayerAttachment.GENESIS_RUNESTONE_ACQUISITION_COUNT,
+            PlayerAttachment.WOLF_SOULS,
+            PlayerAttachment.VILLAGER_ATROCITY_COUNT,
+            PlayerAttachment.WOLF_ATROCITY_COUNT,
+            PlayerAttachment.CD_BLESSING_OF_THE_VERDANT_WIND,
+            PlayerAttachment.CD_HAVOC,
+            PlayerAttachment.NOTIFY_BLESSING_OF_THE_VERDANT_WIND,
+            PlayerAttachment.TRUSTED_PLAYERS,
+            PlayerAttachment.ARMOR_DATA,
+            PlayerAttachment.EQUIPMENTS
+    );
+    public static final List<Supplier<? extends AttachmentType<?>>> VILLAGER_ATTACHMENTS = List.of(
+            VillagerAttachment.IS_VERDANT_TYPE,
+            VillagerAttachment.CD_HEAL_OTHERS,
+            VillagerAttachment.CD_HEAL_WOLF,
+            VillagerAttachment.CD_HEAL_IRON_GOLEM,
+            VillagerAttachment.CD_DISCOUNT_REROLL,
+            VillagerAttachment.DISCOUNT_MODIFIER
+    );
+    public static final List<Supplier<? extends AttachmentType<?>>> MISC_ATTACHMENTS = List.of(
+            HAS_VERDANT_OMEN,
+            PRESSURE_DIFFERENCE,
+            HAS_IMPLODED,
+            VERDANT_BLOOM_STACK,
+            SCORCHING_HEAT,
+            LAST_OVERWORLD_POS,
+            LAST_NOLAYAN_POS,
+            HAS_ENTERED_NOLAYAN,
+            ARCTIC_AFFLICTION,
+            FROST_BOUND_TIMER,
+            FROST_BOUND_POS,
+            MOB_EFFECTS,
+            HAVOC_DATA,
+            LIFT_DURATION
+    );
+    public static final List<Supplier<? extends AttachmentType<?>>> PLAYER_PREFS = List.of(
+            PlayerPrefs.SHOW_ATROCITY_COUNTER,
+            PlayerPrefs.ENABLE_NOTIFIERS,
+            PlayerPrefs.SHOW_WOLF_EFFECT_INDICATORS,
+
+            PlayerPrefs.BENEDICTION_HEALTH_THRESHOLD,
+            PlayerPrefs.BENEDICTION_SHARE_STACK,
+            PlayerPrefs.BENEDICTION_ALWAYS_TRIGGER_BLESSING,
+            PlayerPrefs.BENEDICTION_TELEPORT_AFTER_SAVE,
+            PlayerPrefs.BENEDICTION_WOLF_TP_METHOD,
+            PlayerPrefs.BENEDICTION_PLAYER_TP_METHOD,
+            PlayerPrefs.BENEDICTION_WOLF_TP_ALL
+    );
+    public static final int TOTAL = WOLF_ATTACHMENTS.size() + PLAYER_ATTACHMENTS.size() + VILLAGER_ATTACHMENTS.size() + MISC_ATTACHMENTS.size() + PLAYER_PREFS.size();
+
+
+    public static void register() {
+        TOTVW.sendClassRegisterLog(
+                "Custom Attachments (" +
+                        "Wolf: " + WOLF_ATTACHMENTS.size() + ", " +
+                        "Villager: " + VILLAGER_ATTACHMENTS.size() + ", " +
+                        "Player: " + PLAYER_ATTACHMENTS.size() + ", " +
+                        "Misc: " + MISC_ATTACHMENTS.size() + ", " +
+                        "PlayerPrefs: " + PLAYER_PREFS.size() + "): " +
+                        TOTAL + " in total has been"
+        );
+    }
+}

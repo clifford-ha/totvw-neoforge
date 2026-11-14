@@ -3,7 +3,7 @@ package cliffordha.totvw.datagen;
 import cliffordha.totvw.registry.VWBlocks;
 import cliffordha.totvw.registry.VWItems;
 import cliffordha.totvw.tag.VWItemTags;
-import cliffordha.totvw.util.VWUtil;
+import cliffordha.totvw.util.ExtUtil;
 
 import net.minecraft.advancements.Advancement;
 import net.minecraft.core.registries.MultiRegistryBootstrap;
@@ -109,11 +109,22 @@ public class VWRecipeProvider extends RecipeProvider {
                 List.of(VWItems.VERIXIUM_FLUID_BUCKET),
                 RecipeCategory.MISC,
                 CookingBookCategory.MISC,
-                VWItems.VERIXIUM_CHUNK,
+                VWItems.VERIXIUM_SEDIMENT,
                 900.0F,
-                VWUtil.TimeUtil.duration(3, 45),
+                ((20 * 60) * 3) + (20 * 30),
                 "verixium_raw_materials"
         );
+
+        shaped(RecipeCategory.MISC, VWItems.VERIXIUM_CHUNK, 3)
+                .pattern("XXX")
+                .pattern("XVX")
+                .pattern("XXX")
+                .define('X', Items.WIND_CHARGE)
+                .define('V', VWItems.VERIXIUM_SEDIMENT)
+                .group("verixium_raw_materials")
+                .unlockedBy(getHasName(Items.CRAFTING_TABLE), has(Items.CRAFTING_TABLE))
+                .save(output);
+
         shaped(RecipeCategory.COMBAT, VWItems.VERIXIUM_SPEAR, 1)
                 .pattern("  L")
                 .pattern(" X ")

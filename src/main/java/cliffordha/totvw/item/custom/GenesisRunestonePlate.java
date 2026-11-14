@@ -2,9 +2,9 @@ package cliffordha.totvw.item.custom;
 
 import cliffordha.totvw.registry.VWColors;
 import cliffordha.totvw.registry.VWParticles;
-import cliffordha.totvw.registry.attachments.VWAttachments;
+import cliffordha.totvw.registry.attachments.VWAttachment;
 import cliffordha.totvw.tag.VWBiomeTags;
-import cliffordha.totvw.util.VWUtil;
+import cliffordha.totvw.util.ExtUtil;
 import cliffordha.totvw.worldgen.dimension.VWDimensions;
 
 import net.minecraft.core.BlockPos;
@@ -43,7 +43,7 @@ public class GenesisRunestonePlate extends Item {
 
     @Override
     public void inventoryTick(ItemStack itemStack, ServerLevel level, Entity owner, @Nullable EquipmentSlot slot) {
-        ACTIVE = owner instanceof Player player && VWUtil.isInBiome(player, VWBiomeTags.IS_VERDANT_BIOMES);
+        ACTIVE = owner instanceof Player player && ExtUtil.isInBiome(player, VWBiomeTags.IS_VERDANT_BIOMES);
         super.inventoryTick(itemStack, level, owner, slot);
     }
 
@@ -51,8 +51,8 @@ public class GenesisRunestonePlate extends Item {
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
         if (!level.isClientSide() && !player.getCooldowns().isOnCooldown(new ItemStack(this))) {
             player.getCooldowns().addCooldown(new ItemStack(this), 100);
-            if (!VWUtil.isDimension(player, VWDimensions.NOLAYAN_LEVEL_KEY) && !VWUtil.isDimension(player, VWDimensions.OVERWORLD)) {
-                VWUtil.sendToChat(player, false, "You must be in the Overworld to establish connection");
+            if (!ExtUtil.isDimension(player, VWDimensions.NOLAYAN_LEVEL_KEY) && !ExtUtil.isDimension(player, VWDimensions.OVERWORLD)) {
+                ExtUtil.sendToChat(player, false, "You must be in the Overworld to establish connection");
                 return InteractionResult.FAIL;
             }
             player.teleport(getPortalDestination((player)));
@@ -65,7 +65,7 @@ public class GenesisRunestonePlate extends Item {
         if (!(entity instanceof ServerPlayer player)) return null;
         ServerLevel currentLevel = player.level();
 
-        VWUtil.sendParticles(VWParticles.BENEDICTION_TRIGGER_PARTICLE.get(), currentLevel, player.blockPosition(), 32, 1.5);
+        ExtUtil.sendParticles(VWParticles.BENEDICTION_TRIGGER.get(), currentLevel, player.blockPosition(), 32, 1.5);
         ResourceKey<Level> currentDimension = currentLevel.dimension();
         boolean isLeavingCustomDim = currentDimension == VWDimensions.NOLAYAN_LEVEL_KEY;
 
@@ -77,8 +77,8 @@ public class GenesisRunestonePlate extends Item {
             return null;
         }
 
-        BlockPos nolayanPos = player.getData(VWAttachments.LAST_NOLAYAN_POS);
-        BlockPos overworldPos = player.getData(VWAttachments.LAST_OVERWORLD_POS);
+        BlockPos nolayanPos = player.getData(VWAttachment.LAST_NOLAYAN_POS);
+        BlockPos overworldPos = player.getData(VWAttachment.LAST_OVERWORLD_POS);
 
         BlockPos baseSpawnPos = isLeavingCustomDim ? overworldPos : nolayanPos;
 
@@ -88,7 +88,7 @@ public class GenesisRunestonePlate extends Item {
 
         if (isLeavingCustomDim) {
             // Save current Nolayan pos before leaving
-            player.setData(VWAttachments.LAST_NOLAYAN_POS, player.blockPosition().above());
+            player.setData(VWAttachment.LAST_NOLAYAN_POS, player.blockPosition().above());
 
             //exactSpawnPos = Vec3.atBottomCenterOf(entity.adjustSpawnLocation(targetLevel, baseSpawnPos));
             exactSpawnPos = Vec3.atBottomCenterOf(baseSpawnPos);
@@ -106,7 +106,7 @@ public class GenesisRunestonePlate extends Item {
             boolean createPlatform = !targetLevel.getBlockState(portalPos.above()).is(Blocks.AIR)
                     && !targetLevel.getBlockState(portalPos).is(Blocks.AIR);
 
-            boolean firstEntrance = !entity.getData(VWAttachments.HAS_ENTERED_NOLAYAN);
+            boolean firstEntrance = !entity.getData(VWAttachment.HAS_ENTERED_NOLAYAN);
 
             if (firstEntrance && createPlatform) {
                 targetLevel.setBlockAndUpdate(portalPos, Blocks.AIR.defaultBlockState());
@@ -117,7 +117,7 @@ public class GenesisRunestonePlate extends Item {
             exactSpawnPos = exactSpawnPos.subtract(0, 1, 0);
 
             // Save current overworld pos before leaving
-            player.setData(VWAttachments.LAST_OVERWORLD_POS, player.blockPosition());
+            player.setData(VWAttachment.LAST_OVERWORLD_POS, player.blockPosition());
         }
 
         return new TeleportTransition(

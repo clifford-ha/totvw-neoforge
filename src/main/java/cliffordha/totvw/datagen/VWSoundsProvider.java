@@ -13,7 +13,7 @@ public class VWSoundsProvider extends SoundDefinitionsProvider {
     @Override
     public void registerSounds() {
         for (SoundEvent event : VWSounds.getAllSounds()) {
-            add(event, definition().subtitle(event.toString()).with(sound(event.location())));
+            add(event, definition().subtitle(event.location().toLanguageKey().replace("/", ".")).with(sound(event.location())));
         }
     }
 

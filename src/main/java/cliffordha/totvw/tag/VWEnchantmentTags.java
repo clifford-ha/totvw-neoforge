@@ -13,7 +13,10 @@ import org.jspecify.annotations.NonNull;
 
 import java.util.concurrent.CompletableFuture;
 
+import static cliffordha.totvw.tag.VWTagHelpers.enchantment;
+import static cliffordha.totvw.registry.VWEnchantments.*;
 public class VWEnchantmentTags extends EnchantmentTagsProvider {
+
     public VWEnchantmentTags(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider) {
         super(output, lookupProvider, TOTVW.MOD_ID);
     }
@@ -23,6 +26,7 @@ public class VWEnchantmentTags extends EnchantmentTagsProvider {
         getOrCreateRawBuilder(WOLF_ENCHANTMENTS)
                 .addOptionalElement(VWEnchantments.BENEDICTION_OF_THE_VERDANT_MOUNTAINS.identifier())
                 .addOptionalElement(VWEnchantments.WOLF_ARMOR_ENHANCEMENT_KIT.identifier())
+                .addOptionalElement(VWEnchantments.WOLF_EFFECT_ARCTIC_WINDS.identifier())
                 .addOptionalElement(VWEnchantments.WOLF_EFFECT_IGNITION.identifier())
                 .addOptionalElement(VWEnchantments.WOLF_EFFECT_POISONING.identifier())
                 .addOptionalElement(VWEnchantments.WOLF_EFFECT_WITHERING.identifier())
@@ -33,6 +37,7 @@ public class VWEnchantmentTags extends EnchantmentTagsProvider {
                 .addOptionalElement(VWEnchantments.WOLF_EFFECT_GNAWING.identifier());
 
         getOrCreateRawBuilder(CONTINUOUS_DAMAGE)
+                .addOptionalElement(VWEnchantments.WOLF_EFFECT_ARCTIC_WINDS.identifier())
                 .addOptionalElement(VWEnchantments.WOLF_EFFECT_IGNITION.identifier())
                 .addOptionalElement(VWEnchantments.WOLF_EFFECT_POISONING.identifier())
                 .addOptionalElement(VWEnchantments.WOLF_EFFECT_WITHERING.identifier());
@@ -63,8 +68,7 @@ public class VWEnchantmentTags extends EnchantmentTagsProvider {
     public static final TagKey<Enchantment> WOLF_ENCHANTMENTS = create("wolf_enchantments");
     public static final TagKey<Enchantment> CONTINUOUS_DAMAGE = create("continuous_damage");
     public static final TagKey<Enchantment> IMPAIRING_DAMAGE = create("impairing_damage");
-
     private static TagKey<Enchantment> create(String name) {
-        return TagKey.create(Registries.ENCHANTMENT, TOTVW.registerID(name));
-    }
+        return TagKey.create(Registries.ENCHANTMENT, TOTVW.registerID(name)); }
+
 }

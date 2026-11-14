@@ -1,13 +1,15 @@
 package cliffordha.totvw.datagen;
 
 import cliffordha.totvw.TOTVW;
-import cliffordha.totvw.keymapping.VWKeymap;
+import cliffordha.totvw.client.VWKeymap;
 import cliffordha.totvw.registry.*;
 import cliffordha.totvw.registry.VWBlocks;
 import cliffordha.totvw.registry.VWItems.Pages;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.block.Block;
@@ -15,7 +17,11 @@ import net.neoforged.neoforge.common.data.LanguageProvider;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredItem;
 
-import static cliffordha.totvw.item.scatteredpages.ScatteredPageTitle.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.function.Supplier;
+
+import static cliffordha.totvw.item.pages.ScatteredPageTitle.*;
 
 public class VWEngLangProvider extends LanguageProvider {
     public VWEngLangProvider(PackOutput output) {
@@ -55,33 +61,30 @@ public class VWEngLangProvider extends LanguageProvider {
         add(VWBlocks.VERDANT_SPRUCE_PRESSURE_PLATE, "Verdant Spruce Pressure Plate");
         add(VWBlocks.VERDANT_SPRUCE_DOOR, "Verdant Spruce Door");
         add(VWBlocks.VERDANT_SPRUCE_TRAPDOOR, "Verdant Spruce Trapdoor");
+        add(VWItems.VERDANT_SPRUCE_SIGN, "Verdant Spruce Sign");
+        add(VWItems.VERDANT_SPRUCE_HANGING_SIGN, "Verdant Spruce Hanging Sign");
         add(VWBlocks.VERDANT_SPRUCE_SHELF, "Verdant Spruce Shelf");
         add(VWBlocks.VERDANT_SPRUCE_STORAGE_BOX, "Verdant Spruce Storage Box");
 
         add(VWBlocks.VERIXIUM_FLUID.get(), "Verixium Fluid");
-        add(VWBlocks.LODESTONE_WIND_CORE, "Lodestone Wind Core");
 
-        
-        // MISC BLOCKS
-        add(VWBlocks.FARMLAND_PLACER, "Farmland Placer");
-        
-        
-        // ENTITIES
-        add(VWEntities.VERDANT_SPRUCE_BOAT.get(), "Verdant Spruce Boat");
-        add(VWEntities.VERDANT_SPRUCE_CHEST_BOAT.get(), "Verdant Spruce Chest Boat");
+        add("container.tales-of-the-verdant-wind.storage_box", "Storage Box");
+        add(VWBlocks.LODESTONE_WIND_CORE, "Lodestone Wind Core");
 
         add(VWItems.VERDANT_SPRUCE_BOAT, "Verdant Spruce Boat");
         add(VWItems.VERDANT_SPRUCE_CHEST_BOAT, "Verdant Spruce Chest Boat");
-        add(VWItems.VERDANT_SPRUCE_SIGN, "Verdant Spruce Sign");
-        add(VWItems.VERDANT_SPRUCE_HANGING_SIGN, "Verdant Spruce Hanging Sign");
-        
-        
+
+        add(VWEntities.VERDANT_SPRUCE_BOAT.get(), "Verdant Spruce Boat");
+        add(VWEntities.VERDANT_SPRUCE_CHEST_BOAT.get(), "Verdant Spruce Chest Boat");
+
+
         add(VWItems.VERIXIUM_FLUID_BUCKET, "Verixium Fluid Bucket");
         add("verixium_fluid", "Verixium Fluid");
         add("flowing_verixium_fluid", "Flowing Verixium Fluid");
 
 
         add(VWItems.VERIXIUM_CHUNK, "Verixium Chunk");
+        add(VWItems.VERIXIUM_SEDIMENT, "Verixium Sediment");
         add(VWItems.CONDENSED_VERIXIUM, "Condensed Verixium");
         add(VWItems.VERIXIUM_SHARD, "Verixium Shard");
         add(VWItems.VERIXIUM_POWDER, "Verixium Powder");
@@ -110,12 +113,8 @@ public class VWEngLangProvider extends LanguageProvider {
         add(VWItems.HAVOC_RUNESTONE_PLATE, "Havoc Runestone Plate");
         add(VWItems.EFFLORESCENCE_RUNESTONE_PLATE, "Efflorescence Runestone Plate");
 
-        add(VWItems.VERIXIUM_SPEAR, "Verixium Spear");
-        add(VWItems.VERIXIUM_SWORD, "Verixium Sword");
-        add(VWItems.VERIXIUM_AXE, "Verixium Axe");
-        add(VWItems.VERIXIUM_PICKAXE, "Verixium Pickaxe");
-        add(VWItems.VERIXIUM_SHOVEL, "Verixium Shovel");
-        add(VWItems.VERIXIUM_HOE, "Verixium Hoe");
+        // MISC BLOCKS
+        add(VWBlocks.FARMLAND_PLACER, "Farmland Placer");
 
 
         String SCATTERED_PAGE = "Scattered Page";
@@ -142,6 +141,9 @@ public class VWEngLangProvider extends LanguageProvider {
 
         add(Pages.SP_ID_1006, SP_1006.getTitle());
 
+        add(Pages.SP_ID_1007, SP_1007.getTitle());
+        add(Pages.SP_ID_1008, SP_1008.getTitle());
+
         add(Pages.SP_ID_3000, SP_3000.getTitle());
         add(Pages.SP_ID_3001, SP_3001.getTitle());
         add(Pages.SP_ID_3002, SP_3002.getTitle());
@@ -149,65 +151,20 @@ public class VWEngLangProvider extends LanguageProvider {
         add(Pages.LODESTONE_WIND_CORE_MANUAL, LODESTONE_WIND_CORE_MANUAL.getTitle());
 
 
-        // ENCHANTMENTS
-        add(enchant(VWEnchantments.WOLF_EFFECT_IGNITION), "Wolf ATK Effect: §vIgnition");
-        add(enchant(VWEnchantments.WOLF_EFFECT_POISONING), "Wolf ATK Effect: §cPoison");
-        add(enchant(VWEnchantments.WOLF_EFFECT_WITHERING), "Wolf ATK Effect: §cWithering");
-        add(enchant(VWEnchantments.WOLF_EFFECT_LIFTING), "Wolf ATK Effect: Lifting");
-        add(enchant(VWEnchantments.WOLF_EFFECT_BLOODLUST), "Wolf ATK Effect: §cBloodlust");
-        add(enchant(VWEnchantments.WOLF_EFFECT_MIGHT), "Wolf ATK Effect: §dMight");
-        add(enchant(VWEnchantments.WOLF_EFFECT_OOZING), "Wolf ATK Effect: §aOozing");
-        add(enchant(VWEnchantments.WOLF_EFFECT_GNAWING), "Wolf ATK Effect: §dGnawing");
-        add(enchant(VWEnchantments.WOLF_ARMOR_ENHANCEMENT_KIT), "Wolf Armor Enhancement Kit");
-        add(enchant(VWEnchantments.BENEDICTION_OF_THE_VERDANT_MOUNTAINS),"Benediction of the Verdant Mountains");
+
+        add(VWEnchantments.KEY_WOLF_EFFECT_IGNITION, "Wolf Effect: Ignition");
+        add(VWEnchantments.KEY_WOLF_EFFECT_POISONING, "Wolf Effect: Poison");
+        add(VWEnchantments.KEY_WOLF_EFFECT_WITHERING, "Wolf Effect: Withering");
+        add(VWEnchantments.KEY_WOLF_EFFECT_LIFTING, "Wolf Effect: Lifting");
+        add(VWEnchantments.KEY_WOLF_EFFECT_BLOODLUST, "Wolf Effect: Bloodlust");
+        add(VWEnchantments.KEY_WOLF_EFFECT_MIGHT, "Wolf Effect: Might");
+        add(VWEnchantments.KEY_WOLF_EFFECT_OOZING, "Wolf Effect: Oozing");
+        add(VWEnchantments.KEY_WOLF_EFFECT_GNAWING, "Wolf Effect: Gnawing");
+        add(VWEnchantments.KEY_WOLF_EFFECT_ARCTIC_WINDS, "Wolf Effect: Arctic Winds");
+        add(VWEnchantments.KEY_WOLF_ARMOR_ENHANCEMENT_KIT, "Wolf Armor Enhancement Kit");
+        add(VWEnchantments.KEY_BENEDICTION,"Benediction of the Verdant Mountains");
 
 
-        // POTIONS
-        add("effect.tales_of_the_verdant_wind.bloodlust.description", "Gives massive attack buff in exchange for constant damage while the effect is active");
-
-        add("item.minecraft.potion.effect.sacred_verdant_potion", "Sacred Verdant Potion");
-        add("item.minecraft.splash_potion.effect.sacred_verdant_potion", "Sacred Verdant Splash Potion");
-        add("item.minecraft.lingering_potion.effect.sacred_verdant_potion", "Sacred Verdant Lingering Potion");
-
-        add("item.minecraft.potion.effect.might_amplifier_potion", "Amplified Might Potion");
-        add("item.minecraft.splash_potion.effect.might_amplifier_potion", "Amplified Might Splash Potion");
-        add("item.minecraft.lingering_potion.effect.might_amplifier_potion", "Amplified Might Lingering Potion");
-
-        add("item.minecraft.potion.effect.baleful_strength_potion", "Baleful Strength Potion");
-        add("item.minecraft.splash_potion.effect.baleful_strength_potion", "Baleful Strength Splash Potion");
-        add("item.minecraft.lingering_potion.effect.baleful_strength_potion", "Baleful Strength Lingering Potion");
-
-        add("item.minecraft.tipped_arrow.effect.sacred_verdant_potion", "Arrow infused with Verdant Wind");
-        add("item.minecraft.tipped_arrow.effect.might_amplifier_potion", "Arrow of Amplified Might");
-        add("item.minecraft.tipped_arrow.effect.baleful_strength_potion", "Arrow of Baleful Strength");
-
-
-        // DEATH DIALOGUE
-        add("death.attack.bloodlust", "%1$s died from the agonizing effects of §cBloodlust§r");
-        add("death.attack.bloodlust.player", "%1$s died from the agonizing effects of §cBloodlust§r while fighting %2$s");
-
-        add("death.attack.scorching_heat", "%1$s died from scorching heat");
-        add("death.attack.scorching_heat.player", "%1$s died from scorching heat while fighting %2$s");
-
-        add("death.attack.bleeding", "%1$s bled to death");
-        add("death.attack.bleeding.player", "%1$s bled to death while fighting %2$s");
-
-        add("death.attack.wind_core_pulse", "%1$s got incapacitated by the Wind Core's pulse");
-        add("death.attack.wind_core_pulse.player", "%1$s got incapacitated by the Wind Core's pulse while fighting %2$s");
-
-        add("death.attack.havoc", "%1$s got their life drained by the effects of Havoc");
-        add("death.attack.havoc.player", "%1$s got their life drained by the effects of Havoc while fighting %2$s");
-
-        add("death.attack.tether_proxy", "%1$s got killed via proxy");
-        add("death.attack.tether_proxy.player", "%1$s got killed via proxy while fighting %2$s");
-
-
-        // BIOMES
-        add(biomeKey("verdant_mountains"), "Verdant Mountains");
-        add(biomeKey("verdant_forest"), "Verdant Forest");
-
-
-        // EFFECTS
         add(effectKey("blessing_of_the_verdant_wind"), "Blessing of the Verdant Wind");
         add(effectKey("amplified_might"), "Amplified Might");
         add(effectKey("bloodlust"), "Bloodlust");
@@ -215,71 +172,135 @@ public class VWEngLangProvider extends LanguageProvider {
         add(effectKey("wind_veil"), "Wind Veil");
         add(effectKey("havoc"), "Havoc");
 
+        add("effect.tales-of-the-verdant-wind.bloodlust.description", "Gives massive attack buff in exchange for constant damage while the effect is active");
+
+        add(potionKey("sacred_verdant_potion"), "Sacred Verdant Potion");
+        add(potionSplashKey("sacred_verdant_potion"), "Sacred Verdant Splash Potion");
+        add(potionLingeringKey("sacred_verdant_potion"), "Sacred Verdant Lingering Potion");
+        add(arrowKey("sacred_verdant_potion"), "Arrow infused with Verdant Wind");
+
+        HashMap<String, String> potionTranslations = new HashMap<>();
+        potionTranslations.put("might_amplifier_potion", "Amplified Might");
+        potionTranslations.put("baleful_strength_potion", "Baleful Strength");
+
+        potionTranslations(potionTranslations);
+
+        HashMap<String, List<String>> deathTranslations = new HashMap<>();
+        deathTranslations.put("bloodlust", List.of(
+                "%1$s died from the agonizing effects of §cBloodlust§r",
+                "%1$s died from the agonizing effects of §cBloodlust§r while fighting %2$s"
+        ));
+        deathTranslations.put("scorching_heat", List.of(
+                "%1$s died from scorching heat",
+                "%1$s died from scorching heat while fighting %2$s"
+        ));
+        deathTranslations.put("bleeding", List.of(
+                "%1$s bled to death",
+                "%1$s bled to death while fighting %2$s"
+        ));
+        deathTranslations.put("wind_core_pulse", List.of(
+                "%1$s got incapacitated by the Wind Core's pulse",
+                "%1$s got incapacitated by the Wind Core's pulse while fighting %2$s"
+        ));
+        deathTranslations.put("havoc", List.of(
+                "%1$s got their life drained by the effects of Havoc",
+                "%1$s got their life drained by the effects of Havoc while fighting %2$s"
+        ));
+        deathTranslations.put("tether_proxy", List.of(
+                "%1$s got killed via proxy",
+                "%1$s got killed via proxy while fighting %2$s"
+        ));
+        deathTranslations.put("thermal_burn", List.of(
+                "%1$s got thermally burnt",
+                "%1$s got thermally burnt while fighting %2$s"
+        ));
+        deathTranslations.put("winterbreeze_shock", List.of(
+                "%1$s chilled to death from the effects of Winterbreeze Shock",
+                "%1$s chilled to death from the effects of Winterbreeze Shock while fighting %2$s"
+        ));
+
+        deathTranslationsBuilder(deathTranslations);
+
+
+        add(VWItems.VERIXIUM_SPEAR, "Verixium Spear");
+        add(VWItems.VERIXIUM_SWORD, "Verixium Sword");
+        add(VWItems.VERIXIUM_AXE, "Verixium Axe");
+        add(VWItems.VERIXIUM_PICKAXE, "Verixium Pickaxe");
+        add(VWItems.VERIXIUM_SHOVEL, "Verixium Shovel");
+        add(VWItems.VERIXIUM_HOE, "Verixium Hoe");
+
+
+        add(biomeKey("verdant_mountains"), "Verdant Mountains");
+        add(biomeKey("verdant_forest"), "Verdant Forest");
+
 
         // SOUNDS
-        add(VWSounds.WOLF_HOWL_A.toString(), "Distant wolf howls");
-        add(VWSounds.WOLF_HOWL_B1.toString(), "Distant wolf howls");
-        add(VWSounds.WOLF_HOWL_B2.toString(), "Distant wolf howls");
-        add(VWSounds.WOLF_HOWL_B3.toString(), "Distant wolf howls");
+        addSound(VWSounds.WOLF_HOWL_A, "Distant wolf howls");
+        addSound(VWSounds.WOLF_HOWL_B1, "Distant wolf howls");
+        addSound(VWSounds.WOLF_HOWL_B2, "Distant wolf howls");
+        addSound(VWSounds.WOLF_HOWL_B3, "Distant wolf howls");
 
-        add(VWSounds.NOTIFY.toString(), "Notification popped");
-        add(VWSounds.WOLF_SKILL_PARALYZE.toString(), "%1$s got paralyzed");
+        addSound(VWSounds.NOTIFY, "Notification popped");
+        addSound(VWSounds.WOLF_SKILL_PARALYZE, "%1$s got paralyzed");
 
-        add(VWSounds.LODESTONE_WIND_CORE_AMBIENT.toString(), "Wind Core whooshes");
+        addSound(VWSounds.LODESTONE_WIND_CORE_AMBIENT, "Wind Core whooshes");
+
 
 
         // KEYMAPPINGS
-        add(VWKeymap.WOLF_CONFIG_KEY, "Wolf Config Screen");
+        add(VWKeymap.TOTVW_CONFIG_SCREEN, "TOTVW Config Screen");
+        add(VWKeymap.TOTVW_STAT_SCREEN, "TOTVW Stats Screen");
 
-        //MOD NAME
         add(TOTVW.MOD_ID, "Tales of the Verdant Wind");
-
-        // MOD CONFIG
-        add(config("enableNotifiers"), "Enable Notifiers");
-        add(config("showAtrocityCounter"), "Show Atrocity Counter");
-        add(config("modSounds"), "Mod Sounds");
-        add(config("allowLoreSpoilers"), "Allow Lore Spoilers");
-        add(config("allowEffectOverlays"), "Allow Effect Overlays");
-        add(config("allowBloodlustEffectOverlay"), "Bloodlust Effect Overlay");
-
-        add(config("benedictionHealthThreshold"), "Benediction Health Threshold");
-        add(config("alwaysTriggerBlessing"), "Always Trigger Blessing");
-        add(config("wolfSharesBenedictionStack"), "Wolf Shares Benediction Stack");
-        add(config("teleportAfterSave"), "Teleport After Save");
-        add(config("wolfTPMethod"), "Wolf TP Method");
-        add(config("playerTPMethod"), "Player TP Method");
-        add(config("wolfTPAll"), "Wolf TP All");
-
-        add(config("logEnchantmentShowWolfCD"), "Show Wolf CD");
-        add(config("logEnchantmentShowPlayerCD"), "Show Player CD");
-
-
-        add(config("wolfDamageDistribution"), "Wolf Damage Distribution");
-        add(config("wolfPlayerScanDistance"), "Wolf Player Scan Distance");
-        add(config("serverSkillCooldowns"), "Skill Cooldowns");
-        add(config("serverItemCooldowns"), "Item Cooldowns");
-        add(config("serverOtherCooldowns"), "Other Cooldowns");
-
-
+        add(VWItems.EMPTY, "");
 
         //DEV
         if (TOTVW.IN_DEVELOPMENT) {
             add(VWItems.DevItems.ATTACHMENTS_REMOVER, "Attachments Remover");
         }
     }
-    
-    private static String enchant(ResourceKey<Enchantment> value) {
-        Identifier ofValue = value.identifier();
-        String name = ofValue.toString().replace(":", ".");
-        return "enchantment." + name;
-    }
-    private static String config(String value) {
-        return TOTVW.MOD_ID + ".configuration." + value;
-    }
+
     private static String biomeKey(String name) {
         return "biome." + TOTVW.MOD_ID + "." + name;
     }
     private static String effectKey(String name) {
         return "effect." + TOTVW.MOD_ID + "." + name;
+    }
+    private static String deathKey(String name) {
+        return "death.attack." + name;
+    }
+    private static String deathPlayerKey(String name) {
+        return "death.attack." + name + ".player";
+    }
+    private void deathTranslationsBuilder(HashMap<String, List<String>> deaths) {
+        for (String death : deaths.keySet()) {
+            super.add(deathKey(death), deaths.get(death).getFirst());
+            super.add(deathPlayerKey(death), deaths.get(death).get(1));
+        }
+    }
+
+    private static String potionKey(String name) {
+        return "item.minecraft.potion.effect." + name;
+    }
+    private static String potionSplashKey(String name) {
+        return "item.minecraft.splash_potion.effect." + name;
+    }
+    private static String potionLingeringKey(String name) {
+        return "item.minecraft.lingering_potion.effect." + name;
+    }
+    private static String arrowKey(String name) {
+        return "item.minecraft.tipped_arrow.effect." + name;
+    }
+    private void potionTranslations(HashMap<String, String> potions) {
+        for (String potion : potions.keySet()) {
+            super.add(potionKey(potion), potions.get(potion) + " Potion");
+            super.add(potionSplashKey(potion), potions.get(potion) + " Splash Potion");
+            super.add(potionLingeringKey(potion), potions.get(potion) + " Lingering Potion");
+            super.add(arrowKey(potion), "Arrow of " + potions.get(potion));
+        }
+    }
+    private void addSound(Supplier<SoundEvent> sound, String name) {
+        String key = BuiltInRegistries.SOUND_EVENT.getKey(sound.get()).toLanguageKey().replace("/", ".");
+        super.add(key, name);
     }
 }

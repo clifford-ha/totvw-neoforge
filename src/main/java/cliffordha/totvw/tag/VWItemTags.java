@@ -83,6 +83,9 @@ public class VWItemTags extends ItemTagsProvider {
                 .addTag(ItemTags.HOES.location());
 
         getOrCreateRawBuilder(BENEDICTION_ENCHANTMENT_USE_QUALIFIED_ITEMS)
+                .add(item(Items.MAGMA_CREAM))
+                .add(item(Items.GUNPOWDER))
+                .add(item(Items.BLAZE_POWDER))
                 .add(item(Items.GLOWSTONE_DUST))
                 .add(item(VWItems.VERIXIUM_POWDER));
 

@@ -1,11 +1,10 @@
 package cliffordha.totvw.client;
 
-import cliffordha.totvw.ClientConfig;
 import cliffordha.totvw.TOTVW;
+import cliffordha.totvw.config.VWConfig;
 import cliffordha.totvw.registry.*;
 import cliffordha.totvw.registry.attachments.entity.PlayerAttachment;
 import cliffordha.totvw.tag.VWItemTags;
-
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
@@ -19,15 +18,14 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
 
-import static cliffordha.totvw.item.scatteredpages.ScatteredPageTextColor.*;
 import static cliffordha.totvw.registry.VWEnchantments.entityEnchantmentLVL;
-import static cliffordha.totvw.util.VWUtil.TextUtil.*;
+import static cliffordha.totvw.util.TextUtil.*;
+import static cliffordha.totvw.item.pages.FTextColor.*;
 
 @EventBusSubscriber(modid = TOTVW.MOD_ID, value = Dist.CLIENT)
 public class VWTooltips {
@@ -285,7 +283,7 @@ public class VWTooltips {
         }
     }
     private static void addETForSurvival(List<Component> out, String... keys) {
-        if (player.isCreative() && !ClientConfig.ALLOW_LORE_SPOILERS.get()) return;
+        if (player.isCreative() && !VWConfig.get().CLIENT_ALLOW_LORE_SPOILERS) return;
         addExpandingText(out, keys);
     }
 }

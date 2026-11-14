@@ -10,6 +10,7 @@ import net.minecraft.resources.Identifier;
 public record ClientPrefsPayload(
         boolean showAtrocityCounter,
         boolean enableNotifiers,
+        boolean wolfEffectIndicators,
 
         int benedictionLowHealthThreshold,
         boolean benedictionShareStack,
@@ -17,18 +18,17 @@ public record ClientPrefsPayload(
         boolean benedictionTeleportAfterSave,
         int benedictionWolfTPMethod,
         int benedictionPlayerTPMethod,
-        boolean benedictionWolfTPAll,
+        boolean benedictionWolfTPAll
 
-        boolean showWolfLog,
-        boolean showPlayerLog
 ) implements CustomPacketPayload {
     public static final CustomPacketPayload.Type<ClientPrefsPayload> TYPE =
-            new CustomPacketPayload.Type<>(Identifier.fromNamespaceAndPath(TOTVW.MOD_ID, "client_prefs"));
+            new CustomPacketPayload.Type<>(TOTVW.registerID("client_prefs"));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, ClientPrefsPayload> STREAM_CODEC =
             StreamCodec.composite(
                     ByteBufCodecs.BOOL, ClientPrefsPayload::showAtrocityCounter,
                     ByteBufCodecs.BOOL, ClientPrefsPayload::enableNotifiers,
+                    ByteBufCodecs.BOOL, ClientPrefsPayload::wolfEffectIndicators,
 
                     ByteBufCodecs.INT, ClientPrefsPayload::benedictionLowHealthThreshold,
                     ByteBufCodecs.BOOL, ClientPrefsPayload::benedictionShareStack,
@@ -37,11 +37,11 @@ public record ClientPrefsPayload(
                     ByteBufCodecs.INT, ClientPrefsPayload::benedictionWolfTPMethod,
                     ByteBufCodecs.INT, ClientPrefsPayload::benedictionPlayerTPMethod,
                     ByteBufCodecs.BOOL, ClientPrefsPayload::benedictionWolfTPAll,
-                    ByteBufCodecs.BOOL, ClientPrefsPayload::showWolfLog,
-                    ByteBufCodecs.BOOL, ClientPrefsPayload::showPlayerLog,
                     ClientPrefsPayload::new
             );
-    @Override public CustomPacketPayload.Type<? extends CustomPacketPayload> type() {
+
+    @Override
+    public CustomPacketPayload.Type<? extends CustomPacketPayload> type() {
         return TYPE;
     }
 }

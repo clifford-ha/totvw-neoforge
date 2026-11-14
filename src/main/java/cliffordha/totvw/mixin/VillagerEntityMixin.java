@@ -1,6 +1,6 @@
 package cliffordha.totvw.mixin;
 
-import cliffordha.totvw.Config;
+import cliffordha.totvw.config.VWConfig;
 import cliffordha.totvw.entity.skill.SkillManager;
 import cliffordha.totvw.registry.*;
 import cliffordha.totvw.registry.attachments.entity.PlayerAttachment;
@@ -39,7 +39,7 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-import static cliffordha.totvw.util.VWUtil.isInBiome;
+import static cliffordha.totvw.util.ExtUtil.isInBiome;
 
 @Mixin(Villager.class)
 public class VillagerEntityMixin {
@@ -183,7 +183,7 @@ public class VillagerEntityMixin {
 
     @Unique
     private static void depleteCD(Villager villager, Supplier<AttachmentType<Integer>> cooldown) {
-        if (Config.SERVER_OTHER_COOLDOWNS.get()) {
+        if (VWConfig.get().SERVER_OTHER_COOLDOWNS) {
             SkillManager.depleteCooldown(villager, cooldown);
         } else {
             villager.setData(cooldown, 0);

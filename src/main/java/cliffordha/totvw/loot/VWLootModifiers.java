@@ -5,6 +5,8 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.level.storage.loot.LootTable;
 import net.neoforged.neoforge.common.data.GlobalLootModifierProvider;
 import net.neoforged.neoforge.common.loot.AddTableLootModifier;
 import net.neoforged.neoforge.common.loot.LootTableIdCondition;
@@ -26,6 +28,12 @@ public class VWLootModifiers extends GlobalLootModifierProvider {
     public static Identifier END_CITY_TREASURE_CHEST = Identifier.withDefaultNamespace("chests/end_city_treasure");
     public static Identifier DESERT_PYRAMID_CHEST = Identifier.withDefaultNamespace("chests/desert_pyramid");
     public static Identifier PILLAGER_OUTPOST_CHEST = Identifier.withDefaultNamespace("chests/pillager_outpost");
+    public static Identifier VILLAGE_TEMPLES = Identifier.withDefaultNamespace("chests/village/village_temple");
+
+    public static final Identifier ID_PAGE_FROM_VERDANT_CAMPS = TOTVW.registerID("chests/verdant_camp_valuables");
+    public static final Identifier ID_ANCIENT_VERIXIUM_PILLARS = TOTVW.registerID("chests/verixium_pillar");
+    public static final Identifier ID_VERDANT_VILLAGE_WEAPONSMITH = TOTVW.registerID("chests/village/verdant/weaponsmith");
+
 
     @Override
     protected void start() {
@@ -88,20 +96,26 @@ public class VWLootModifiers extends GlobalLootModifierProvider {
 
         this.add("soul_runestone_fragment_from_ancient_pillars",
                 new AddTableLootModifier(Optional.of(Holder.direct(
-                        new LootTableIdCondition.Builder(VWLootTables.ID_ANCIENT_VERIXIUM_PILLARS).build())),
+                        new LootTableIdCondition.Builder(ID_ANCIENT_VERIXIUM_PILLARS).build())),
                         10, VWLootTables.SOUL_RUNESTONE_FRAGMENT_FROM_VERIXIUM_PILLARS
                 ));
 
         this.add("soul_runestone_fragment_from_verdant_weaponsmith",
                 new AddTableLootModifier(Optional.of(Holder.direct(
-                        new LootTableIdCondition.Builder(VWLootTables.ID_VERDANT_VILLAGE_WEAPONSMITH).build())),
+                        new LootTableIdCondition.Builder(ID_VERDANT_VILLAGE_WEAPONSMITH).build())),
                         10, VWLootTables.SOUL_RUNESTONE_FRAGMENT_FROM_VERDANT_WEAPONSMITH
                 ));
 
         this.add("page_from_verdant_camps",
                 new AddTableLootModifier(Optional.of(Holder.direct(
-                        new LootTableIdCondition.Builder(VWLootTables.ID_PAGE_FROM_VERDANT_CAMPS).build())),
+                        new LootTableIdCondition.Builder(ID_PAGE_FROM_VERDANT_CAMPS).build())),
                         10, VWLootTables.PAGE_FROM_VERDANT_CAMPS
+                ));
+
+        this.add("page_from_village_temples",
+                new AddTableLootModifier(Optional.of(Holder.direct(
+                        new LootTableIdCondition.Builder(VILLAGE_TEMPLES).build())),
+                        10, VWLootTables.PAGES_FROM_VILLAGE_TEMPLES
                 ));
     }
 }

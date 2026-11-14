@@ -40,6 +40,19 @@ public class VWEffects {
     public static final Holder<MobEffect> HAVOC = registerMobEffect("havoc",
             new HavocEffect());
 
+
+    public static final String KEY_AMPLIFIED_MIGHT = getEffectKey("amplified_might");
+    public static final String KEY_BLESSING_OF_THE_VERDANT_WIND = getEffectKey("blessing_of_the_verdant_wind");
+    public static final String KEY_BLOODLUST = getEffectKey("bloodlust");
+    public static final String KEY_PARALYZE = getEffectKey("paralyze");
+    public static final String KEY_WIND_VEIL = getEffectKey("wind_veil");
+    public static final String KEY_HAVOC = getEffectKey("havoc");
+
+
+    public static String getEffectKey(String key) {
+        return "effect." + TOTVW.MOD_ID + "." + key;
+    }
+
     private static Holder<MobEffect> registerMobEffect(String name, MobEffect effect) {
         return MOB_EFFECTS.register(name, () -> effect);
     }

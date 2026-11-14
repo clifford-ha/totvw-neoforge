@@ -2,8 +2,8 @@ package cliffordha.totvw.mixin;
 
 import cliffordha.totvw.item.custom.EfflorescenceRunestonePlate;
 import cliffordha.totvw.registry.attachments.Runestone;
-import cliffordha.totvw.registry.attachments.VWAttachments;
-import cliffordha.totvw.util.VWUtil;
+import cliffordha.totvw.registry.attachments.VWAttachment;
+import cliffordha.totvw.util.ExtUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
@@ -49,7 +49,7 @@ public abstract class CropsBlockMixin {
         List<Player> players = level.getEntities(
                 EntityTypes.PLAYER,
                 scan,
-                test -> test.getData(VWAttachments.VERDANT_BLOOM_STACK) > 0
+                test -> test.getData(VWAttachment.VERDANT_BLOOM_STACK) > 0
         ).stream().limit(1).toList();
 
         boolean wolfIsPresent = !wolves.isEmpty();
@@ -93,8 +93,8 @@ public abstract class CropsBlockMixin {
         }
 
         if (entity instanceof Player player) {
-            int stack = player.getData(VWAttachments.VERDANT_BLOOM_STACK);
-            player.setData(VWAttachments.VERDANT_BLOOM_STACK, stack - 1);
+            int stack = player.getData(VWAttachment.VERDANT_BLOOM_STACK);
+            player.setData(VWAttachment.VERDANT_BLOOM_STACK, stack - 1);
         }
 
         totvw_26_3_neoforge$alwaysTick = true;
@@ -114,7 +114,7 @@ public abstract class CropsBlockMixin {
     }
     @Unique
     private static void particle(ServerLevel level, BlockPos pos) {
-        VWUtil.sendParticles(ParticleTypes.GLOW, level, pos, 12, 0.6);
+        ExtUtil.sendParticles(ParticleTypes.GLOW, level, pos, 12, 0.6);
     }
 
     // other FlourishingFlora-related growth accelerators
@@ -142,7 +142,7 @@ public abstract class CropsBlockMixin {
 
         boolean shouldGrowByPlayer = crop.getAge(state) < crop.getMaxAge()
                 && entity instanceof Player player
-                && player.getData(VWAttachments.VERDANT_BLOOM_STACK) > 0
+                && player.getData(VWAttachment.VERDANT_BLOOM_STACK) > 0
                 && player.getInventory().contains(new ItemStack(Items.BONE_MEAL));
 
         if (shouldGrowByWolf || shouldGrowByPlayer) {
@@ -150,11 +150,11 @@ public abstract class CropsBlockMixin {
             particle((ServerLevel) level, pos);
 
             if (level.getRandom().nextFloat() < 0.2f && entity instanceof Player player) {
-                int currentStack = player.getData(VWAttachments.VERDANT_BLOOM_STACK);
-                player.setData(VWAttachments.VERDANT_BLOOM_STACK, Math.max(0, currentStack - 1));
+                int currentStack = player.getData(VWAttachment.VERDANT_BLOOM_STACK);
+                player.setData(VWAttachment.VERDANT_BLOOM_STACK, Math.max(0, currentStack - 1));
 
                 ItemStack stack = EfflorescenceRunestonePlate.getBonemeal(player);
-                boolean amount = VWUtil.isInBiome(player, BiomeTags.HAS_DESERT_PYRAMID);
+                boolean amount = ExtUtil.isInBiome(player, BiomeTags.HAS_DESERT_PYRAMID);
                 if (stack != null) {
                     stack.shrink(amount ? 2 : 1);
                 }

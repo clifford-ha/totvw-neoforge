@@ -1,10 +1,13 @@
 package cliffordha.totvw.item.events;
 
-import cliffordha.totvw.Config;
-import cliffordha.totvw.registry.*;
+import cliffordha.totvw.config.VWConfig;
+import cliffordha.totvw.registry.VWColors;
+import cliffordha.totvw.registry.VWEffects;
+import cliffordha.totvw.registry.VWItems;
+import cliffordha.totvw.registry.VWParticles;
+import cliffordha.totvw.registry.attachments.entity.PlayerAttachment;
 import cliffordha.totvw.tag.VWBiomeTags;
 import cliffordha.totvw.tag.VWItemTags;
-
 import net.minecraft.core.Holder;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -23,8 +26,7 @@ import net.minecraft.world.level.biome.Biome;
 
 import java.util.function.Predicate;
 
-import static cliffordha.totvw.util.VWUtil.*;
-import static cliffordha.totvw.util.VWUtil.TimeUtil.*;
+import static cliffordha.totvw.util.ExtUtil.*;
 
 public class VWItemBlessings {
     private static final int TICK_SECONDS = 20;
@@ -36,7 +38,7 @@ public class VWItemBlessings {
         return mainHandItem.tags().anyMatch(Predicate.isEqual(tag));
     }
     public static boolean tryApply(Player player) {
-        if (player.getCooldowns().isOnCooldown(player.getMainHandItem()) && Config.SERVER_ITEM_COOLDOWNS.get()) return false;
+        if (player.getCooldowns().isOnCooldown(player.getMainHandItem()) && VWConfig.get().SERVER_ITEM_COOLDOWNS) return false;
         boolean hasSword = isItem(player, ItemTags.SWORDS);
         boolean hasAxe = isItem(player, ItemTags.AXES);
         boolean hasPickaxe = isItem(player, ItemTags.PICKAXES);
@@ -56,14 +58,14 @@ public class VWItemBlessings {
     private static void setCooldown(Player player, int cdBiome, int cd) {
         if (player.isCreative()) return;
         player.getMainHandItem().hurtAndBreak(5, player, EquipmentSlot.MAINHAND);
-        if (!Config.SERVER_ITEM_COOLDOWNS.get()) return;
+        if (!VWConfig.get().SERVER_ITEM_COOLDOWNS) return;
         int cooldown = isInBiome(player, VWBiomeTags.IS_VERDANT_BIOMES) ? (cdBiome) : (cd);
         player.getCooldowns().addCooldown(player.getItemBySlot(EquipmentSlot.MAINHAND), cooldown);
     }
     private static void setCooldown(Player player, int cd) {
         if (player.isCreative()) return;
         player.getMainHandItem().hurtAndBreak(5, player, EquipmentSlot.MAINHAND);
-        if (!Config.SERVER_ITEM_COOLDOWNS.get()) return;
+        if (!VWConfig.get().SERVER_ITEM_COOLDOWNS) return;
         player.getCooldowns().addCooldown(player.getItemBySlot(EquipmentSlot.MAINHAND), cd);
     }
     private static void grantEffect(Player player, Holder<MobEffect> effect, int inBiome, int enhancedAmp, TagKey<Biome> biomeTag) {
@@ -101,7 +103,7 @@ public class VWItemBlessings {
 
         int targetDurationSec = targetDuration / 20;
         if (!player.hasEffect(VWEffects.BLESSING_OF_THE_VERDANT_WIND)) {
-            grantEffect(player, VWEffects.BLESSING_OF_THE_VERDANT_WIND, sec(45), 1, VWBiomeTags.IS_VERDANT_BIOMES);
+            grantEffect(player, VWEffects.BLESSING_OF_THE_VERDANT_WIND, 45, 1, VWBiomeTags.IS_VERDANT_BIOMES);
         }
 
         if (player.hasEffect(effect)) {
@@ -249,29 +251,49 @@ public class VWItemBlessings {
         );
     }
     private static void hasOther(Player player) {
-        ItemStack itemStack = player.getItemBySlot(EquipmentSlot.MAINHAND);
+        ItemStack stack = player.getItemBySlot(EquipmentSlot.MAINHAND);
+        int explosionRes = player.getData(PlayerAttachment.EXPLOSION_RES);
         
-        if (itemStack.is(VWItems.VERIXIUM_POWDER)) {
+        if (stack.is(VWItems.VERIXIUM_POWDER)) {
             grantEffect(player,
                     MobEffects.SLOW_FALLING,
                     setDuration(0, 6),
                     1,
                     VWBiomeTags.IS_VERDANT_BIOMES);
-            consumeItem(player);
+            consumeItem(player, stack);
             setCooldown(player, setDuration(1, 15), setDuration(2, 0));
 
-        } else if (itemStack.is(Items.GLOWSTONE_DUST)) {
+        } else if (stack.is(Items.GLOWSTONE_DUST)) {
             grantEffect(player,
                     MobEffects.NIGHT_VISION,
                     TICK_MINUTES,
                     1,
                     BiomeTags.IS_NETHER);
-            consumeItem(player);
+            consumeItem(player, stack);
             setCooldown(player, setDuration(1, 30));
+
+        } else if (stack.is(Items.GUNPOWDER)) {
+            player.setData(PlayerAttachment.EXPLOSION_RES, 3);
+            addOrStackEffect(player, MobEffects.NAUSEA, 30, 0, true);
+            consumeItem(player, stack, 3);
+            setCooldown(player, setDuration(1, 30));
+
+        } else if (stack.is(Items.BLAZE_POWDER)) {
+            addOrStackEffect(player, MobEffects.FIRE_RESISTANCE, 6, 0, false);
+            consumeItem(player, stack, 2);
+
+        } else if (stack.is(Items.MAGMA_CREAM)) {
+            addOrStackEffect(player, MobEffects.FIRE_RESISTANCE, 30, 0, false);
+            consumeItem(player, stack, 5);
         }
     }
 
-    private static void consumeItem(Player player) {
-        player.getMainHandItem().shrink(1);
+    public static boolean negateExplosionDamage(Player player) {
+        int explosionRes = player.getData(PlayerAttachment.EXPLOSION_RES);
+        if (explosionRes > 0) {
+            player.setData(PlayerAttachment.EXPLOSION_RES, explosionRes - 1);
+            return true;
+        }
+        return false;
     }
 }
