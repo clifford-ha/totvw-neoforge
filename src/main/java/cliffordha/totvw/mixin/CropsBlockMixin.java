@@ -35,7 +35,7 @@ import java.util.List;
 @Mixin(CropBlock.class)
 public abstract class CropsBlockMixin {
     @Unique
-    private static boolean totvw_26_3_neoforge$alwaysTick = false;
+    private static boolean totvw_$alwaysTick = false;
 
     @Inject(method = "randomTick", at = @At("TAIL"))
     private void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random, CallbackInfo ci) {
@@ -66,7 +66,7 @@ public abstract class CropsBlockMixin {
             checkTick(entity, state, level, pos, random);
 
         } else {
-            totvw_26_3_neoforge$alwaysTick = false;
+            totvw_$alwaysTick = false;
         }
     }
 
@@ -97,7 +97,7 @@ public abstract class CropsBlockMixin {
             player.setData(VWAttachment.VERDANT_BLOOM_STACK, stack - 1);
         }
 
-        totvw_26_3_neoforge$alwaysTick = true;
+        totvw_$alwaysTick = true;
         particle(level, pos);
     }
 
@@ -121,13 +121,13 @@ public abstract class CropsBlockMixin {
     @Inject(method = "isRandomlyTicking", at = @At("TAIL"), cancellable = true)
     private void growthSpeed(BlockState state, CallbackInfoReturnable<Boolean> cir) {
         CropBlock crop = (CropBlock) (Object) this;
-        if (totvw_26_3_neoforge$alwaysTick && crop.getAge(state) < crop.getMaxAge()) {
+        if (totvw_$alwaysTick && crop.getAge(state) < crop.getMaxAge()) {
             cir.setReturnValue(true);
         }
     }
     @Inject(method = "hasSufficientLight", at = @At("TAIL"), cancellable = true)
     private static void bypassLightRequirements(LevelReader level, BlockPos pos, CallbackInfoReturnable<Boolean> cir) {
-        if (totvw_26_3_neoforge$alwaysTick) {
+        if (totvw_$alwaysTick) {
             cir.setReturnValue(true);
         }
     }

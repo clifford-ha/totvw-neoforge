@@ -35,7 +35,6 @@ public class ServerboundPackets {
         if (!(event.getEntity() instanceof ServerPlayer player)) return;
         ServerLevel level = player.level();
 
-        level.getServer().execute(() -> sendPrefs(player));
         if (TOTVW.VERSION.contains("beta") || TOTVW.IN_DEVELOPMENT) {
             sendToChat(player, VWColors.DEFAULT, false, "TOTVW mod version is a development build.");
             sendToChat(player, VWColors.DEFAULT, false, "Bugs and potential crashes are to be expected");
@@ -50,6 +49,7 @@ public class ServerboundPackets {
     public static void sendPrefs(Player player) {
         player.setData(PlayerPrefs.SHOW_ATROCITY_COUNTER, VWConfig.get().SYNCED_SHOW_ATROCITY_COUNTER);
         player.setData(PlayerPrefs.ENABLE_NOTIFIERS, VWConfig.get().SYNCED_ENABLE_NOTIFIERS);
+        player.setData(PlayerPrefs.SHOW_WOLF_EFFECT_INDICATORS, VWConfig.get().SYNCED_SHOW_WOLF_EFFECT_INDICATORS);
 
         player.setData(PlayerPrefs.BENEDICTION_HEALTH_THRESHOLD, VWConfig.get().SYNCED_BENEDICTION_HEALTH_THRESHOLD);
         player.setData(PlayerPrefs.BENEDICTION_SHARE_STACK, VWConfig.get().SYNCED_WOLF_SHARES_BENEDICTION_STACK);
@@ -64,7 +64,9 @@ public class ServerboundPackets {
         if (!(context.player() instanceof ServerPlayer player)) return;
         player.setData(PlayerPrefs.ENABLE_NOTIFIERS, payload.enableNotifiers());
         player.setData(PlayerPrefs.SHOW_ATROCITY_COUNTER, payload.showAtrocityCounter());
-        player.setData(PlayerPrefs.BENEDICTION_HEALTH_THRESHOLD, Mth.clamp(payload.benedictionLowHealthThreshold(), 15, 90));
+        player.setData(PlayerPrefs.SHOW_WOLF_EFFECT_INDICATORS, payload.wolfEffectIndicators());
+
+        player.setData(PlayerPrefs.BENEDICTION_HEALTH_THRESHOLD, Mth.clamp(payload.benedictionLowHealthThreshold(), 10, 50));
         player.setData(PlayerPrefs.BENEDICTION_SHARE_STACK, payload.benedictionShareStack());
         player.setData(PlayerPrefs.BENEDICTION_ALWAYS_TRIGGER_BLESSING, payload.benedictionAlwaysTriggerBlessing());
         player.setData(PlayerPrefs.BENEDICTION_TELEPORT_AFTER_SAVE, payload.benedictionTeleportAfterSave());

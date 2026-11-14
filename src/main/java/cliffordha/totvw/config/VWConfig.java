@@ -61,42 +61,25 @@ public class VWConfig {
         }
     }
     public static void loadAndVerify() {
-        if (Files.exists(CONFIG_PATH)) {
-            try (Reader reader = Files.newBufferedReader(CONFIG_PATH)) {
-                INSTANCE = GSON.fromJson(reader, VWConfig.class);
-            } catch (IOException e) {
-                INSTANCE = new VWConfig();
-            }
-        } else {
+        if (!Files.exists(CONFIG_PATH)) {
+            INSTANCE = new VWConfig();
             save();
+            return;
         }
-
         boolean requiresFixing = false;
-
         try (BufferedReader reader = Files.newBufferedReader(CONFIG_PATH)) {
             INSTANCE = GSON.fromJson(reader, VWConfig.class);
-
-            if (INSTANCE == null) {
-                INSTANCE = new VWConfig();
-                requiresFixing = true;
-            }
+            if (INSTANCE == null) { INSTANCE = new VWConfig(); requiresFixing = true; }
         } catch (JsonSyntaxException e) {
             TOTVW.sendWarning("Config file is malformed! Resetting to default values.");
             INSTANCE = new VWConfig();
             requiresFixing = true;
-
         } catch (IOException e) {
             TOTVW.sendError("Failed to read config file!");
-
+            INSTANCE = new VWConfig();
         }
-
-        if (INSTANCE.verifyAndSanitizeValues()) {
-            requiresFixing = true;
-        }
-
-        if (requiresFixing) {
-            save();
-        }
+        if (INSTANCE.verifyAndSanitizeValues()) requiresFixing = true;
+        if (requiresFixing) save();
     }
     private boolean verifyAndSanitizeValues() {
         int count = 0;

@@ -84,7 +84,6 @@ public class TOTVWClient {
 
     @SubscribeEvent
     public static void registerKeymapping(RegisterKeyMappingsEvent event) {
-        //event.register(VWKeymap.WOLF_CONFIG_PRESSED.get());
         event.register(VWKeymap.TOTVW_STAT);
         event.register(VWKeymap.TOTVW_CONFIG);
     }

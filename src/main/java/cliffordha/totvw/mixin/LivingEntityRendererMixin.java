@@ -30,18 +30,18 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, S extend
     public abstract Identifier getTextureLocation(S state);
 
     @Unique
-    private static final Map<UUID, float[]> FROZEN = new HashMap<>();
+    private static final Map<UUID, float[]> totvw_$FROZEN = new HashMap<>();
 
     @Inject(method = "extractRenderState(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/client/renderer/entity/state/LivingEntityRenderState;F)V", at = @At("TAIL"))
     private void getRenderState(T entity, S state, float partialTicks, CallbackInfo ci) {
         if (entity instanceof Wolf wolf && wolf.hasData(WolfAttachment.FRAGMENT_DATA)) {
-            ((TranslucentRenderState) state).vw$setTranslucent(true);
+            ((TranslucentRenderState) state).totvw_$setTranslucent(true);
         }
         if (entity.getData(VWAttachment.FROST_BOUND_TIMER) <= 0) {
-            FROZEN.remove(entity.getUUID());
+            totvw_$FROZEN.remove(entity.getUUID());
             return;
         }
-        float[] saved = FROZEN.computeIfAbsent(entity.getUUID(),
+        float[] saved = totvw_$FROZEN.computeIfAbsent(entity.getUUID(),
                 _ -> new float[]{state.ageInTicks, state.bodyRot, state.yRot, state.xRot, state.ageScale, state.scale});
 
         state.ageInTicks = saved[0];
@@ -55,7 +55,7 @@ public abstract class LivingEntityRendererMixin<T extends LivingEntity, S extend
 
     @Inject(method = "getRenderType", at = @At("HEAD"), cancellable = true)
     private void getTranslucentLayer(S state, boolean showBody, boolean translucent, boolean showOutline, CallbackInfoReturnable<RenderType> cir) {
-        if (((TranslucentRenderState) state).vw$isTranslucent()) {
+        if (((TranslucentRenderState) state).totvw_$isTranslucent()) {
             cir.setReturnValue(RenderTypes.entityTranslucent(this.getTextureLocation(state)));
         }
     }

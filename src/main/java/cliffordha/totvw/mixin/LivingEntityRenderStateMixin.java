@@ -8,15 +8,15 @@ import org.spongepowered.asm.mixin.Unique;
 @Mixin(LivingEntityRenderState.class)
 public abstract class LivingEntityRenderStateMixin implements TranslucentRenderState {
     @Unique
-    private boolean vw$translucent;
+    private boolean totvw_$translucent;
 
     @Override
-    public void vw$setTranslucent(boolean translucent) {
-        this.vw$translucent = translucent;
+    public void totvw_$setTranslucent(boolean translucent) {
+        this.totvw_$translucent = translucent;
     }
 
     @Override
-    public boolean vw$isTranslucent() {
-        return this.vw$translucent;
+    public boolean totvw_$isTranslucent() {
+        return this.totvw_$translucent;
     }
 }

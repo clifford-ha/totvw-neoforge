@@ -1,6 +1,7 @@
 package cliffordha.totvw.entity;
 
 import cliffordha.totvw.TOTVW;
+import cliffordha.totvw.config.VWConfig;
 import cliffordha.totvw.effect.*;
 import cliffordha.totvw.enchantment.ArcticWindsEffect;
 import cliffordha.totvw.enchantment.WitheringEffect;
@@ -21,12 +22,14 @@ import cliffordha.totvw.registry.attachments.entity.WolfAttachment;
 import cliffordha.totvw.tag.VWBiomeTags;
 
 import net.minecraft.core.Holder;
+import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
@@ -37,7 +40,9 @@ import net.minecraft.world.entity.monster.ElderGuardian;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -91,9 +96,54 @@ public class GlobalEntityEvents {
         }
     }
 
-    @SubscribeEvent(priority = EventPriority.HIGH)
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    public static void onIncomingDamagePre(LivingIncomingDamageEvent event) {
+        if (event.getSource().getEntity() instanceof LivingEntity attacker) {
+            if (ArcticWindsEffect.frostBoundStack(attacker) > 0 || attacker.getData(VWAttachment.LIFT_DURATION) > 0) {
+                event.setCanceled(true);
+                return;
+            }
+        }
+
+        if (event.getEntity() instanceof Wolf wolf && wolf.level() instanceof ServerLevel level) {
+            float damage = event.getAmount();
+            DamageSource source = event.getSource();
+            Entity attacker = source.getEntity();
+
+            boolean isPeer = attacker instanceof Wolf peer && wolf.getOwner() == peer.getOwner();
+            boolean isAccidentalDMG = wolf.getOwner() instanceof LivingEntity owner && attacker instanceof LivingEntity mob && owner == mob;
+
+            if (isPeer || isAccidentalDMG) {
+                event.setCanceled(true);
+                return;
+            }
+
+            // "actuallyHurt" in wolf mixin
+            if (wolf.isWearingBodyArmor()) {
+                ItemStack armor = wolf.getBodyArmorItem();
+                float computedDMG = VWEnchantments.getEnhancementKit(wolf) ? damage * 0.8f : damage;
+
+                if (!VWConfig.get().SERVER_WOLF_DMG_DISTRIBUTION || !wolf.canArmorAbsorb(source)) {
+                    event.setAmount(computedDMG);
+
+                } else {
+                    double finalWolfDMG = Math.ceil(computedDMG * 0.25f);
+                    event.setAmount((float) finalWolfDMG);
+                    int finalArmorDMG = Mth.ceil(computedDMG * 0.75f);
+
+                    armor.hurtAndBreak(finalArmorDMG, wolf, EquipmentSlot.BODY);
+                    if (Crackiness.WOLF_ARMOR.byDamage(armor.getDamageValue(), armor.getMaxDamage()) != Crackiness.WOLF_ARMOR.byDamage(wolf.getBodyArmorItem())) {
+                        wolf.playSound(SoundEvents.WOLF_ARMOR_CRACK);
+                        Item type = wolf.getBodyArmorItem().is(VWItems.VERIXIUM_WOLF_ARMOR) ? VWItems.VERIXIUM_WOLF_ARMOR.get() : Items.WOLF_ARMOR;
+                        level.sendParticles(new ItemParticleOption(ParticleTypes.ITEM, type), wolf.getX(), wolf.getY() + 1.0, wolf.getZ(), 20, 0.2, 0.1, 0.2, 0.1);
+                    }
+                }
+            }
+        }
+        onIncomingDamage(event);
+    }
     public static void onIncomingDamage(LivingIncomingDamageEvent event) {
-        if (!allowDamageEvent(event.getEntity(), event.getSource(), event.getAmount())) {
+        if (!allowDamageEvent(event.getEntity(), event.getSource(), event.getContainer().getNewDamage())) {
             event.setCanceled(true);
         }
     }
@@ -201,21 +251,8 @@ public class GlobalEntityEvents {
             return windVeilEffect(entity, source, damage);
         }
 
-        boolean attackerIsLive = attacker instanceof LivingEntity;
-
-        if (attackerIsLive) {
-            if (ArcticWindsEffect.frostBoundStack(attacker) > 0) return false;
-            if (attacker.getData(VWAttachment.LIFT_DURATION) > 0) return false;
-        }
-
         if (entity instanceof Wolf wolf) {
-            boolean isPeer = attacker instanceof Wolf peer && wolf.getOwner() == peer.getOwner();
-            boolean isAccidentalDMG = wolf.getOwner() instanceof LivingEntity owner && attacker instanceof LivingEntity mob && owner == mob;
             boolean fromFireOrIce = source.is(DamageTypeTags.IS_FIRE) || source.is(DamageTypeTags.IS_FREEZING);
-
-            if (isPeer || isAccidentalDMG) {
-                return false;
-            }
 
             if (wolf.hasData(WolfAttachment.FRAGMENT_DATA)) {
                 if (!(attacker instanceof LivingEntity)) return false;

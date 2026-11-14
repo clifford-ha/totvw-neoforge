@@ -21,6 +21,8 @@ public class TalesOfTheVerdantWind {
     public static final boolean IN_DEVELOPMENT = false;
 
     public TalesOfTheVerdantWind(IEventBus modEventBus, ModContainer modContainer) {
+        VWConfig.loadAndVerify();
+
         VWBlocks.register(modEventBus);
         VWItems.register(modEventBus);
         VWCreativeTabs.register(modEventBus);
@@ -50,8 +52,6 @@ public class TalesOfTheVerdantWind {
 
         AttachmentUtil.registerAttachments(modEventBus);
         VWAttachment.register();
-
-        VWConfig.loadAndVerify();
     }
 
     @SubscribeEvent

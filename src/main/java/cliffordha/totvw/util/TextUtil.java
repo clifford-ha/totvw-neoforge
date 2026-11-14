@@ -180,7 +180,7 @@ public class TextUtil {
             start = end;
         }
 
-        return String.join("", pages);
+        return String.join(" ", pages);
     }
     public static String iterateList(List<String> list, boolean vertical) {
         if (list.isEmpty()) return "";

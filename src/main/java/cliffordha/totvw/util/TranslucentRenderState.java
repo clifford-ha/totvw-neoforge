@@ -1,6 +1,6 @@
 package cliffordha.totvw.util;
 
 public interface TranslucentRenderState {
-    void vw$setTranslucent(boolean translucent);
-    boolean vw$isTranslucent();
+    void totvw_$setTranslucent(boolean translucent);
+    boolean totvw_$isTranslucent();
 }

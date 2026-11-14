@@ -37,8 +37,11 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArgs;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
 import java.util.UUID;
 
@@ -250,31 +253,6 @@ public abstract class WolfEntityMixin extends LivingEntity {
     private void distributeHurt(ServerLevel level, DamageSource source, float damage, CallbackInfo ci) {
         Wolf wolf = (Wolf) (Object) this;
 
-        if (!wolf.isWearingBodyArmor()) return;
-
-        ItemStack armor = wolf.getBodyArmorItem();
-        float computedDMG = VWEnchantments.getEnhancementKit(wolf) ? damage * 0.8f : damage;
-
-        if (!VWConfig.get().SERVER_WOLF_DMG_DISTRIBUTION || !wolf.canArmorAbsorb(source)) {
-            super.actuallyHurt(level, source, computedDMG);
-            ci.cancel();
-            return;
-        }
-
-        int damageBefore = armor.getDamageValue();
-        int maxDamage = armor.getMaxDamage();
-
-        int finalArmorDMG = Mth.ceil(computedDMG * 0.75f);
-        double finalWolfDMG = Math.floor(computedDMG * 0.25f);
-
-        armor.hurtAndBreak(finalArmorDMG, wolf, EquipmentSlot.BODY);
-        if (Crackiness.WOLF_ARMOR.byDamage(damageBefore, maxDamage) != Crackiness.WOLF_ARMOR.byDamage(wolf.getBodyArmorItem())) {
-            wolf.playSound(SoundEvents.WOLF_ARMOR_CRACK);
-            Item type = wolf.getBodyArmorItem().is(VWItems.VERIXIUM_WOLF_ARMOR) ? VWItems.VERIXIUM_WOLF_ARMOR.get() : Items.WOLF_ARMOR;
-            level.sendParticles(new ItemParticleOption(ParticleTypes.ITEM, type), wolf.getX(), wolf.getY() + 1.0, wolf.getZ(), 20, 0.2, 0.1, 0.2, 0.1);
-        }
-        super.actuallyHurt(level, source, (float) finalWolfDMG);
-
-        ci.cancel();
+        if (VWConfig.get().SERVER_WOLF_DMG_DISTRIBUTION && wolf.isWearingBodyArmor()) ci.cancel();
     }
 }

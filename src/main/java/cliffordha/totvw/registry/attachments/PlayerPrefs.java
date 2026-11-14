@@ -10,12 +10,11 @@ import java.util.function.Supplier;
 import static cliffordha.totvw.registry.attachments.AttachmentUtil.ATTACHMENTS;
 
 public class PlayerPrefs {
-    private static final String prefix = "prefs_";
-    private static final String benediction = prefix + "benediction_";
+    private static final String benediction = "benediction_";
 
-    public static final Supplier<AttachmentType<Boolean>> SHOW_ATROCITY_COUNTER = registerBool(prefix + "show_atrocity_counter", VWConfig.get().SYNCED_SHOW_ATROCITY_COUNTER);
-    public static final Supplier<AttachmentType<Boolean>> ENABLE_NOTIFIERS = registerBool(prefix + "enable_notifiers", VWConfig.get().SYNCED_ENABLE_NOTIFIERS);
-    public static final Supplier<AttachmentType<Boolean>> SHOW_WOLF_EFFECT_INDICATORS = registerBool(prefix + "show_wolf_effect_indicators", VWConfig.get().SYNCED_SHOW_WOLF_EFFECT_INDICATORS);
+    public static final Supplier<AttachmentType<Boolean>> SHOW_ATROCITY_COUNTER = registerBool("show_atrocity_counter", VWConfig.get().SYNCED_SHOW_ATROCITY_COUNTER);
+    public static final Supplier<AttachmentType<Boolean>> ENABLE_NOTIFIERS = registerBool("enable_notifiers", VWConfig.get().SYNCED_ENABLE_NOTIFIERS);
+    public static final Supplier<AttachmentType<Boolean>> SHOW_WOLF_EFFECT_INDICATORS = registerBool("show_wolf_effect_indicators", VWConfig.get().SYNCED_SHOW_WOLF_EFFECT_INDICATORS);
 
     public static final Supplier<AttachmentType<Integer>> BENEDICTION_HEALTH_THRESHOLD = registerInt(benediction + "health_threshold", VWConfig.get().SYNCED_BENEDICTION_HEALTH_THRESHOLD);
     public static final Supplier<AttachmentType<Boolean>> BENEDICTION_SHARE_STACK = registerBool(benediction + "share_stack", VWConfig.get().SYNCED_WOLF_SHARES_BENEDICTION_STACK);
