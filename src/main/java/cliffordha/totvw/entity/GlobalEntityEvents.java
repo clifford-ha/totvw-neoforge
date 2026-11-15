@@ -24,7 +24,6 @@ import cliffordha.totvw.tag.VWBiomeTags;
 import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -133,9 +132,9 @@ public class GlobalEntityEvents {
 
                     armor.hurtAndBreak(finalArmorDMG, wolf, EquipmentSlot.BODY);
                     if (Crackiness.WOLF_ARMOR.byDamage(armor.getDamageValue(), armor.getMaxDamage()) != Crackiness.WOLF_ARMOR.byDamage(wolf.getBodyArmorItem())) {
-                        wolf.playSound(SoundEvents.WOLF_ARMOR_CRACK);
                         Item type = wolf.getBodyArmorItem().is(VWItems.VERIXIUM_WOLF_ARMOR) ? VWItems.VERIXIUM_WOLF_ARMOR.get() : Items.WOLF_ARMOR;
-                        level.sendParticles(new ItemParticleOption(ParticleTypes.ITEM, type), wolf.getX(), wolf.getY() + 1.0, wolf.getZ(), 20, 0.2, 0.1, 0.2, 0.1);
+                        sendParticles(new ItemParticleOption(ParticleTypes.ITEM, type), level, wolf.blockPosition(), 4, 0.1);
+                        playSound(wolf, SoundEvents.WOLF_ARMOR_CRACK, SoundSource.NEUTRAL, false);
                     }
                 }
             }
