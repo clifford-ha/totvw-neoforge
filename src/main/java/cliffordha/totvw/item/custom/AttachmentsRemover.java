@@ -1,7 +1,7 @@
 package cliffordha.totvw.item.custom;
 
-import cliffordha.totvw.registry.attachments.VWAttachments;
-import cliffordha.totvw.util.VWUtil;
+import cliffordha.totvw.registry.attachments.VWAttachment;
+import cliffordha.totvw.util.ExtUtil;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -19,7 +19,7 @@ public class AttachmentsRemover extends Item {
 
     @Override
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
-        List<Supplier<? extends AttachmentType<?>>> PLAYER_ATTACHMENTS = VWAttachments.PLAYER_ATTACHMENTS;
+        List<Supplier<? extends AttachmentType<?>>> PLAYER_ATTACHMENTS = VWAttachment.PLAYER_ATTACHMENTS;
 
         int count = 0;
         for (Supplier<? extends AttachmentType<?>> attachment : PLAYER_ATTACHMENTS) {
@@ -31,7 +31,7 @@ public class AttachmentsRemover extends Item {
         String empty = "No attachments were removed";
         String one = "1 attachment was removed";
         String many = count + " attachments were removed";
-        VWUtil.sendToChat(player, true, count > 0 ? (count == 1 ? one: many) : empty);
+        ExtUtil.sendToChat(player, true, count > 0 ? (count == 1 ? one: many) : empty);
 
         return super.use(level, player, hand);
     }

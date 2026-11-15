@@ -2,8 +2,6 @@ package cliffordha.totvw.registry;
 
 import cliffordha.totvw.TOTVW;
 import cliffordha.totvw.fluid.VWFluidTypes;
-import cliffordha.totvw.fluid.VerixiumFluid;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.Fluid;
@@ -14,8 +12,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 import java.util.function.Supplier;
 
 public class VWFluids {
-    public static final DeferredRegister<Fluid> FLUIDS =
-            DeferredRegister.create(BuiltInRegistries.FLUID, TOTVW.MOD_ID);
+    public static final DeferredRegister<Fluid> FLUIDS = DeferredRegister.create(BuiltInRegistries.FLUID, TOTVW.MOD_ID);
 
     public static final Supplier<FlowingFluid> FLOWING_VERIXIUM_FLUID = FLUIDS.register(
             "flowing_verixium_fluid", () -> new BaseFlowingFluid.Flowing(VWFluids.VERIXIUM_FLUID_PROPERTIES));

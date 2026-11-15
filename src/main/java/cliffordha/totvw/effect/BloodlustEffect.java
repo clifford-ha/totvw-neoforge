@@ -34,7 +34,7 @@ public class BloodlustEffect extends MobEffect {
     private static final Identifier ID_ADDITIONAL = VWIdentifiers.EFFECT_BLOODLUST_ADDITIONAL;
 
     public BloodlustEffect() {
-        super(MobEffectCategory.HARMFUL, VWColors.BLOODLUST_EFFECT);
+        super(MobEffectCategory.HARMFUL, VWColors.BLOODLUST);
     }
 
     @Override

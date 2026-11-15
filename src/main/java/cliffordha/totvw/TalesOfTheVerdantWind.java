@@ -1,16 +1,16 @@
 package cliffordha.totvw;
 
+import cliffordha.totvw.config.VWConfig;
 import cliffordha.totvw.datagen.VWDamageTypes;
 import cliffordha.totvw.fluid.VWFluidTypes;
 import cliffordha.totvw.registry.*;
 import cliffordha.totvw.registry.attachments.AttachmentUtil;
-import cliffordha.totvw.registry.attachments.VWAttachments;
+import cliffordha.totvw.registry.attachments.VWAttachment;
 import cliffordha.totvw.world.VWBiomes;
 
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
-import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
@@ -20,8 +20,7 @@ public class TalesOfTheVerdantWind {
     public static final boolean IN_DEVELOPMENT = false;
 
     public TalesOfTheVerdantWind(IEventBus modEventBus, ModContainer modContainer) {
-        modContainer.registerConfig(ModConfig.Type.COMMON, ClientConfig.CLIENT);
-        modContainer.registerConfig(ModConfig.Type.SERVER, Config.SYNCED);
+        VWConfig.loadAndVerify();
 
         VWBlocks.register(modEventBus);
         VWItems.register(modEventBus);
@@ -49,7 +48,7 @@ public class TalesOfTheVerdantWind {
         VWPotionBrewing.register();
 
         AttachmentUtil.registerAttachments(modEventBus);
-        VWAttachments.register();
+        VWAttachment.register();
     }
 
     @SubscribeEvent

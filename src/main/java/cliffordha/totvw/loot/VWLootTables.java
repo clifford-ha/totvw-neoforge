@@ -31,13 +31,6 @@ import java.util.function.BiConsumer;
 public class VWLootTables implements LootTableSubProvider {
     private static final NumberProvider ONE_ROLL = ConstantValue.exactly(1);
 
-    public static final ResourceKey<LootTable> PAGE_FROM_VERDANT_CAMPS = createFromPath("chests/verdant_camp_valuables");
-    public static final ResourceKey<LootTable> SOUL_RUNESTONE_FRAGMENT_FROM_VERIXIUM_PILLARS = createFromPath("chests/verixium_pillar");
-    public static final ResourceKey<LootTable> SOUL_RUNESTONE_FRAGMENT_FROM_VERDANT_WEAPONSMITH = createFromPath("chests/village/verdant/weaponsmith");
-
-    public static final Identifier ID_PAGE_FROM_VERDANT_CAMPS = TOTVW.registerID("chests/verdant_camp_valuables");
-    public static final Identifier ID_ANCIENT_VERIXIUM_PILLARS = TOTVW.registerID("chests/verixium_pillar");
-    public static final Identifier ID_VERDANT_VILLAGE_WEAPONSMITH = TOTVW.registerID("chests/village/verdant/weaponsmith");
 
     public static final ResourceKey<LootTable> ANCIENT_CITY_LOOTS = createExtra("ancient_city_loots");
     public static final ResourceKey<LootTable> VERIXIUM_POWDER_TRIAL = createExtra("verixium_powder_trial");
@@ -49,6 +42,11 @@ public class VWLootTables implements LootTableSubProvider {
     public static final ResourceKey<LootTable> GENESIS_RUNESTONE_FROM_END_CITY = createExtra("genesis_runestone_from_end_city");
     public static final ResourceKey<LootTable> HAVOC_RUNESTONE_FROM_BASTION = createExtra("havoc_runestone_from_bastion");
     public static final ResourceKey<LootTable> EFFLORESCENCE_RUNESTONE_FROM_DESERT_PYRAMID = createExtra("efflorescence_runestone_from_desert_pyramid");
+    public static final ResourceKey<LootTable> PAGES_FROM_VILLAGE_TEMPLES = createExtra("pages_from_village_temples");
+    public static final ResourceKey<LootTable> PAGE_FROM_VERDANT_CAMPS = createExtra("chests/verdant_camp_valuables");
+    public static final ResourceKey<LootTable> SOUL_RUNESTONE_FRAGMENT_FROM_VERIXIUM_PILLARS = createExtra("chests/verixium_pillar");
+    public static final ResourceKey<LootTable> SOUL_RUNESTONE_FRAGMENT_FROM_VERDANT_WEAPONSMITH = createExtra("chests/village/verdant/weaponsmith");
+
 
     private final HolderGetter<Enchantment> enchants;
     public VWLootTables(HolderLookup.Provider provider) {
@@ -126,26 +124,33 @@ public class VWLootTables implements LootTableSubProvider {
                 LootTable.lootTable().withPool(
                     addItemChance(VWItems.EFFLORESCENCE_RUNESTONE_PLATE,1, 0.24f))
         );
-        /*
+
 
         output.accept(SOUL_RUNESTONE_FRAGMENT_FROM_VERIXIUM_PILLARS,
             LootTable.lootTable().withPool(
-                    addItemChance(VWItems.SOUL_RUNESTONE_FRAGMENT_1,1, 0.33f))
+                    addItemChance(VWItems.SOUL_RUNESTONE_FRAGMENT_1,1, 0.15f))
                     .withPool(
-                            addItemChance(VWItems.SOUL_RUNESTONE_FRAGMENT_3,1, 0.33f))
+                            addItemChance(VWItems.SOUL_RUNESTONE_FRAGMENT_3,1, 0.15f))
+                    .withPool(
+                            addItemChance(VWItems.Pages.SP_ID_1008, 1, 0.07f)
+                    )
         );
 
         output.accept(SOUL_RUNESTONE_FRAGMENT_FROM_VERDANT_WEAPONSMITH,
             LootTable.lootTable().withPool(
-                    addItemChance(VWItems.SOUL_RUNESTONE_FRAGMENT_2,1, 0.33f))
+                    addItemChance(VWItems.SOUL_RUNESTONE_FRAGMENT_2,1, 0.15f))
                     .withPool(
-                            addItemChance(VWItems.SOUL_RUNESTONE_FRAGMENT_4,1, 0.33f))
+                            addItemChance(VWItems.SOUL_RUNESTONE_FRAGMENT_4,1, 0.15f))
         );
 
         output.accept(PAGE_FROM_VERDANT_CAMPS,
             LootTable.lootTable().withPool(
                     addItemChance(VWItems.Pages.SP_ID_1006,1, 0.07f))
-        );*/
+        );
+        output.accept(PAGES_FROM_VILLAGE_TEMPLES,
+                LootTable.lootTable().withPool(
+                        addItemChance(VWItems.Pages.SP_ID_1007,1, 0.07f))
+        );
     }
 
     private static LootPool.Builder addItemChance(DeferredItem<Item> item, int count, float chance) {

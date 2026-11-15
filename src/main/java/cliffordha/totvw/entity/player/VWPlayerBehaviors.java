@@ -1,15 +1,16 @@
 package cliffordha.totvw.entity.player;
 
-import cliffordha.totvw.Config;
 import cliffordha.totvw.TOTVW;
-import cliffordha.totvw.entity.skill.PlayerSkillDefinition;
-import cliffordha.totvw.entity.skill.SkillManager;
+import cliffordha.totvw.config.VWConfig;
+import cliffordha.totvw.entity.TickCondition;
+import cliffordha.totvw.entity.skill.PlayerSkills;
 import cliffordha.totvw.entity.skills.RunestoneEffects;
 import cliffordha.totvw.entity.skills.VerdantWindBlessing;
+import cliffordha.totvw.networking.VWNetworking;
 import cliffordha.totvw.registry.*;
 import cliffordha.totvw.registry.attachments.HavocType;
-import cliffordha.totvw.registry.attachments.ClientPref;
-import cliffordha.totvw.registry.attachments.VWAttachments;
+import cliffordha.totvw.registry.attachments.PlayerPrefs;
+import cliffordha.totvw.registry.attachments.VWAttachment;
 import cliffordha.totvw.registry.attachments.entity.PlayerAttachment;
 import cliffordha.totvw.tag.VWBiomeTags;
 
@@ -36,8 +37,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static cliffordha.totvw.entity.skill.SkillManager.*;
-import static cliffordha.totvw.util.VWUtil.*;
-import static cliffordha.totvw.util.VWUtil.TimeUtil.*;
+import static cliffordha.totvw.util.ExtUtil.*;
 
 @EventBusSubscriber(modid = TOTVW.MOD_ID)
 public class VWPlayerBehaviors {
@@ -49,97 +49,77 @@ public class VWPlayerBehaviors {
     }
 
     private static void registerRules() {
-        ON_DAMAGE_RULES.add(PlayerBehaviorRule.register(
-                PlayerCondition.alwaysTrue(),
-                (player, level) -> {
-                    if (player.getArmorValue() > 0) {
-                        runEnchantmentsOnDamage(player, level);
-                    }
-                    boolean hasHavoc = player.hasEffect(VWEffects.HAVOC)
-                    && !HavocType.isNone(player);
+        ON_DAMAGE_RULES.add(PlayerBehaviorRule.register(TickCondition.alwaysTrue(), (player, level) -> {
+            if (player.getArmorValue() > 0) {
+                runEnchantmentsOnDamage(player, level);
+            }
 
-                    if (hasHavoc) {
-                        RunestoneEffects.havocPlayerOnAttack(player, CURRENT_VICTIM.get());
-                    }
-                }
-        ));
-        TICK_RULES.add(PlayerBehaviorRule.register(
-                PlayerCondition.tick(1, 0),
-                ((player, level) -> {
-                    RandomSource random = level.getRandom();
-                    player.setData(PlayerAttachment.RANDOM_INT_10, random.nextIntBetweenInclusive(1, 10));
+            boolean hasHavoc = player.hasEffect(VWEffects.HAVOC) && !HavocType.isNone(player);
+            if (hasHavoc) {
+                RunestoneEffects.havocPlayerOnAttack(level, player, CURRENT_VICTIM.get());
+            }
+        }));
+        TICK_RULES.add(PlayerBehaviorRule.register(TickCondition.tick(1, 0), ((player, level) -> {
+            RandomSource random = level.getRandom();
+            player.setData(PlayerAttachment.RANDOM_INT_10, random.nextIntBetweenInclusive(1, 10));
 
-                    if (VWEnchantments.getBenediction(player) && isInBiome(player, VWBiomeTags.IS_VERDANT_BIOMES)) {
-                        player.heal(1.0f);
-                    }
-                })
-        ));
-        TICK_RULES.add(PlayerBehaviorRule.register(
-                PlayerCondition.tick(6, 0)
-                        .and(PlayerCondition.hasArmorWithEnchantment(EquipmentSlot.CHEST, VWEnchantments.BENEDICTION_OF_THE_VERDANT_MOUNTAINS)),
-                ((player, _) -> player.heal(1.0f))
-        ));
-        TICK_RULES.add(PlayerBehaviorRule.register(
-                PlayerCondition.tick(0, 30),
-                (player, _) -> {
-                    if (Config.SERVER_OTHER_COOLDOWNS.get()) {
-                        depleteCooldown(player, PlayerAttachment.VILLAGER_ATROCITY_COUNT);
-                        depleteCooldown(player, PlayerAttachment.WOLF_ATROCITY_COUNT);
-                    }
-                }
-        ));
-        TICK_RULES.add(PlayerBehaviorRule.register(
-                PlayerCondition.tick(0, 3),
-                (player, _) -> {
-                    AttachmentType<Integer> BLOOM_STACKS = VWAttachments.VERDANT_BLOOM_STACK.get();
-                    if (player.hasData(BLOOM_STACKS)) {
-                        int remaining = player.getData(BLOOM_STACKS);
-                        boolean shouldRemoveBloomStack = remaining > 0 && !player.getInventory().contains(new ItemStack(Items.BONE_MEAL));
-                        if (shouldRemoveBloomStack) {
+            if (VWEnchantments.getBenediction(player) && isInBiome(player, VWBiomeTags.IS_VERDANT_BIOMES)) {
+                player.heal(1.0f);
+            }
+        })));
+        TICK_RULES.add(PlayerBehaviorRule.register(TickCondition.tick(6, 0), ((player, _) -> {
+            if (VWEnchantments.getBenediction(player)) player.heal(1.0f);
+        })));
+        TICK_RULES.add(PlayerBehaviorRule.register(TickCondition.tick(0, 30), (player, _) -> {
+            if (VWConfig.get().SERVER_OTHER_COOLDOWNS) {
+                depleteCooldown(player, PlayerAttachment.VILLAGER_ATROCITY_COUNT);
+                depleteCooldown(player, PlayerAttachment.WOLF_ATROCITY_COUNT);
+            }
+        }));
+        TICK_RULES.add(PlayerBehaviorRule.register(TickCondition.tick(0, 3), (player, level) -> {
+            if (player.getLastAttacker() instanceof Player other && PlayerAttachment.isTrusted(player, other)) {
+                player.setLastHurtByPlayer(other, 0);
+            }
 
-                            player.setData(BLOOM_STACKS, remaining - 2);
-                            if (player.getData(BLOOM_STACKS) <= 0) {
-                                player.removeData(BLOOM_STACKS);
-                            }
-                        }
-                    }
+            AttachmentType<Integer> BLOOM_STACKS = VWAttachment.VERDANT_BLOOM_STACK.get();
+            if (player.hasData(BLOOM_STACKS)) {
+                int remaining = player.getData(BLOOM_STACKS);
+                boolean shouldRemoveBloomStack = remaining > 0 && !player.getInventory().contains(new ItemStack(Items.BONE_MEAL));
+                if (shouldRemoveBloomStack) {
 
-                    float HEALTH_THRESHOLD = player.getData(ClientPref.BENEDICTION_HEALTH_THRESHOLD) * 0.01f;
-                    if (player.getHealth() <= player.getMaxHealth() * HEALTH_THRESHOLD) {
-                        VerdantWindBlessing.triggerBenedictionFromTick(player);
+                    player.setData(BLOOM_STACKS, remaining - 2);
+                    if (player.getData(BLOOM_STACKS) <= 0) {
+                        player.removeData(BLOOM_STACKS);
                     }
                 }
-        ));
-        TICK_RULES.add(PlayerBehaviorRule.register(
-                PlayerCondition.tick(),
-                (player, _) -> {
+            }
 
-                    if (ClientPref.showPlayerLog(player)) setPlayerConfiguration(player, 0);
-                    if (Config.SERVER_SKILL_COOLDOWNS.get()) {
-                        depleteCooldown(player, PlayerAttachment.CD_BLESSING_OF_THE_VERDANT_WIND);
-                        depleteCooldown(player, PlayerAttachment.CD_HAVOC);
-                    } else {
-                        setPlayerConfiguration(player, 1);
-                    }
+            float HEALTH_THRESHOLD = player.getData(PlayerPrefs.BENEDICTION_HEALTH_THRESHOLD) * 0.01f;
+            if (player.getHealth() <= player.getMaxHealth() * HEALTH_THRESHOLD) {
+                VerdantWindBlessing.triggerBenedictionFromTick(player);
+            }
+        }));
+        TICK_RULES.add(PlayerBehaviorRule.register(TickCondition.tick(), (player, level) -> {
+            VWNetworking.syncPlayerArmor(player);
 
-                    if (!Config.SERVER_OTHER_COOLDOWNS.get()) setPlayerOtherConfig(player);
+            if (VWConfig.get().SERVER_SKILL_COOLDOWNS) {
+                depleteCooldown(player, PlayerAttachment.CD_BLESSING_OF_THE_VERDANT_WIND);
+                depleteCooldown(player, PlayerAttachment.CD_HAVOC);
+                depleteCooldown(player, PlayerAttachment.CD_ALLIANCE_REQUEST);
+            } else {
+                setPlayerConfiguration(player);
+            }
 
-                    SkillManager.notifyReset(player, VERDANT_BLESSING);
-                    processCDNotify(player,
-                            PlayerAttachment.CD_BLESSING_OF_THE_VERDANT_WIND,
-                            PlayerAttachment.NOTIFY_BLESSING_OF_THE_VERDANT_WIND,
-                            VWColors.VERDANT_WIND,
-                            "§nVerdant Wind's Blessing§f cooldown reset for §r"
-                    );
-                }
-        ));
+            if (!VWConfig.get().SERVER_OTHER_COOLDOWNS) setPlayerOtherConfiguration(player);
+            processCDNotify(player, PlayerSkills.VERDANT_BLESSING);
+        }));
     }
 
 
     public static void runWolfBlessing(LivingEntity player, Wolf wolf, ServerLevel level) {
         float triggerHeal;
         if (player instanceof Player aPlayer && (!aPlayer.isCreative() || !aPlayer.isSpectator())) {
-            triggerHeal = triggerHeal(player, wolf);
+            triggerHeal = VerdantWindBlessing.triggerHeal(player, wolf);
         } else {
             triggerHeal = 999.0f;
         }
@@ -147,8 +127,8 @@ public class VWPlayerBehaviors {
         VerdantWindBlessing.applyBenedictionEffects(wolf,  false);
         sendToChat(player, VWColors.VERDANT_WIND, true, "You have granted §nVerdant Wind's Blessing§r to " + wolfName(wolf));
 
-        sendParticles(VWParticles.BENEDICTION_TRIGGER_PARTICLE.get(), level, wolf.blockPosition(), 6, 0.5);
-        verdantBlessingAfterEffects(level, player);
+        sendParticles(VWParticles.BENEDICTION_TRIGGER, level, wolf.blockPosition(), 6, 0.5);
+        VerdantWindBlessing.verdantBlessingAfterEffects(level, player);
     }
     private static void runEnchantmentsOnDamage(Player player, ServerLevel level) {
         var victim = CURRENT_VICTIM.get();
@@ -161,21 +141,13 @@ public class VWPlayerBehaviors {
         boolean inNether = isInBiome(player, BiomeTags.IS_NETHER);
 
         if (BENEDICTION_ACTIVE && inVerdantBiomes) {
-            victim.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, sec(3), 0));
+            victim.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 3, 0));
         }
 
         if (FIRE_PROTECTION > 2 && inNether && !victim.fireImmune()) {
             victim.hurtServer(level, level.damageSources().onFire(), 1.0f + FIRE_PROTECTION);
         }
     }
-
-
-    public static final PlayerSkillDefinition VERDANT_BLESSING = new PlayerSkillDefinition(
-            PlayerAttachment.CD_BLESSING_OF_THE_VERDANT_WIND,
-            PlayerAttachment.NOTIFY_BLESSING_OF_THE_VERDANT_WIND,
-            VWColors.VERDANT_WIND_MUTED,
-            "§nVerdant Wind's Blessing§r"
-    );
 
     private static String wolfName(Wolf wolf) {
         String wolfName;

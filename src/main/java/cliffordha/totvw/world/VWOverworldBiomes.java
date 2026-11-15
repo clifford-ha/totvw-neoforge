@@ -73,7 +73,6 @@ public class VWOverworldBiomes {
         spawner.addSpawn(MobCategory.MONSTER, 10, new MobSpawnSettings.SpawnerData(EntityTypes.SKELETON, 2, 2));
 
         spawner.addSpawn(MobCategory.WATER_AMBIENT, 1, new MobSpawnSettings.SpawnerData(EntityTypes.TROPICAL_FISH, 1, 1));
-        spawner.addSpawn(MobCategory.UNDERGROUND_WATER_CREATURE, 1, new MobSpawnSettings.SpawnerData(EntityTypes.NAUTILUS, 1, 1));
 
         spawner.build();
 

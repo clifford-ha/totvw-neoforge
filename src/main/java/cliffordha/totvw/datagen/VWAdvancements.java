@@ -16,18 +16,14 @@ import net.minecraft.advancements.predicates.entity.EntityPredicate;
 import net.minecraft.advancements.triggers.InventoryChangeTrigger;
 import net.minecraft.advancements.triggers.PlayerInteractTrigger;
 import net.minecraft.advancements.triggers.PlayerTrigger;
-import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.advancements.AdvancementProvider;
 import net.minecraft.data.advancements.AdvancementSubProvider;
-import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EntityTypes;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.Block;
 
 import java.util.List;
 import java.util.Optional;
@@ -165,7 +161,7 @@ public class VWAdvancements extends AdvancementProvider {
                             ))
                     .save(consumer, TOTVW.registerID(worldLostInTimeID));
 
-            String powerBeyondReasonID =  "power_beyond_reason";
+            String powerBeyondReasonID = "power_beyond_reason";
             AdvancementHolder powerBeyondReason = Advancement.Builder.advancement()
                     .parent(root)
                     .display(
@@ -188,7 +184,7 @@ public class VWAdvancements extends AdvancementProvider {
             Advancement.Builder.advancement()
                     .parent(powerBeyondReason)
                     .display(VWItems.TETHER_RUNESTONE_PLATE.get(),
-                            title("Bound By A Thread", VWColors.MIGHT_EFFECT),
+                            title("Bound By A Thread", VWColors.MIGHT),
                             description("Use the power of Tether Runestone on your companion so it can gain the Link status"),
                             TOTVW.registerID(boundByAnInvisibleThreadID),
                             AdvancementType.CHALLENGE,

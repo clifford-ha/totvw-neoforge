@@ -174,7 +174,10 @@ public class VWPlacedFeatures {
                         HeightRangePlacement.uniform(VerticalAnchor.absolute(-64), VerticalAnchor.absolute(74)),
                         PlacementUtils.HEIGHTMAP_WORLD_SURFACE,
                         CountPlacement.of(UniformInt.of(1, 2)),
-                        RandomOffsetPlacement.vertical(ConstantInt.of(1)),
+                        RandomOffsetPlacement.of(
+                                TrapezoidInt.of(-3, 7, 0),
+                                TrapezoidInt.of(-3, 3, 0)
+                        ),
                         BiomeFilter.biome()
                 ))
         );
@@ -183,7 +186,10 @@ public class VWPlacedFeatures {
                         HeightRangePlacement.uniform(VerticalAnchor.absolute(84), VerticalAnchor.absolute(256)),
                         PlacementUtils.HEIGHTMAP_WORLD_SURFACE,
                         CountPlacement.of(UniformInt.of(1, 4)),
-                        RandomOffsetPlacement.vertical(ConstantInt.of(1)),
+                        RandomOffsetPlacement.of(
+                                TrapezoidInt.of(-7, 3, 0),
+                                TrapezoidInt.of(-3, 3, 0)
+                        ),
                         BiomeFilter.biome()
                 ))
         );

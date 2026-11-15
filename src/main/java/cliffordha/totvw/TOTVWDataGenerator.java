@@ -1,24 +1,36 @@
 package cliffordha.totvw;
 
 import cliffordha.totvw.datagen.*;
+import cliffordha.totvw.datagen.villager.VWVillagerTrades;
 import cliffordha.totvw.loot.VWBlockLootTableProvider;
 import cliffordha.totvw.loot.VWLootModifiers;
 import cliffordha.totvw.loot.VWLootTables;
+import cliffordha.totvw.registry.VWEnchantments;
 import cliffordha.totvw.tag.*;
-
+import cliffordha.totvw.world.VWBiomeModifications;
+import cliffordha.totvw.world.VWBiomes;
+import cliffordha.totvw.worldgen.VWConfiguredFeatures;
+import cliffordha.totvw.worldgen.VWPlacedFeatures;
+import cliffordha.totvw.worldgen.dimension.VWDimensions;
+import net.minecraft.core.RegistrySetBuilder;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
+import net.minecraft.data.advancements.AdvancementProvider;
 import net.minecraft.data.loot.LootTableProvider;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
+import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 @EventBusSubscriber(modid = TOTVW.MOD_ID)
 public class TOTVWDataGenerator {
+
 	@SubscribeEvent
 	public static void gatherClientData(GatherDataEvent.Client event) {
 		DataGenerator generator = event.getGenerator();

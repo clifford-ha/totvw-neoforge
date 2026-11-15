@@ -140,8 +140,11 @@ public class VWModelProvider extends ModelProvider {
     }
 
     public void generateItemModels(ItemModelGenerators item) {
+        item.generateFlatItem(VWItems.EMPTY.get(), VWBlocks.AIR_PLACEHOLDER.asItem(), ModelTemplates.FLAT_ITEM);
+
         add(item, ModelTemplates.FLAT_ITEM, List.of(
                 VWItems.VERIXIUM_CHUNK,
+                VWItems.VERIXIUM_SEDIMENT,
                 VWItems.CONDENSED_VERIXIUM,
                 VWItems.VERIXIUM_SHARD,
                 VWItems.VERIXIUM_POWDER,

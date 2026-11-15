@@ -1,9 +1,8 @@
 package cliffordha.totvw.item.custom;
 
 import cliffordha.totvw.registry.VWColors;
-import cliffordha.totvw.registry.attachments.VWAttachments;
-import cliffordha.totvw.util.VWUtil;
-
+import cliffordha.totvw.registry.attachments.VWAttachment;
+import cliffordha.totvw.util.TimeUtil;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -20,8 +19,8 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.function.Consumer;
 
-import static cliffordha.totvw.util.VWUtil.playSound;
-import static cliffordha.totvw.util.VWUtil.sendToChat;
+import static cliffordha.totvw.util.ExtUtil.playSound;
+import static cliffordha.totvw.util.ExtUtil.sendToChat;
 
 public class EfflorescenceRunestonePlate extends Item {
     public EfflorescenceRunestonePlate(Properties properties) {
@@ -47,10 +46,10 @@ public class EfflorescenceRunestonePlate extends Item {
         }
 
         if (stack.count() >= 5) {
-            int currentStacks = player.getData(VWAttachments.VERDANT_BLOOM_STACK);
-            player.setData(VWAttachments.VERDANT_BLOOM_STACK, currentStacks + 50);
+            int currentStacks = player.getData(VWAttachment.VERDANT_BLOOM_STACK);
+            player.setData(VWAttachment.VERDANT_BLOOM_STACK, currentStacks + 50);
             stack.consume(5, player);
-            player.getCooldowns().addCooldown(new ItemStack(this), VWUtil.TimeUtil.duration(1, 30));
+            player.getCooldowns().addCooldown(new ItemStack(this), TimeUtil.tickDuration(1, 30));
 
             if (level.isClientSide()) {
                 playSound(player, SoundEvents.BONE_MEAL_USE, SoundSource.PLAYERS, true);
@@ -67,7 +66,7 @@ public class EfflorescenceRunestonePlate extends Item {
     public void inventoryTick(ItemStack itemStack, ServerLevel level, Entity owner, @Nullable EquipmentSlot slot) {
         if (owner instanceof Player player) {
             getPlayer = player;
-            ACTIVE = player.getData(VWAttachments.VERDANT_BLOOM_STACK) > 0;
+            ACTIVE = player.getData(VWAttachment.VERDANT_BLOOM_STACK) > 0;
         }
         super.inventoryTick(itemStack, level, owner, slot);
     }
@@ -77,7 +76,7 @@ public class EfflorescenceRunestonePlate extends Item {
     @Override
     public void appendHoverText(ItemStack itemStack, TooltipContext context, TooltipDisplay display, Consumer<Component> builder, TooltipFlag tooltipFlag) {
         if (getPlayer == null) return;
-        int amount = getPlayer.getData(VWAttachments.VERDANT_BLOOM_STACK);
+        int amount = getPlayer.getData(VWAttachment.VERDANT_BLOOM_STACK);
         if (amount > 0) {
             builder.accept(Component.literal("Verdant Bloom Stacks: " + amount).withColor(VWColors.RUNESTONE_EFFLORESCENCE));
         }

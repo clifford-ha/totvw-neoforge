@@ -1,0 +1,186 @@
+package cliffordha.totvw.item.pages.handbooks;
+
+import cliffordha.totvw.config.VWConfig;
+import cliffordha.totvw.registry.attachments.PlayerPrefs;
+import net.minecraft.world.entity.player.Player;
+
+import static cliffordha.totvw.item.pages.FTextColor.*;
+import static cliffordha.totvw.item.pages.FTextStyle.UNDERLINED;
+import static cliffordha.totvw.util.TextUtil.*;
+
+public class EnchantmentHandbook {
+    private static final String descAttackDMG = "Attack Damage";
+    private static final String descBenediction = "Benediction of the Verdant Mountains";
+    private static final String descBleedingDMG = cText(RED, "Bleeding damage");
+
+    public static final String titleBenediction = cText(DARK_AQUA, "Benediction of the Verdant Mountains");
+    public static final String titleEnhancementKit = cText(YELLOW,"Wolf Armor Enhancement Kit");
+    public static final String titleMight = "Wolf Effect: " + cText(BLUE, "Might");
+    public static final String titleBloodlust = "Wolf Effect: " + cText(RED, "Bloodlust");
+    public static final String titleOozing = "Wolf Effect: " + cText(GREEN, "Oozing");
+    public static final String titleIgnition = "Wolf Effect: " + cText(GOLD, "Ignition");
+    public static final String titleLifting = "Wolf Effect: Lifting";
+    public static final String titleGnawing = "Wolf Effect: " + cText(LIGHT_PURPLE, "Gnawing");
+    public static final String titlePoisoning = "Wolf Effect: " + cText(DARK_GREEN, "Poisoning");
+    public static final String titleWithering = "Wolf Effect: " + cText(DARK_PURPLE, "Withering");
+    public static final String titleMending = "Wolf Effect: " + cText(LIGHT_PURPLE, "Mending");
+    public static final String titleArcticWinds = "Wolf Effect: " + cText(AQUA, "Arctic Winds");
+
+    public static String benedictionInfo(Player player) {
+        String HEALTH_THRESHOLD = (player.getData(PlayerPrefs.BENEDICTION_HEALTH_THRESHOLD)) + "%";
+
+        return
+                "The core enchantment addition that will provide access to features that are related to the Verdant Mountains, as well as the key to unlocking the full potential of other enchantments. This enchantment also gives " + cText(DARK_AQUA, "+3 ") + descAttackDMG + "."
+                + nextParagraph
+
+                + bold("Core Features:") + nextLine
+                + "• If your wolf companion has the enchantment, you may want to give them a Totem of Undying and it will be automatically converted into a Benediction Stack. They will automatically use it to revive themselves when they get knocked down. The stack will also remain even if the armor is removed or destroyed during combat."
+                + nextParagraph
+
+                + "• Your companion can also share their stack through " + fText(UNDERLINED, "Revival by Proxy") + " (Enabled by default). Additional information can be found in the Features Handbook."
+                + nextParagraph
+
+                + "• " + cText(AQUA, "Verdant Wind's Blessing") + ": When your health drops below " + cText(AQUA, HEALTH_THRESHOLD) + ", or when you get damaged and the damage is equal to or more than said threshold (damage is at least 1 and half a heart), it will grant Blessing of the Verdant Wind effect for 30 seconds and a temporary immunity for 10 seconds. This buff also applies to your companion when you have the enchantment and their health drops below said threshold. This buff is considered a skill."
+                + nextParagraph
+
+                + "• Passive: When wolf is about to get hurt and the incoming damage exceeds 50% of their max health, it will be entirely ignored (except if the damage comes from /kill command). This passive has a cooldown of 15 seconds. If wolf has the Havoc Runestone and the damage comes from an entity, reflect 50% of that damage (12 points max) to the attacker."
+                + nextParagraph
+
+                + bold("Combat Features:") + nextLine
+                + "• When holding a tool or weapon with a [VW] mark, hold *Crouch + Right Click to activate the buff. The buff provided depends on what tool you are holding. Moreover, duration and amplifier are also increased when within the Verdant Biomes!";
+    }
+    public static String enhancementKitInfo() {
+        return
+                "Your wolf companion gets 20% damage reduction and boosts the following base attributes: Max Health, Water Movement Speed, and Knockback Resistance.";
+    }
+    public static String mightEnchantmentInfo() {
+        return
+                "Grants Amplified Might effect to wolf when they have target which boosts their " + descAttackDMG + " and lessens Fall Damage. On attack: Grant Absorption effect for a short period of time that can stack its amplifier and duration (max at 30 sec) each hit, on all enchantment level. Additionally, if wolf has a baby wolf nearby, base effects will be shared to them."
+                + nextParagraph
+
+                + bold("At level 3 or higher:") + nextLine
+                + "• When wolf is on fire, automatically extinguish self. Additionally, if wolf has a baby wolf nearby that is on fire, the effect will be extended to them as well." + nextLine
+                + "• " + cText(AQUA, "Rupture") + " skill is unlocked."
+                + nextParagraph
+
+                + bold("Rupture: ")
+                + "A skill that deals an additional instance of " + descBleedingDMG + " when the target's health is below 60% of their max health — damage scales based on distance to owner. If the owner is not present, damage will scale to 180% of wolf's max health. The cooldown duration can be reduced if your companion has the Benediction of the Verdant Mountains enchantment. Additionally, when the target has the Strength effect, rewrite it to Weakness effect and maintain its original amplifier and duration. Otherwise, directly add the Weakness effect with a duration of 10 seconds."
+                + nextParagraph
+
+                + bold("At level 5 or higher:") + nextLine
+                + "• Forcibly remove Resistance effect from the target if present." + nextLine
+                + "• Deal another instance of " + descBleedingDMG + " equal to 10% of wolf's max health.";
+    }
+    public static String bloodlustEnchantmentInfo() {
+        return
+                "On attack: Grant the Bloodlust effect to wolf. While the Bloodlust effect is active and wolf attacks: Weakness effect is inflicted to the target for a short period of time and the amplifier of the effect is based on the enchantment level. This also boosts the following: " + descAttackDMG + ", Attack Knockback, and Knockback Resistance."
+                + nextParagraph
+
+                + bold("Paralyze: ")
+                + "A skill that is triggered when target is a player or if their health is more than 20 points. Upon trigger, target becomes paralyzed for a period of time."
+                + nextParagraph
+
+                + bold("At level 3 or higher:") + nextLine
+                + "• While wolf has Bloodlust effect and attacks: target's Speed effect is replaced with Slowness.";
+    }
+    public static String oozingEnchantmentInfo() {
+        return
+                "On attack: Inflict stackable Oozing effect to target for one minute and said duration will be multiplied if wolf also has the "
+                + cText(RED, "Bloodlust (1.5x)") + " or " + cText(AQUA, "Might (1.25x)") + " enchantment.";
+    }
+    public static String ignitionEnchantmentInfo() {
+        return
+                "On attack: Wolf will try to ignite target for 3 seconds and apply a Scorching Point based on the enchantment level. When the target reaches 9 points, deal Scorching Heat damage that is equal to the amount of computed ignition duration + enchantment level. If it is raining and target has a Scorching Point equal to or more than 6 points, deal Thermal Burn damage instead and reduce its points based on the enchantment level. Additionally, wolf will now ignore damages inflicted by fire so long as they are not directly in lava."
+                + nextParagraph + nextLine
+
+                + bold("At level 3 or higher:") + nextLine
+                + "• Forcibly remove Fire Resistance effect from the target if present." + nextLine
+                + "• There is a small chance to break the Powdered Snow block when wolf is inside of it." + nextLine
+                + "• Wolf will ignore any forms of freezing damage." + nextLine
+                + "• Wolf will ignore most incoming lava damage (direct contact)."
+                + nextParagraph
+
+                + "Passive: When wolf is within the Nether biomes and also has " + descBenediction + " and Fire Protection equal to or more than 3 enchantment level, grant a strong Fire Resistance effect. This passive is extended when their owner is also present and is nearby."
+                + nextParagraph
+
+                + "Bonuses:" + nextLine
+                + "• Damage and duration of fire increases when wolf is within Nether or hot biomes." + nextLine
+                + "• If wolf has the Havoc Runestone, extend duration by another 3 seconds.";
+    }
+    public static String liftingEnchantmentInfo() {
+        return
+                "On attack: Lift target from ground by inflicting Levitation effect and nullify their attack damages for a short period of time. If said effect is already present, knock back the target instead. Additionally, if wolf is in the End Dimension, the lift force becomes stronger and slightly extends the attack nullifier.";
+    }
+    public static String gnawingEnchantmentInfo() {
+        return
+                "On attack: Heal wolf by 15% of its max health. If wolf has a baby wolf nearby, healing will be shared to them as well."
+                + nextParagraph
+
+                + "• Passive: When wolf's owner is present and wearing armor enchanted with any of the following:" + nextLine
+                + " > Blast Protection" + nextLine
+                + " > Fire Protection" + nextLine
+                + " > Projectile Protection or Protection"
+                + nextParagraph
+
+                + "...the owner will be healed based on that enchantment's level, capped at 20% of their max health. If multiple qualifying enchantments are present, the first one in that order takes priority. Additionally, if the owner's armor have the " + descBenediction + " enchantment, the heal amount receives an additional 20% boost."
+                + nextParagraph
+
+                + bold("At level 2 or higher:") + nextLine
+                + "• Wolf's on-attack heal increases to 30% of its max health and the owner's heal cap is raised to 40%.";
+    }
+    public static String poisoningEnchantmentInfo() {
+        return
+                "On attack: Inflict stackable Poison effect to target for a period of time. The duration of the effect is based on the enchantment level."
+                + nextParagraph
+
+                + bold("At level 3 or higher:") + nextLine
+                + "• Forcibly remove the Regeneration effect from the target if present.";
+    }
+    public static String witheringEnchantmentInfo() {
+        return
+                "On attack: Inflict Wither effect to target for a short period of time. The duration and amplifier of the effect is based on the enchantment level."
+                + nextParagraph
+
+                + bold("At level 3 or higher:") + nextLine
+                + "• Forcibly remove the Regeneration effect from the target if present." + nextLine
+                + "• " + cText(DARK_PURPLE, "Fragmented Wolf") + " skill is unlocked."
+                + nextParagraph
+
+                + bold("[Summon] Fragmented Wolf: ")
+                + "On attack: wolf will summon a soul projection of a wolf near them. These projections will stay on the field for 60 seconds and will return to the fragmented world once the timer runs out. If they are hit by another mob for a certain amount of times, they are forced to return early as they become less and less stable after each hit. They are, however, immune to any other forms of attack or damage."
+                + nextParagraph
+
+                + "After one is summoned, the soul projection will copy the summoner's equipments, including the enchantments they have on them (limited to base level). If there are other wolves nearby that has armor with enchantments, the soul projection will randomly copy the equipment from one of them instead. These soul projections cannot be carried by other mobs nor interacted with as they are but an unstable fading memory."
+                + nextParagraph
+
+                + "Additionally, after they successfully attack a target, their timer gets an additional 15 seconds and can be triggered 6 times max.";
+    }
+    public static String mendingEnchantmentInfo() {
+        return
+                "On attack: If wolf's armor has been damaged, restore durability based on wolf's current total " + descAttackDMG + ". If wolf also has the " + descBenediction + " enchantment, the restoration efficiency will further improve.";
+    }
+    public static String arcticWindsEnchantmentInfo() {
+        return
+                "While active: Wolf will continuously gain Flash Freeze Stacks for up to a max of 50 and the rate at which they gain stacks is based on their environment. Cold biomes provide additional stacks."
+                + nextParagraph
+
+                + "On attack: Apply Arctic Affliction to target that can stack up to a max of 24. When target has enough affliction, there is a chance to trigger Frost Bound status and this chance is increased for every enchantment level. However, if target is in water or affected by rain, the chance to trigger Frost Bound status is set to a constant 80%. In addition to that, while target is in: "
+                + nextParagraph
+
+                + "Nether: When an afflicted mob has 9 or more stacks, there is a chance to trigger Thermal Burn which will apply a certain amount of damage. This damage will not be lower than 60% of the Affliction Stack."
+                + nextParagraph
+
+                + "Any other dimension: Each Affliction Stack increases the probability of inflicting a certain amount of damage. When this triggers while target is affected by fire, Thermal Burn is triggered and said fire is extinguished. If the aforementioned condition is not met, the damage applied will be converted to Wintershock instead."
+                + nextParagraph
+
+                + "If the target has 3 or more Scorching Points, a direct Thermal Burn damage is also applied." + nextParagraph
+
+                + bold("Frostbound Status: ")
+                + "When target has Arctic Affliction and this status is triggered, freeze target for 1 second. This can stack up to a max of 3 seconds. While Frostbound status is active or Arctic Affliction is 6 or more, when target gets hit by a Wind Charge, the affliction will be dispersed to nearby mobs."
+                + nextParagraph
+
+                + bold("At level 3 or higher:") + nextLine
+                + "• While wolf has enough Flash Freeze Stacks and they are inside lava, consume a number amount of stacks to negate damage. This effect is also triggered when you are the one on fire instead." + nextLine
+                + "• When wolf gets afflicted by Arctic Affliction by other means, convert it to a Flash Freeze Stack. Wolf will also collect Arctic Afflictions from other nearby tamed wolves provided that they don't have this enchantment.";
+    }
+}

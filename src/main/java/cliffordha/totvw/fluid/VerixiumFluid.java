@@ -4,8 +4,7 @@ import cliffordha.totvw.registry.VWBlocks;
 import cliffordha.totvw.registry.VWFluids;
 import cliffordha.totvw.registry.VWParticles;
 import cliffordha.totvw.tag.VWBiomeTags;
-import cliffordha.totvw.util.VWUtil;
-
+import cliffordha.totvw.util.ExtUtil;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.EntityTypeTags;
@@ -33,14 +32,12 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraft.world.level.material.FluidState;
 
 import java.util.Optional;
 
-import static cliffordha.totvw.util.VWUtil.addHiddenEffect;
-import static cliffordha.totvw.util.VWUtil.isInBiome;
+import static cliffordha.totvw.util.ExtUtil.addHiddenEffect;
+import static cliffordha.totvw.util.ExtUtil.isInBiome;
 
-@SuppressWarnings("NullableProblems")
 public class VerixiumFluid extends LiquidBlock {
     private static final Direction[] ALL_DIRECTIONS = { Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST, Direction.DOWN, Direction.UP};
 
@@ -62,7 +59,7 @@ public class VerixiumFluid extends LiquidBlock {
             level.addParticle(ParticleTypes.UNDERWATER, (double)pos.getX() + random.nextDouble(), (double)pos.getY() + random.nextDouble(), (double)pos.getZ() + random.nextDouble(), 0.0F, 0.0F, 0.0F);
         }
         if (random.nextDouble() <= 0.1) {
-            level.addParticle(VWParticles.VERDANT_BIOMES_ENVIRONMENT_AMBIANCE.get(), glowX, glowY, glowZ, 3D, 1D, 3D);
+            level.addParticle(VWParticles.VERDANT_BIOMES_AMBIENCE.get(), glowX, glowY, glowZ, 3D, 1D, 3D);
         }
     }
 
@@ -90,7 +87,7 @@ public class VerixiumFluid extends LiquidBlock {
 
             double randomD = level.getRandom().nextDouble();
             float randomF = level.getRandom().nextFloat();
-            if (VWUtil.isInBiome(level, pos, BiomeTags.IS_NETHER) && randomF < 0.33f) {
+            if (ExtUtil.isInBiome(level, pos, BiomeTags.IS_NETHER) && randomF < 0.33f) {
                 level.destroyBlock(pos, false);
                 level.addParticle(ParticleTypes.SMOKE, (double) pos.getX() + randomD, (double) pos.getY() + randomD, (double) pos.getZ() + randomD, 0.0F, 0.0F, 0.0F);
                 level.playLocalSound(pos, SoundEvents.LAVA_EXTINGUISH, SoundSource.BLOCKS, 0.2F + randomF * 0.2F, 0.9F + randomF * 0.15F, false);
@@ -121,7 +118,7 @@ public class VerixiumFluid extends LiquidBlock {
             if (neighborState.is(Blocks.WATER)) {
                 level.setBlock(neighborPos, Blocks.DEEPSLATE.defaultBlockState(), Block.UPDATE_CLIENTS);
                 level.playSound(null, pos, SoundEvents.DEEPSLATE_BREAK, SoundSource.BLOCKS, 1.0F, 1.0F);
-                VWUtil.sendParticles(
+                ExtUtil.sendParticles(
                         new BlockParticleOption(ParticleTypes.BLOCK_CRUMBLE, Blocks.DEEPSLATE.defaultBlockState()),
                         level,
                         pos,
@@ -162,7 +159,7 @@ public class VerixiumFluid extends LiquidBlock {
         if (!(level instanceof ServerLevel serverLevel) || !(entity instanceof LivingEntity livingEntity)) return;
 
         if (level.getGameTime() % 60 == 0) {
-            if (VWUtil.isInBiome(livingEntity, VWBiomeTags.IS_VERDANT_BIOMES)) {
+            if (ExtUtil.isInBiome(livingEntity, VWBiomeTags.IS_VERDANT_BIOMES)) {
                 if (livingEntity.is(EntityTypeTags.UNDEAD) || livingEntity.is(EntityTypeTags.ILLAGER)) return;
                 if (livingEntity.hasEffect(MobEffects.WITHER)) {
                     livingEntity.removeEffect(MobEffects.POISON);

@@ -2,87 +2,110 @@ package cliffordha.totvw.entity.skills;
 
 import cliffordha.totvw.datagen.VWDamageTypes;
 import cliffordha.totvw.effect.HavocEffect;
-import cliffordha.totvw.entity.wolf.VWWolfBehaviors;
-import cliffordha.totvw.registry.*;
-import cliffordha.totvw.registry.attachments.HavocType;
-import cliffordha.totvw.registry.attachments.Runestone;
-import cliffordha.totvw.registry.attachments.VWAttachments;
+import cliffordha.totvw.entity.wolf.WolfEffects;
+import cliffordha.totvw.registry.VWColors;
+import cliffordha.totvw.registry.VWEffects;
+import cliffordha.totvw.registry.VWEnchantments;
+import cliffordha.totvw.registry.VWSounds;
+import cliffordha.totvw.registry.attachments.*;
 import cliffordha.totvw.registry.attachments.entity.PlayerAttachment;
 import cliffordha.totvw.registry.attachments.entity.WolfAttachment;
-import cliffordha.totvw.util.VWUtil;
-
+import cliffordha.totvw.util.ExtUtil;
+import cliffordha.totvw.util.TimeUtil;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.wolf.Wolf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.attachment.AttachmentType;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static cliffordha.totvw.util.VWUtil.*;
-import static cliffordha.totvw.util.VWUtil.TimeUtil.sec;
+import static cliffordha.totvw.util.ExtUtil.*;
 
 public class RunestoneEffects {
     public static final AttachmentType<Runestone> RUNESTONE_TYPE = WolfAttachment.RUNESTONE_TYPE.get();
     public static final AttachmentType<List<String>> TETHERED_ENTITIES = WolfAttachment.TETHERED_ENTITY_TYPES.get();
 
-    public static final AttachmentType<Integer> ATTACK_CYCLE = WolfAttachment.ATTACK_CYCLE.get();
+    // ON TICK MAIN THREAD
+    public static void onTickRunestoneEffect(Wolf wolf, ServerLevel level, Runestone type) {
+        switch (type) {
+            case HAVOC -> havocTick(wolf, level);
+            case EFFLORESCENCE -> efflorescenceTick(wolf, level);
+            default -> {}
+        }
+    }
 
+    // ON TICK
+    private static void efflorescenceTick(Wolf wolf, ServerLevel level) {}
+    private static void havocTick(Wolf wolf, ServerLevel level) {
+        LivingEntity owner = wolf.getOwner();
 
-    public static void processRunestones(Wolf wolf, ServerLevel level, Runestone type) {
-        if (wolf.getOwner() != null && wolf.getOwner() instanceof Player player) {
+        if (owner == null) return;
+        if (!(owner instanceof Player player)) return;
 
-            int cdHavoc = player.getData(PlayerAttachment.CD_HAVOC);
-            if (type == Runestone.HAVOC && cdHavoc < 1) {
-                if (!player.hasEffect(VWEffects.HAVOC)) {
-                    addEffect(player, VWEffects.HAVOC, sec(60), 0);
-                }
+        int cdHavoc = player.getData(PlayerAttachment.CD_HAVOC);
+
+        boolean inNether = isDimension(wolf, Level.NETHER) || isDimension(owner, Level.NETHER);
+        if (owner.hasEffect(VWEffects.HAVOC)) {
+            if (level.getGameTime() % 60 == 0 && !ExtUtil.isSameDimension(wolf, player)) {
+                if (inNether) return;
+                owner.removeEffect(VWEffects.HAVOC);
+            }
+        } else {
+
+            boolean applied = ExtUtil.isSameDimension(wolf, player) || inNether;
+            if (cdHavoc <= 0 && applied) {
+                addEffect(player, VWEffects.HAVOC, 60, 0);
+
             }
         }
     }
 
-    public static void processHavocStatus(Wolf wolf, LivingEntity victim, ServerLevel level) {
-    }
-    public static void getHavocForPlayer(Player player, LivingEntity attacker, float damage) {
+    // HAVOC-RELATED
+    public static void getHavocForPlayer(Player player, Entity source, float damage) {
+        if (!(source instanceof LivingEntity attacker)) return;
         int CD = player.getData(PlayerAttachment.CD_HAVOC);
         if (CD > 0) return;
 
         if (!HavocType.isNone(player)) return;
-        String type;
+        HavocData data;
 
         boolean noTotem = !player.getItemBySlot(EquipmentSlot.OFFHAND).is(Items.TOTEM_OF_UNDYING)
                 || !player.getItemBySlot(EquipmentSlot.MAINHAND).is(Items.TOTEM_OF_UNDYING);
         boolean isVoid = damage >= player.getHealth() * 0.6f && noTotem;
 
         if (isVoid) {
-            setPlayerHavocStat(player, HavocType.VOID, 2, sec(12));
-            type = HavocType.VOID.name().toUpperCase();
+            data = new HavocData(HavocType.VOID, 2);
+            setPlayerHavocStat(player, data, 12);
 
         } else {
             boolean isObliteration = getEntityArmors(attacker) > 2;
-            if (isObliteration && attacker != null) {
-                setPlayerHavocStat(player, HavocType.EXPULSION,2, sec(30));
-                type = HavocType.EXPULSION.name().toUpperCase();
+            if (isObliteration) {
+                data = new HavocData(HavocType.EXPULSION, 2);
+                setPlayerHavocStat(player, data, 30);
             } else {
-                setPlayerHavocStat(player, HavocType.ANNIHILATION, 6, sec(60));
-                type = HavocType.ANNIHILATION.name().toUpperCase();
+                data = new HavocData(HavocType.ANNIHILATION, 6);
+                setPlayerHavocStat(player, data, 60);
             }
         }
 
-        playSound(player, VWSounds.WOLF_SKILL_PARALYZE.get(), SoundSource.PLAYERS, false);
-        sendToChat(player, VWColors.HAVOC_PARTICLE, true, "Activated Havoc: " + type);
-        sendParticles(HavocEffect.HAVOC_PARTICLE, (ServerLevel) player.level(), player.blockPosition(), 32, 3);
+        playSound(player, VWSounds.WOLF_SKILL_PARALYZE, SoundSource.PLAYERS, false);
+        sendToChat(player, VWColors.HAVOC_PARTICLE, true, "Activated Havoc: " + data.type().getName());
+        sendParticles(HavocEffect.HAVOC_PARTICLE, player.level(), player.blockPosition(), 32, 3);
     }
     public static void triggerHavocPenalty(LivingEntity attacker, HavocType type) {
         if (attacker == null) return;
@@ -92,34 +115,31 @@ public class RunestoneEffects {
             attacker.setHealth(4);
         }
         ServerLevel level = (ServerLevel) attacker.level();
-        int duration = type == HavocType.VOID ? TimeUtil.duration(5, 0) : TimeUtil.duration(2, 30);
+        int duration = type == HavocType.VOID ? TimeUtil.minToSec(5) : TimeUtil.minToSec(2) + 30;
         attacker.hurtServer(level, VWDamageTypes.havoc(level), 4f);
-        addEffect(attacker, VWEffects.PARALYZE, sec(10), 0);
+        addEffect(attacker, VWEffects.PARALYZE, 10, 0);
         addEffect(attacker, MobEffects.GLOWING, duration, 0);
         sendParticles(HavocEffect.HAVOC_PARTICLE, (ServerLevel) attacker.level(), attacker.blockPosition(), 24, 0.5);
     }
-    private static void setPlayerHavocStat(Player player, HavocType type, int usageCount, int duration) {
+    private static void setPlayerHavocStat(Player player, HavocData data, int duration) {
         int extra = VWEnchantments.getBenediction(player) ? 1 : 0;
-        int sec = extra > 0 ? sec(15) : 0;
-        rewriteEffect(player, VWEffects.HAVOC, duration + sec, 0);
-        player.setData(PlayerAttachment.HAVOC_TYPE, type);
-        player.setData(PlayerAttachment.HAVOC_USAGE_COUNT, usageCount + extra);
+        int sec = extra > 0 ? 15 : 0;
+        restartEffect(player, VWEffects.HAVOC, duration + sec, 0);
+        player.setData(VWAttachment.HAVOC_DATA, data.addUsageCount(extra));
     }
-    public static void havocPlayerOnAttack(Player player, LivingEntity victim) {
+    public static void havocPlayerOnAttack(ServerLevel level, Player player, LivingEntity victim) {
         if (victim == null) return;
         if (victim instanceof Wolf) return;
 
-        int usage = HavocType.getUsage(player);
-
-        ServerLevel level = (ServerLevel) player.level();
-        HavocType type = HavocType.getType(player);
+        HavocData data = HavocData.getData(player);
+        HavocType type = data.type();
 
         sendParticles(HavocEffect.HAVOC_PARTICLE, level, victim.blockPosition().above(), 32, 1);
         if (type == HavocType.ANNIHILATION) {
-            addOrStackEffect(victim, MobEffects.WEAKNESS, sec(6), 1, true);
-            addOrStackEffect(victim, MobEffects.HUNGER, sec(12), 0, true);
-            replaceEffect(victim, MobEffects.RESISTANCE, sec(3));
-            replaceEffect(victim, MobEffects.FIRE_RESISTANCE, sec(3));
+            addOrStackEffect(victim, MobEffects.WEAKNESS, 6, 1, true);
+            addOrStackEffect(victim, MobEffects.HUNGER, 12, 0, true);
+            ExtUtil.rewriteEffect(victim, MobEffects.RESISTANCE, 3);
+            ExtUtil.rewriteEffect(victim, MobEffects.FIRE_RESISTANCE, 3);
 
         } else if (type == HavocType.EXPULSION) {
             if (victim instanceof Player p) {
@@ -140,19 +160,19 @@ public class RunestoneEffects {
                     }
                 }
             } else {
-                addEffect(victim, VWEffects.PARALYZE, sec(2), 0);
+                addEffect(victim, VWEffects.PARALYZE, 2, 0);
             }
-            addOrStackEffect(player, MobEffects.SPEED, sec(6), 0, true);
+            addOrStackEffect(player, MobEffects.SPEED, 6, 0, true);
             victim.knockback(1.3, victim.getXRot(), victim.getYHeadRot(), level.damageSources().explosion(null), 2);
 
         } else if (type == HavocType.VOID) {
             victim.teleportTo(victim.getX(), -200, victim.getZ());
-            addOrStackEffect(player, MobEffects.SLOWNESS, sec(3), 0, true);
-            addOrStackEffect(player, MobEffects.POISON, sec(15), 0, false);
+            addOrStackEffect(player, MobEffects.SLOWNESS, 3, 0, true);
+            addOrStackEffect(player, MobEffects.POISON, 15, 0, false);
         }
 
-        player.setData(PlayerAttachment.HAVOC_USAGE_COUNT, usage - 1);
-        int newUsage = HavocType.getUsage(player);
+        HavocData.decrementUsageCount(player);
+        int newUsage = HavocData.getUsageCount(player);
 
         if (newUsage < 1) {
             sendToChat(player, true, "Havoc has been removed");
@@ -162,7 +182,7 @@ public class RunestoneEffects {
         }
     }
 
-
+    // LINK-RELATED
     public static void reapplyLinkStatus(LivingEntity victim, DamageSource damageSource) {
         if (!(damageSource.getEntity() instanceof Wolf wolf)) return;
         if (!Runestone.hasTether(wolf)) return;
@@ -172,7 +192,8 @@ public class RunestoneEffects {
         processLinkStatus(wolf, victim, level);
     }
     public static void processLinkStatus(Wolf wolf, LivingEntity victim, ServerLevel level) {
-        List<String> entities = new ArrayList<>(wolf.getData(TETHERED_ENTITIES));
+        TetherData data = wolf.getData(WolfAttachment.TETHER_DATA);
+        List<String> entities = new ArrayList<>(data.tetheredEntities());
 
         if (victim != null) {
             updateLinkRecord(wolf, victim, entities, level);
@@ -187,43 +208,43 @@ public class RunestoneEffects {
 
             List<Entity> scanner = level.getEntities(
                     wolf,
-                    VWUtil.scanArea(wolf, Math.min(SCAN_SIZE, 24)),
+                    ExtUtil.scanArea(wolf, Math.min(SCAN_SIZE, 24)),
                     test -> isEqualEntityID(entity, test)
             ).stream().limit(LINK_LIMIT).toList();
 
             if (scanner.isEmpty()) return;
 
             for (Entity mob : scanner) {
-                LivingEntity target = (LivingEntity) mob;
+                if (!(mob instanceof LivingEntity target)) continue;
+                if (target == victim) continue;
 
-                applyLink(wolf, target, level);
-            }
-        }
-    }
-    private static void applyLink(Wolf wolf, LivingEntity target, ServerLevel level) {
-        if (WolfAttachment.isTetherBlacklisted(wolf, target)) return;
-
-        if (target instanceof Player player) {
-            boolean isNotAggressor = !WolfAttachment.isListedAggressor(wolf, VWAttachments.getWolfPlayerSharedId(target));
-
-            if (isNotAggressor) {
-                return;
-            } else if (wolf.getOwner() != null) {
-                if (wolf.getOwner().equals(player)) {
-                    return;
+                if (target instanceof Player player) {
+                    applyLinkToPlayer(wolf, player, level);
+                } else {
+                    applyLink(wolf, target, level);
                 }
             }
         }
+    }
+    private static void applyLinkToPlayer(Wolf wolf, Player player, ServerLevel level) {
+        if (WolfAttachment.isTetherBlacklisted(wolf, player)) return;
 
-        DamageSource source = VWDamageTypes.tetherProxy(level);
-        if (wolf.isWearingBodyArmor()) {
-            VWWolfBehaviors.runEnchantmentsOnDamage(wolf, level, target, false, source);
+        if (wolf.getOwner() != null && wolf.getOwner().equals(player)) {
+            return;
         } else {
-            VWWolfBehaviors.applyConsolidatedDamage(level, wolf, target,
-                    source,
-                    0,
-                    false
-            );
+            boolean isAggressor = WolfAttachment.isListedAggressor(wolf, player.getUUID());
+            if (!isAggressor) {
+                return;
+            }
+        }
+
+        applyLink(wolf, player, level);
+    }
+    private static void applyLink(Wolf wolf, LivingEntity target, ServerLevel level) {
+        if (wolf.isWearingBodyArmor()) {
+            WolfEffects.onPostAttack(wolf, level, target, false);
+        } else {
+            target.hurtServer(level, VWDamageTypes.tetherProxy(level), Mth.ceil(wolf.getAttributeBaseValue(Attributes.ATTACK_DAMAGE)));
         }
     }
     private static void updateLinkRecord(Wolf wolf, LivingEntity victim, List<String> entities, ServerLevel level) {
@@ -237,18 +258,19 @@ public class RunestoneEffects {
                 newEntities.remove(type);
             } else {
 
-                int cycle = wolf.getData(ATTACK_CYCLE) - 1;
+                int cycle = wolf.getData(WolfAttachment.ATTACK_CYCLE) - 1;
                 List<Entity> scanner = level.getEntities(wolf,
                         scanArea(wolf, 12),
                         test -> isEqualEntityID(type, test)
                 ).stream().limit(1).toList();
 
-                if (scanner.isEmpty() && cycle % 2 == 0) {
+                if (scanner.isEmpty() && (cycle == 0 || cycle == 3)) {
                     newEntities.remove(type);
                 }
             }
         }
-        wolf.setData(TETHERED_ENTITIES, newEntities);
+        TetherData data = wolf.getData(WolfAttachment.TETHER_DATA);
+        wolf.setData(WolfAttachment.TETHER_DATA, TetherData.updateEntities(data, List.copyOf(newEntities)));
 
         String targetType = getEntityID(victim);
         if (newEntities.contains(targetType)) return;
@@ -261,9 +283,9 @@ public class RunestoneEffects {
             }
         }
         newEntities.add(targetType);
-        wolf.setData(TETHERED_ENTITIES, newEntities);
+        data = wolf.getData(WolfAttachment.TETHER_DATA);
+        wolf.setData(WolfAttachment.TETHER_DATA, TetherData.updateEntities(data, List.copyOf(newEntities)));
     }
-
 
     // helpers
     private static int getEntityArmors(LivingEntity victim) {

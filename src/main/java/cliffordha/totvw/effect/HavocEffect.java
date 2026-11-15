@@ -1,8 +1,11 @@
 package cliffordha.totvw.effect;
 
+import cliffordha.totvw.entity.skill.SkillCD;
 import cliffordha.totvw.registry.VWColors;
 import cliffordha.totvw.registry.VWEffects;
+import cliffordha.totvw.registry.attachments.HavocData;
 import cliffordha.totvw.registry.attachments.HavocType;
+import cliffordha.totvw.registry.attachments.VWAttachment;
 import cliffordha.totvw.registry.attachments.entity.PlayerAttachment;
 
 import net.minecraft.core.particles.DustParticleOptions;
@@ -22,9 +25,9 @@ import static cliffordha.totvw.registry.VWEffects.HAVOC;
 public class HavocEffect extends MobEffect {
     public static final ParticleOptions HAVOC_PARTICLE = new DustParticleOptions(VWColors.HAVOC_PARTICLE, 1.0f);
     public HavocEffect() {
-        super(MobEffectCategory.BENEFICIAL, VWColors.BLOODLUST_EFFECT, HAVOC_PARTICLE);
+        super(MobEffectCategory.BENEFICIAL, VWColors.BLOODLUST, HAVOC_PARTICLE);
     }
-    public static LivingEntity mob;
+    private Component setName;
 
     @Override
     public void onEffectStarted(LivingEntity entity, int amplifier) {
@@ -32,22 +35,19 @@ public class HavocEffect extends MobEffect {
     }
     @Override
     public void onEffectAdded(LivingEntity entity, int amplifier) {
-        if (entity instanceof Player || entity instanceof Wolf) {
-            mob = entity;
-        } else {
-            entity.removeEffect(VWEffects.HAVOC);
-        }
     }
 
     @Override
-    public Component getDisplayName() {
+    public boolean applyEffectTick(ServerLevel serverLevel, LivingEntity mob, int amplification) {
         if (mob instanceof Player player) {
-            HavocType type = HavocType.getType(player);
-            String value = type == HavocType.NONE ? "" : ": " + type.getName();
-
-            return Component.literal("Havoc" + value);
+            updateName(HavocData.getType(player));
         }
-        return super.getDisplayName();
+        return true;
+    }
+
+    private void updateName(HavocType type) {
+        String value = type == HavocType.NONE ? "" : ": " + type.getName();
+        setName = Component.literal("Havoc" + value);
     }
 
     @Override
@@ -56,25 +56,15 @@ public class HavocEffect extends MobEffect {
     }
 
     @Override
-    public void onMobRemoved(ServerLevel level, LivingEntity entity, int amplifier, Entity.RemovalReason reason) {
-        removeHavoc(entity);
+    public Component getDisplayName() {
+        return setName != null ? setName : super.getDisplayName();
     }
 
     public static void removeHavoc(LivingEntity entity) {
         if (entity instanceof Player player) {
-            int cooldown;
-            if (HavocType.isAnnihilation(player)) {
-                cooldown = 90;
-            } else if (HavocType.isExpulsion(player)) {
-                cooldown = (60 * 2) + 30;
-            } else if (HavocType.isVoid(player)) {
-                cooldown = (60 * 7);
-            } else {
-                cooldown = 30;
-            }
+            int cooldown = SkillCD.getHavoc(player);
             player.setData(PlayerAttachment.CD_HAVOC, cooldown);
-            player.removeData(PlayerAttachment.HAVOC_TYPE);
-            player.removeData(PlayerAttachment.HAVOC_USAGE_COUNT);
+            player.removeData(VWAttachment.HAVOC_DATA);
         }
     }
 }

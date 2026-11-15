@@ -24,7 +24,9 @@ import net.minecraft.world.item.enchantment.LevelBasedValue;
 import net.minecraft.world.item.enchantment.effects.EnchantmentAttributeEffect;
 
 public class VWEnchantments {
+    public static final ResourceKey<Enchantment> BENEDICTION_OF_THE_VERDANT_MOUNTAINS = enchantmentKey("benediction_of_the_verdant_mountains");
     public static final ResourceKey<Enchantment> WOLF_ARMOR_ENHANCEMENT_KIT = enchantmentKey("wolf_armor_enhancement_kit");
+
     public static final ResourceKey<Enchantment> WOLF_EFFECT_IGNITION = enchantmentKey("wolf_effect_ignition");
     public static final ResourceKey<Enchantment> WOLF_EFFECT_POISONING = enchantmentKey("wolf_effect_poisoning");
     public static final ResourceKey<Enchantment> WOLF_EFFECT_WITHERING = enchantmentKey("wolf_effect_withering");
@@ -33,7 +35,24 @@ public class VWEnchantments {
     public static final ResourceKey<Enchantment> WOLF_EFFECT_MIGHT = enchantmentKey("wolf_effect_might");
     public static final ResourceKey<Enchantment> WOLF_EFFECT_OOZING = enchantmentKey("wolf_effect_oozing");
     public static final ResourceKey<Enchantment> WOLF_EFFECT_GNAWING = enchantmentKey("wolf_effect_gnawing");
-    public static final ResourceKey<Enchantment> BENEDICTION_OF_THE_VERDANT_MOUNTAINS = enchantmentKey("benediction_of_the_verdant_mountains");
+    public static final ResourceKey<Enchantment> WOLF_EFFECT_ARCTIC_WINDS = enchantmentKey("wolf_effect_arctic_winds");
+
+
+    public static final String KEY_BENEDICTION = getEnchantmentKey("benediction_of_the_verdant_mountains");
+    public static final String KEY_WOLF_ARMOR_ENHANCEMENT_KIT = getEnchantmentKey("wolf_armor_enhancement_kit");
+    public static final String KEY_WOLF_EFFECT_IGNITION = getEnchantmentKey("wolf_effect_ignition");
+    public static final String KEY_WOLF_EFFECT_POISONING = getEnchantmentKey("wolf_effect_poisoning");
+    public static final String KEY_WOLF_EFFECT_WITHERING = getEnchantmentKey("wolf_effect_withering");
+    public static final String KEY_WOLF_EFFECT_LIFTING = getEnchantmentKey("wolf_effect_lifting");
+    public static final String KEY_WOLF_EFFECT_BLOODLUST = getEnchantmentKey("wolf_effect_bloodlust");
+    public static final String KEY_WOLF_EFFECT_MIGHT = getEnchantmentKey("wolf_effect_might");
+    public static final String KEY_WOLF_EFFECT_OOZING = getEnchantmentKey("wolf_effect_oozing");
+    public static final String KEY_WOLF_EFFECT_GNAWING = getEnchantmentKey("wolf_effect_gnawing");
+    public static final String KEY_WOLF_EFFECT_ARCTIC_WINDS = getEnchantmentKey("wolf_effect_arctic_winds");
+
+    public static String getEnchantmentKey(String key) {
+        return "enchantment." + TOTVW.MOD_ID + "." + key;
+    }
 
 
     public static boolean getBenediction(LivingEntity entity) {
@@ -71,6 +90,9 @@ public class VWEnchantments {
     }
     public static int getGnawing(Wolf wolf) {
         return wolfEnchantmentLVL(wolf, WOLF_EFFECT_GNAWING);
+    }
+    public static int getArcticWinds(Wolf wolf) {
+        return wolfEnchantmentLVL(wolf, WOLF_EFFECT_ARCTIC_WINDS);
     }
 
     public static int getProtection(Wolf wolf) {
@@ -135,17 +157,39 @@ public class VWEnchantments {
         var wolfArmorTag = items.getOrThrow(VWItemTags.WOLF_ARMOR_ENCHANTABLE);
         var chestArmorTag = items.getOrThrow(ItemTags.CHEST_ARMOR);
 
+        register(context, BENEDICTION_OF_THE_VERDANT_MOUNTAINS, Enchantment.enchantment(
+                        Enchantment.definition(
+                                chestArmorTag,
+                                chestArmorTag,
+                                2,
+                                1,
+                                Enchantment.dynamicCost(80, 0),
+                                Enchantment.dynamicCost(80, 20),
+                                4,
+                                EquipmentSlotGroup.BODY
+                        ))
+                .withEffect(
+                        EnchantmentEffectComponents.ATTRIBUTES,
+                        new EnchantmentAttributeEffect(
+                                TOTVW.registerID( "benediction_of_the_verdant_mountains"),
+                                Attributes.ATTACK_DAMAGE,
+                                LevelBasedValue.perLevel(3.0f, 0.0f),
+                                AttributeModifier.Operation.ADD_VALUE
+                        )
+                )
+                .build(BENEDICTION_OF_THE_VERDANT_MOUNTAINS.identifier())
+        );
         register(context, WOLF_ARMOR_ENHANCEMENT_KIT, Enchantment.enchantment(
-                Enchantment.definition(
-                        wolfArmorTag,
-                        wolfArmorTag,
-                        4,
-                        1,
-                        Enchantment.dynamicCost(50, 0),
-                        Enchantment.dynamicCost(50, 0),
-                        8,
-                        EquipmentSlotGroup.BODY
-                )).withEffect(
+                        Enchantment.definition(
+                                wolfArmorTag,
+                                wolfArmorTag,
+                                4,
+                                1,
+                                Enchantment.dynamicCost(50, 0),
+                                Enchantment.dynamicCost(50, 0),
+                                8,
+                                EquipmentSlotGroup.BODY
+                        )).withEffect(
                         EnchantmentEffectComponents.ATTRIBUTES, new EnchantmentAttributeEffect(
                                 TOTVW.registerID( "wolf_armor_enhancement_kit"),
                                 Attributes.MAX_HEALTH,
@@ -182,71 +226,71 @@ public class VWEnchantments {
                 .build(WOLF_ARMOR_ENHANCEMENT_KIT.identifier())
         );
         register(context, WOLF_EFFECT_IGNITION, Enchantment.enchantment(
-                Enchantment.definition(
-                        wolfArmorTag,
-                        wolfArmorTag,
-                        2,
-                        3,
-                        Enchantment.dynamicCost(14, 3),
-                        Enchantment.dynamicCost(48, 9),
-                        4,
-                        EquipmentSlotGroup.BODY
-                ))
+                        Enchantment.definition(
+                                wolfArmorTag,
+                                wolfArmorTag,
+                                2,
+                                3,
+                                Enchantment.dynamicCost(14, 3),
+                                Enchantment.dynamicCost(48, 9),
+                                4,
+                                EquipmentSlotGroup.BODY
+                        ))
                 .exclusiveWith(enchantments.getOrThrow(VWEnchantmentTags.CONTINUOUS_DAMAGE))
                 .build(WOLF_EFFECT_IGNITION.identifier())
         );
         register(context, WOLF_EFFECT_POISONING, Enchantment.enchantment(
-                Enchantment.definition(
-                        wolfArmorTag,
-                        wolfArmorTag,
-                        2,
-                        5,
-                        Enchantment.dynamicCost(12, 3),
-                        Enchantment.dynamicCost(55, 9),
-                        4,
-                        EquipmentSlotGroup.BODY
-                ))
+                        Enchantment.definition(
+                                wolfArmorTag,
+                                wolfArmorTag,
+                                2,
+                                5,
+                                Enchantment.dynamicCost(12, 3),
+                                Enchantment.dynamicCost(55, 9),
+                                4,
+                                EquipmentSlotGroup.BODY
+                        ))
                 .exclusiveWith(enchantments.getOrThrow(VWEnchantmentTags.CONTINUOUS_DAMAGE))
                 .build(WOLF_EFFECT_POISONING.identifier())
         );
         register(context, WOLF_EFFECT_WITHERING, Enchantment.enchantment(
-                Enchantment.definition(
-                        wolfArmorTag,
-                        wolfArmorTag,
-                        2,
-                        3,
-                        Enchantment.dynamicCost(33, 0),
-                        Enchantment.dynamicCost(64, 7),
-                        4,
-                        EquipmentSlotGroup.BODY
-                ))
+                        Enchantment.definition(
+                                wolfArmorTag,
+                                wolfArmorTag,
+                                2,
+                                3,
+                                Enchantment.dynamicCost(33, 0),
+                                Enchantment.dynamicCost(64, 7),
+                                4,
+                                EquipmentSlotGroup.BODY
+                        ))
                 .exclusiveWith(enchantments.getOrThrow(VWEnchantmentTags.CONTINUOUS_DAMAGE))
                 .build(WOLF_EFFECT_WITHERING.identifier())
         );
         register(context, WOLF_EFFECT_LIFTING, Enchantment.enchantment(
-                Enchantment.definition(
-                        wolfArmorTag,
-                        wolfArmorTag,
-                        4,
-                        3,
-                        Enchantment.dynamicCost(12, 7),
-                        Enchantment.dynamicCost(47, 13),
-                        4,
-                        EquipmentSlotGroup.BODY
-                ))
+                        Enchantment.definition(
+                                wolfArmorTag,
+                                wolfArmorTag,
+                                4,
+                                3,
+                                Enchantment.dynamicCost(12, 7),
+                                Enchantment.dynamicCost(47, 13),
+                                4,
+                                EquipmentSlotGroup.BODY
+                        ))
                 .build(WOLF_EFFECT_LIFTING.identifier())
         );
         register(context, WOLF_EFFECT_BLOODLUST, Enchantment.enchantment(
-                Enchantment.definition(
-                        wolfArmorTag,
-                        wolfArmorTag,
-                        2,
-                        3,
-                        Enchantment.dynamicCost(33, 0),
-                        Enchantment.dynamicCost(64, 7),
-                        4,
-                        EquipmentSlotGroup.BODY
-                ))
+                        Enchantment.definition(
+                                wolfArmorTag,
+                                wolfArmorTag,
+                                2,
+                                3,
+                                Enchantment.dynamicCost(33, 0),
+                                Enchantment.dynamicCost(64, 7),
+                                4,
+                                EquipmentSlotGroup.BODY
+                        ))
                 .withEffect(
                         EnchantmentEffectComponents.ATTRIBUTES,
                         new EnchantmentAttributeEffect(
@@ -265,28 +309,19 @@ public class VWEnchantments {
                                 AttributeModifier.Operation.ADD_VALUE
                         )
                 )
-                .withEffect(
-                        EnchantmentEffectComponents.ATTRIBUTES,
-                        new EnchantmentAttributeEffect(
-                                TOTVW.registerID( "wolf_effect_bloodlust"),
-                                Attributes.KNOCKBACK_RESISTANCE,
-                                LevelBasedValue.constant(0.1F),
-                                AttributeModifier.Operation.ADD_VALUE
-                        )
-                )
                 .build(WOLF_EFFECT_BLOODLUST.identifier())
         );
         register(context, WOLF_EFFECT_MIGHT, Enchantment.enchantment(
-                Enchantment.definition(
-                        wolfArmorTag,
-                        wolfArmorTag,
-                        4,
-                        5,
-                        Enchantment.dynamicCost(33, 0),
-                        Enchantment.dynamicCost(64, 7),
-                        4,
-                        EquipmentSlotGroup.BODY
-                ))
+                        Enchantment.definition(
+                                wolfArmorTag,
+                                wolfArmorTag,
+                                4,
+                                5,
+                                Enchantment.dynamicCost(33, 0),
+                                Enchantment.dynamicCost(64, 7),
+                                4,
+                                EquipmentSlotGroup.BODY
+                        ))
                 .withEffect(
                         EnchantmentEffectComponents.ATTRIBUTES,
                         new EnchantmentAttributeEffect(
@@ -308,52 +343,52 @@ public class VWEnchantments {
                 .build(WOLF_EFFECT_MIGHT.identifier())
         );
         register(context, WOLF_EFFECT_OOZING, Enchantment.enchantment(
-                Enchantment.definition(
-                        wolfArmorTag,
-                        wolfArmorTag,
-                        2,
-                        1,
-                        Enchantment.dynamicCost(55, 15),
-                        Enchantment.dynamicCost(55, 15),
-                        4,
-                        EquipmentSlotGroup.BODY
-                ))
+                        Enchantment.definition(
+                                wolfArmorTag,
+                                wolfArmorTag,
+                                2,
+                                1,
+                                Enchantment.dynamicCost(55, 15),
+                                Enchantment.dynamicCost(55, 15),
+                                4,
+                                EquipmentSlotGroup.BODY
+                        ))
                 .build(WOLF_EFFECT_OOZING.identifier())
         );
         register(context, WOLF_EFFECT_GNAWING, Enchantment.enchantment(
-                Enchantment.definition(
-                        wolfArmorTag,
-                        wolfArmorTag,
-                        2,
-                        2,
-                        Enchantment.dynamicCost(33, 0),
-                        Enchantment.dynamicCost(147, 33),
+                        Enchantment.definition(
+                                wolfArmorTag,
+                                wolfArmorTag,
+                                2,
+                                2,
+                                Enchantment.dynamicCost(33, 0),
+                                Enchantment.dynamicCost(147, 33),
                                 4,
-                        EquipmentSlotGroup.BODY
-                ))
+                                EquipmentSlotGroup.BODY
+                        ))
                 .build(WOLF_EFFECT_GNAWING.identifier())
         );
-        register(context, BENEDICTION_OF_THE_VERDANT_MOUNTAINS, Enchantment.enchantment(
-                Enchantment.definition(
-                        chestArmorTag,
-                        chestArmorTag,
-                        2,
-                        1,
-                        Enchantment.dynamicCost(80, 0),
-                        Enchantment.dynamicCost(80, 20),
-                        4,
-                        EquipmentSlotGroup.BODY
-                ))
+        register(context, WOLF_EFFECT_ARCTIC_WINDS, Enchantment.enchantment(
+                        Enchantment.definition(
+                                wolfArmorTag,
+                                wolfArmorTag,
+                                4,
+                                5,
+                                Enchantment.dynamicCost(33, 0),
+                                Enchantment.dynamicCost(64, 7),
+                                4,
+                                EquipmentSlotGroup.BODY
+                        ))
                 .withEffect(
                         EnchantmentEffectComponents.ATTRIBUTES,
                         new EnchantmentAttributeEffect(
-                                TOTVW.registerID( "benediction_of_the_verdant_mountains"),
-                                Attributes.ATTACK_DAMAGE,
-                                LevelBasedValue.perLevel(3.0f, 0.0f),
+                                TOTVW.registerID( "wolf_effect_arctic_dominance"),
+                                Attributes.BURNING_TIME,
+                                LevelBasedValue.perLevel(-0.2f, -0.05f),
                                 AttributeModifier.Operation.ADD_VALUE
                         )
                 )
-                .build(BENEDICTION_OF_THE_VERDANT_MOUNTAINS.identifier())
+                .build(WOLF_EFFECT_ARCTIC_WINDS.identifier())
         );
     }
     private static void register(BootstrapContext<Enchantment> context, ResourceKey<Enchantment> key, Enchantment enchantment) {

@@ -21,19 +21,19 @@ import java.util.concurrent.CompletableFuture;
 
 public class VWDatapackProvider extends DatapackBuiltinEntriesProvider {
     public static final RegistrySetBuilder WORLD_BUILDER = new RegistrySetBuilder()
-        .add(Registries.ENCHANTMENT, VWEnchantments::bootstrap)
-        .add(Registries.DAMAGE_TYPE, VWDamageTypes::bootstrap)
+            .add(Registries.ENCHANTMENT, VWEnchantments::bootstrap)
+            .add(Registries.DAMAGE_TYPE, VWDamageTypes::bootstrap)
 
-        .add(Registries.WOLF_VARIANT, VWWolfVariants::bootstrap)
-        .add(Registries.VILLAGER_TRADE, VWVillagerTrades::bootstrap)
+            .add(Registries.WOLF_VARIANT, VWWolfVariants::bootstrap)
+            .add(Registries.VILLAGER_TRADE, VWVillagerTrades::bootstrap)
 
-        .add(Registries.BIOME, VWBiomes::bootstrap)
-        .add(NeoForgeRegistries.Keys.BIOME_MODIFIERS, VWBiomeModifications::bootstrap)
-        .add(Registries.CONFIGURED_FEATURE, VWConfiguredFeatures::configure)
-        .add(Registries.PLACED_FEATURE, VWPlacedFeatures::configure)
+            .add(Registries.BIOME, VWBiomes::bootstrap)
+            .add(NeoForgeRegistries.Keys.BIOME_MODIFIERS, VWBiomeModifications::bootstrap)
+            .add(Registries.CONFIGURED_FEATURE, VWConfiguredFeatures::configure)
+            .add(Registries.PLACED_FEATURE, VWPlacedFeatures::configure)
 
-        .add(Registries.DIMENSION_TYPE, VWDimensions::bootstrapType)
-        .add(Registries.LEVEL_STEM, VWDimensions::bootstrapStem);
+            .add(Registries.DIMENSION_TYPE, VWDimensions::bootstrapType)
+            .add(Registries.LEVEL_STEM, VWDimensions::bootstrapStem);
 
     public VWDatapackProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
         super(output, registries, WORLD_BUILDER, Set.of(TOTVW.MOD_ID));

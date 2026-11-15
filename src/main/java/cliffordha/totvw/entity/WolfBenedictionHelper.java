@@ -1,0 +1,308 @@
+package cliffordha.totvw.entity;
+
+import cliffordha.totvw.TOTVW;
+import cliffordha.totvw.config.VWConfig;
+import cliffordha.totvw.data.WolfStorage;
+import cliffordha.totvw.entity.skills.RevivalByProxy;
+import cliffordha.totvw.entity.skills.VerdantWindBlessing;
+import cliffordha.totvw.item.custom.SoulRunestonePlate;
+import cliffordha.totvw.registry.VWColors;
+import cliffordha.totvw.registry.VWEffects;
+import cliffordha.totvw.registry.attachments.PlayerPrefs;
+import cliffordha.totvw.registry.attachments.ReturnPointData;
+import cliffordha.totvw.registry.attachments.entity.WolfAttachment;
+import cliffordha.totvw.util.ExtUtil;
+import net.minecraft.core.UUIDUtil;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtAccounter;
+import net.minecraft.nbt.NbtIo;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.ProblemReporter;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.animal.wolf.Wolf;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.portal.TeleportTransition;
+import net.minecraft.world.level.storage.LevelData;
+import net.minecraft.world.level.storage.TagValueInput;
+import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.attachment.AttachmentType;
+import org.jspecify.annotations.Nullable;
+
+import java.io.IOException;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.*;
+import java.util.function.Predicate;
+
+import static cliffordha.totvw.util.ExtUtil.*;
+
+public class WolfBenedictionHelper {
+    public static boolean reviveWolf(Wolf wolf, ServerLevel level, DamageSource source) {
+        AttachmentType<Integer> BENEDICTION_STACK = WolfAttachment.BENEDICTION.get();
+        int STACK = wolf.getData(BENEDICTION_STACK);
+        if (STACK < 1) return false;
+
+        VerdantWindBlessing.applyBenedictionEffects(wolf, true);
+
+        wolf.dropLeash();
+        wolf.unRide();
+        wolf.setOrderedToSit(false);
+
+        level.broadcastEntityEvent(wolf, (byte) 35);
+
+        wolf.setData(BENEDICTION_STACK, STACK - 1);
+
+        String name = wolf.getPlainTextName();
+        STACK = wolf.getData(BENEDICTION_STACK);
+        if (STACK == 0) {
+            sendToChat(wolf, VWColors.BLOODLUST_MUTED, name + " used up all Benediction stacks");
+        } else {
+            sendToChat(wolf, VWColors.VERDANT_WIND_MUTED, STACK + " Benediction stack remaining for " + name);
+        }
+        if (!wolf.isTame()) return true;
+
+        LivingEntity owner = wolf.getOwner();
+
+        if (owner == null) {
+            ReturnPointData data = wolf.getData(WolfAttachment.RETURN_POINT);
+            if (data.recordAfter()) {
+                saveWolfFiles(level.getServer(), List.of(wolf), null);
+            } else {
+                teleportToReturnPointOrOwner(level, wolf, null);
+            }
+            return true;
+        }
+
+        Entity attacker = source.getEntity();
+        if (attacker != null) {
+            sendToChat(owner, VWColors.BLOODLUST_MUTED, false, attacker.getPlainTextName() + " tried to kill " + name + ".");
+        } else {
+            String report = "Someone tried to kill " + name + ".";
+            if (source.is(DamageTypes.GENERIC_KILL)) report = name + " was killed through a command.";
+            sendToChat(owner, VWColors.BLOODLUST_MUTED, false, report);
+        }
+
+        // owner is close so revive in place
+        if (isSameDimension(wolf, owner) && wolf.distanceTo(owner) <= 8) return true;
+        boolean canTP = owner.getData(PlayerPrefs.BENEDICTION_TELEPORT_AFTER_SAVE);
+        if (canTP) {
+            teleportToReturnPointOrOwner(level, wolf, owner);
+            return true;
+        }
+
+        //record to file
+        List<Wolf> targets = new ArrayList<>();
+        targets.add(wolf);
+        if (owner.getData(PlayerPrefs.BENEDICTION_WOLF_TP_ALL)) {
+            targets.addAll(level.getEntitiesOfClass(Wolf.class, scanArea(wolf, 32),
+                    other -> other != wolf && other.isTame() && other.getOwner() == owner));
+        }
+        saveWolfFiles(level.getServer(), targets, owner);
+        return true;
+    }
+
+    public static Set<Wolf> collectTpAllTargets(Wolf main, LivingEntity owner, int range, boolean allDimensions) {
+        Set<Wolf> targets = new LinkedHashSet<>();
+        if (!owner.getData(PlayerPrefs.BENEDICTION_WOLF_TP_ALL)) return targets;
+
+        Predicate<Wolf> valid = w -> w != main && w.isTame() && w.getOwner() == owner;
+        Set<ServerLevel> scanned = new HashSet<>();
+
+        if (main.level() instanceof ServerLevel mainLevel && scanned.add(mainLevel)) {
+            targets.addAll(mainLevel.getEntitiesOfClass(Wolf.class, scanArea(main, range), valid));
+        }
+        if (owner.level() instanceof ServerLevel ownerLevel && scanned.add(ownerLevel)) {
+            targets.addAll(ownerLevel.getEntitiesOfClass(Wolf.class, scanArea(owner, range), valid));
+        }
+        if (allDimensions) {
+            MinecraftServer server = owner.level().getServer();
+            for (ServerLevel other : server.getAllLevels()) {
+                if (scanned.add(other)) targets.addAll(other.getEntities(EntityTypes.WOLF, valid));
+            }
+        }
+        return targets;
+    }
+    public static void pullToOwner(ServerLevel level, Wolf other, LivingEntity owner) {
+        RevivalByProxy.untetherWolf(other);
+        Entity moved = other;
+        if (isSameDimension(other, owner)) {
+            other.teleportToAroundBlockPos(owner.blockPosition());
+        } else if (other.canTeleport(other.level(), owner.level())) {
+            moved = other.teleport(teleporter(level, owner));
+        }
+        if (moved instanceof Wolf w) addEffect(w, VWEffects.WIND_VEIL, 3, 0);
+    }
+    private static void teleportToReturnPointOrOwner(ServerLevel level, Wolf wolf, @Nullable LivingEntity owner) {
+        if (owner != null) {
+            Set<Wolf> others = collectTpAllTargets(wolf, owner, 48, false); // collect BEFORE moving anything
+            RevivalByProxy.untetherWolf(wolf);
+
+            if (isSameDimension(wolf, owner) && wolf.canTeleport(wolf.level(), owner.level())) {
+                tryTeleport(wolf, owner);
+            } else if (owner.getData(PlayerPrefs.BENEDICTION_WOLF_TP_METHOD) < 1) {
+                Entity moved = wolf.teleport(teleporter(level, owner));
+                if (moved instanceof Wolf w) addEffect(w, VWEffects.WIND_VEIL, 3, 0);
+            } else {
+                owner.teleport(teleporter(level, wolf));
+                addEffect(owner, VWEffects.WIND_VEIL, 3, 0);
+                addEffect(wolf, VWEffects.WIND_VEIL, 3, 0);
+            }
+
+            for (Wolf other : others) pullToOwner(level, other, owner);
+            return;
+        }
+
+        ReturnPointData data = wolf.getData(WolfAttachment.RETURN_POINT);
+        Entity moved = data.isValid() ? ReturnPointData.returnToTargetOrDefault(wolf, data, false) : null;
+        if (moved instanceof Wolf w) {
+            addEffect(w, VWEffects.WIND_VEIL, 3, 0);
+            w.teleportToAroundBlockPos(data.pos());
+        } else {
+            saveWolfFile(level.getServer(), wolf);
+        }
+    }
+    public static TeleportTransition teleporter(ServerLevel level, LivingEntity entity) {
+        ServerLevel newLevel = entity.level() instanceof ServerLevel serverLevel ? serverLevel : level;
+        Vec3 pos = entity.position();
+        if (!RevivalByProxy.validLevel(entity)) {
+            LevelData.RespawnData respawn = newLevel.getRespawnData();
+            ServerLevel respawnLevel = newLevel.getServer().getLevel(respawn.dimension());
+            if (respawnLevel != null) newLevel = respawnLevel;
+            pos = Vec3.atBottomCenterOf(respawn.pos());
+        }
+        return new TeleportTransition(
+                newLevel,
+                pos,
+                Vec3.ZERO,
+                newLevel.getRespawnData().yaw(),
+                newLevel.getRespawnData().pitch(),
+                TeleportTransition.PLACE_PORTAL_TICKET
+        );
+    }
+    private static void tryTeleport(Wolf wolf, LivingEntity owner) {
+        if (owner.getData(PlayerPrefs.BENEDICTION_WOLF_TP_METHOD) < 1) {
+            wolf.teleportToAroundBlockPos(owner.blockPosition());
+            addEffect(wolf, VWEffects.WIND_VEIL, 3, 0);
+        } else {
+            owner.teleportTo(wolf.getX(), wolf.getY(), wolf.getZ());
+            addEffect(owner, VWEffects.WIND_VEIL, 3, 0);
+        }
+    }
+
+
+    private static void saveWolfFiles(MinecraftServer server, List<Wolf> wolves, @Nullable LivingEntity owner) {
+        for (Wolf w : wolves) {
+            saveWolfFile(server, w);
+        }
+    }
+    public static void saveWolfFile(MinecraftServer server, Wolf wolf) {
+        if (WolfStorage.saveWolfNbt(server, wolf)) {
+            wolf.remove(Entity.RemovalReason.UNLOADED_TO_CHUNK);
+        }
+    }
+    public static void loadWolfFilesIfPresent(Player player, ServerLevel level) {
+        if (loadWolfFiles(player, level)) {
+            deleteLoadedWolfFiles(player, level);
+        }
+    }
+    public static boolean loadWolf(ServerLevel level, Player player, CompoundTag wolfTag, boolean fromRecords) {
+        if (wolfTag.isEmpty()) return false;
+        ListTag setPosition = SoulRunestonePlate.getPosition(player);
+        wolfTag.put("Pos", setPosition);
+
+        TagValueInput input = (TagValueInput) TagValueInput.create(ProblemReporter.DISCARDING, level.registryAccess(), wolfTag);
+        Optional<Entity> wolfEntity = EntityType.create(input, level, new EntitySpawnRequest(EntitySpawnReason.LOAD, false));
+
+        if (wolfEntity.isPresent()) {
+            Entity wolfE = wolfEntity.get();
+            if (level.getEntity(wolfE.getUUID()) != null) {
+                wolfE.setUUID(UUID.randomUUID());
+            }
+            level.addFreshEntity(wolfE);
+            Wolf wolf = (Wolf) wolfE;
+            if (!fromRecords) {
+                if (wolf.getHealth() < 2f) wolf.setHealth(4f);
+            } else {
+                wolf.heal(100f);
+            }
+            wolf.removeAllEffects();
+            wolf.teleportToAroundBlockPos(player.blockPosition());
+            addHiddenEffect(wolf, VWEffects.WIND_VEIL, 3, 0);
+
+            if (fromRecords) {
+                WolfStorage.deleteWolfNBTFile(level.getServer(), player.getUUID(), wolf.getUUID());
+            }
+        }
+        return true;
+    }
+    public static void loadWolves(ServerLevel level, Player player, List<CompoundTag> wolfTag) {
+        List<CompoundTag> catcher = new ArrayList<>();
+        for (CompoundTag tag : wolfTag) {
+            if (!loadWolf(level, player, tag, false)) {
+                catcher.add(tag);
+            }
+        }
+        if (catcher.isEmpty()) return;
+        int pass = 0;
+        for (CompoundTag tag : catcher) {
+            if (loadWolf(level, player, tag, false)) pass++;
+        }
+        if (pass != catcher.size()) {
+            ExtUtil.sendToChat(player, VWColors.VERDANT_WIND_MUTED, "Failed to load " + (catcher.size() - pass) + " wolves");
+        }
+    }
+    public static boolean loadWolfFiles(Player player, ServerLevel level) {
+        try {
+            Path path = WolfStorage.benedictionDirectory(level.getServer(), player.getUUID());
+            if (!Files.exists(path)) return false;
+            try(DirectoryStream<Path> files = Files.newDirectoryStream(path, "*.nbt")) {
+
+                int success = 0;
+                for (Path file : files) {
+                    CompoundTag tag = NbtIo.readCompressed(file, NbtAccounter.unlimitedHeap());
+                    if (loadWolf(level, player, tag, true)) success++;
+                }
+                if (success > 0) {
+                    String message = success == 1 ? "1 recorded wolf" : success + " recorded wolves";
+                    ExtUtil.sendToChat(player, VWColors.VERDANT_WIND_MUTED, "[Wolf Additions: TOTVW] Loaded " + message);
+                    return true;
+                } else {
+                    if (TOTVW.IN_DEVELOPMENT) {
+                        ExtUtil.sendToChat(player, VWColors.VERDANT_WIND_MUTED, "No recorded wolves found");
+                    }
+                    return false;
+                }
+            } catch (IOException e) {
+                return false;
+            }
+
+        } catch (IOException e) {
+            return false;
+        }
+    }
+    public static void deleteLoadedWolfFiles(Player player, ServerLevel level) {
+        try {
+            Path path = WolfStorage.benedictionDirectory(level.getServer(), player.getUUID());
+            if (!Files.exists(path)) return;
+            List<Path> files = Files.list(path).toList();
+            if (files.isEmpty()) return;
+
+            for (Path file : files) {
+                CompoundTag tag = NbtIo.readCompressed(file, NbtAccounter.unlimitedHeap());
+                if (tag.isEmpty()) return;
+                int[] empty = new int[4];
+                UUID wolfID = UUIDUtil.uuidFromIntArray(tag.getIntArray("UUID").orElse(empty));
+                if (wolfID.equals(UUIDUtil.uuidFromIntArray(empty))) return;
+
+                WolfStorage.deleteWolfNBTFile(level.getServer(), player.getUUID(), wolfID);
+            }
+
+        } catch (IOException _) {
+        }
+    }
+}

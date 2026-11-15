@@ -1,5 +1,6 @@
 package cliffordha.totvw.entity.wolf;
 
+import cliffordha.totvw.entity.TickCondition;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.animal.wolf.Wolf;
 
@@ -12,23 +13,23 @@ public class WolfBehaviorRule {
     }
 
     private final Scope scope;
-    private final WolfCondition condition;
+    private final TickCondition condition;
     private final WolfBehaviorAction action;
 
-    private WolfBehaviorRule(Scope scope, WolfCondition condition, WolfBehaviorAction action) {
+    private WolfBehaviorRule(Scope scope, TickCondition condition, WolfBehaviorAction action) {
         this.scope     = scope;
         this.condition = condition;
         this.action    = action;
     }
 
     // factories
-    public static WolfBehaviorRule forTamed(WolfCondition condition, WolfBehaviorAction action) {
+    public static WolfBehaviorRule forTamed(TickCondition condition, WolfBehaviorAction action) {
         return new WolfBehaviorRule(Scope.TAMED, condition, action);
     }
-    public static WolfBehaviorRule forWild(WolfCondition condition, WolfBehaviorAction action) {
+    public static WolfBehaviorRule forWild(TickCondition condition, WolfBehaviorAction action) {
         return new WolfBehaviorRule(Scope.WILD, condition, action);
     }
-    public static WolfBehaviorRule forAny(WolfCondition condition, WolfBehaviorAction action) {
+    public static WolfBehaviorRule forAny(TickCondition condition, WolfBehaviorAction action) {
         return new WolfBehaviorRule(Scope.ANY, condition, action);
     }
     public boolean isApplicableTo(Wolf wolf) {
@@ -39,7 +40,7 @@ public class WolfBehaviorRule {
         };
     }
     public void evaluate(Wolf wolf, ServerLevel level) {
-        if (condition.test(wolf, level)) {
+        if (condition.test(level)) {
             action.execute(wolf, level);
         }
     }

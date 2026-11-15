@@ -1,11 +1,13 @@
 package cliffordha.totvw.entity.skills;
 
-import cliffordha.totvw.Config;
 import cliffordha.totvw.TOTVW;
+import cliffordha.totvw.config.VWConfig;
+import cliffordha.totvw.entity.WolfBenedictionHelper;
 import cliffordha.totvw.item.custom.SoulRunestonePlate;
 import cliffordha.totvw.registry.VWColors;
+import cliffordha.totvw.registry.VWEffects;
 import cliffordha.totvw.registry.VWItems;
-import cliffordha.totvw.registry.attachments.ClientPref;
+import cliffordha.totvw.registry.attachments.PlayerPrefs;
 import cliffordha.totvw.registry.attachments.entity.PlayerAttachment;
 import cliffordha.totvw.registry.attachments.entity.WolfAttachment;
 
@@ -13,9 +15,12 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.wolf.Wolf;
@@ -24,81 +29,76 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.attachment.AttachmentType;
+import net.minecraft.world.level.portal.TeleportTransition;
+import net.minecraft.world.level.storage.LevelData;
+import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
-import static cliffordha.totvw.util.VWUtil.*;
+import static cliffordha.totvw.util.ExtUtil.*;
 
 public class RevivalByProxy {
-    public static boolean revivePlayerIfPossible(LivingEntity entity, DamageSource damageSource) {
-        boolean hasTotem = entity.getMainHandItem().is(Items.TOTEM_OF_UNDYING) || entity.getOffhandItem().is(Items.TOTEM_OF_UNDYING);
-        if (entity instanceof Player player && !hasTotem) {
-            if (damageSource.is(DamageTypes.GENERIC_KILL)) return true;
-            if (!player.getData(ClientPref.BENEDICTION_SHARE_STACK)) return true;
+    public static boolean allowPlayerDeath(LivingEntity entity, DamageSource damageSource) {
+        if (!(entity instanceof ServerPlayer player)) return true;
+        ServerLevel level = player.level();
 
-            Level getLevel = player.level();
-            ServerLevel level = (ServerLevel) getLevel;
+        boolean hasTotem = player.getMainHandItem().is(Items.TOTEM_OF_UNDYING) || player.getOffhandItem().is(Items.TOTEM_OF_UNDYING);
+        boolean hasSoulRunestone = player.getInventory().contains(new ItemStack(VWItems.SOUL_RUNESTONE_PLATE.get()));
 
-            double distance = Config.SERVER_WOLF_PLAYER_SCAN_DISTANCE.get() * 16;
-            AttachmentType<Integer> BENEDICTION_STACK = WolfAttachment.BENEDICTION.get();
-
-            List<Wolf> wolves = level.getEntities(EntityTypes.WOLF, player.getBoundingBox().inflate(distance), wolf ->
-                    wolf.getOwner() != null && wolf.getOwner().is(player));
-
-            if (!wolves.isEmpty()) {
-                List<Wolf> wolfWithStack = wolves.stream().filter(wolf -> wolf.getData(BENEDICTION_STACK) > 1).toList();
-                if (!wolfWithStack.isEmpty()) {
-                    Wolf mainWolf = wolfWithStack.getFirst();
-                    getTeleportToWolf(player, mainWolf, false, mainWolf);
-
-                    if (player.getData(ClientPref.BENEDICTION_WOLF_TP_ALL)) {
-                        for (Wolf wolf : wolves) {
-                            getTeleportToWolf(player, wolf, true, mainWolf);
-                        }
-                        for (Wolf otherMainWolf : wolfWithStack) {
-                            getTeleportToWolf(player, otherMainWolf, true, mainWolf);
-                        }
-                    }
-
-                    VerdantWindBlessing.applyBenedictionEffects(player, true);
-
-                    int benediction = mainWolf.getData(BENEDICTION_STACK);
-                    mainWolf.setData(BENEDICTION_STACK, benediction - 1);
-
-                    String name = mainWolf.getPlainTextName();
-                    int STACK_AFTER = mainWolf.getData(BENEDICTION_STACK);
-                    if (STACK_AFTER == 0) {
-                        sendToChat(mainWolf, VWColors.BLOODLUST_EFFECT_MUTED, name + " used up all Benediction stacks");
-                    } else {
-                        sendToChat(mainWolf, VWColors.VERDANT_WIND_MUTED, "A Benediction stack has been shared by " + name + ". " + STACK_AFTER + " remaining.");
-                    }
-
-                    mainWolf.makeSound(new SoundEvent(Identifier.withDefaultNamespace("entity.wolf.whine"), Optional.of(16.0f)));
-                    level.broadcastEntityEvent(player, (byte) 35);
-                    return false;
-                }
-            } else {
-                // Last check to revive player if no wolves with stack found
+        if (hasTotem && damageSource.is(DamageTypes.FELL_OUT_OF_WORLD)) {
+            if (hasSoulRunestone && PlayerAttachment.hasWolfSoul(player)) {
                 return checkWolfSouls(player, level, damageSource);
             }
         }
-        return true;
-    }
-    private static final String ATT = "neoforge:attachments";
-    private static final String BENEDICTION_KEY = TOTVW.MOD_ID + ":wolf_benediction";
 
-    private static boolean checkWolfSouls(Player player, ServerLevel level, DamageSource damageSource) {
+        if (!hasTotem || (damageSource.is(DamageTypes.FELL_OUT_OF_WORLD) && !PlayerAttachment.hasWolfSoul(player))) {
+            if (damageSource.is(DamageTypes.GENERIC_KILL)) return true;
+            if (!player.getData(PlayerPrefs.BENEDICTION_SHARE_STACK)) return true;
+
+            Wolf wolf = findBenedictionWolf(player, level);
+            if (wolf == null) {
+                return checkWolfSouls(player, level, damageSource);
+
+            } else {
+                if (damageSource.is(DamageTypes.FELL_OUT_OF_WORLD)) {
+                    validateLocationBeforeRevival(level, player);
+                }
+                teleportToWolfOrReturnPoint(level, player, wolf);
+
+                VerdantWindBlessing.applyBenedictionEffects(player, true);
+
+                int benediction = WolfAttachment.benedictionStack(wolf);
+                wolf.setData(WolfAttachment.BENEDICTION, benediction - 1);
+
+                String name = wolf.getPlainTextName();
+                benediction = WolfAttachment.benedictionStack(wolf);
+                if (benediction <= 0) {
+                    sendToChat(wolf, VWColors.BLOODLUST_MUTED, name + " used up all Benediction stacks");
+                } else {
+                    sendToChat(wolf, VWColors.VERDANT_WIND_MUTED, "A Benediction stack has been shared by " + name + ". " + benediction + " remaining.");
+                }
+
+                wolf.makeSound(new SoundEvent(Identifier.withDefaultNamespace("entity.wolf.whine"), Optional.of(16.0f)));
+                level.broadcastEntityEvent(player, (byte) 35);
+                return false;
+            }
+        } else {
+                // Last check to revive player if no wolves with stack found
+            return checkWolfSouls(player, level, damageSource);
+        }
+    }
+    private static boolean checkWolfSouls(ServerPlayer player, ServerLevel level, DamageSource damageSource) {
         if (!player.getInventory().contains(new ItemStack(VWItems.SOUL_RUNESTONE_PLATE.get()))) return true;
 
         List<CompoundTag> souls = player.getData(PlayerAttachment.WOLF_SOULS);
         if (souls.isEmpty()) return true;
 
-        CompoundTag stack = souls.stream().filter(soul -> soul.getCompoundOrEmpty(ATT)
-                .getCompoundOrEmpty(BENEDICTION_KEY)
-                .getIntOr("value", 0) > 1)
+        CompoundTag stack = souls.stream().filter(soul -> soul.getCompoundOrEmpty("fabric:attachments")
+                .getIntOr(TOTVW.MOD_ID + ":wolf_benediction", 0) > 1)
                 .findFirst()
                 .orElse(new CompoundTag());
 
@@ -110,39 +110,80 @@ public class RevivalByProxy {
         }
         return true;
     }
-    private static void getTeleportToWolf(Player player, Wolf wolf, boolean tpAll, Wolf mainWolf) {
-        if (!player.canTeleport(player.level(), wolf.level())) return;
-        if (!player.getData(ClientPref.BENEDICTION_TELEPORT_AFTER_SAVE)) return;
-        if (player.distanceTo(wolf) < 16) return;
 
-        BlockPos wolfPos = wolf.blockPosition();
-        BlockPos playerPos = player.blockPosition();
-        boolean tpMode = player.getData(ClientPref.BENEDICTION_PLAYER_TP_METHOD) < 1;
+    private static void teleportToWolfOrReturnPoint(ServerLevel level, ServerPlayer player, @Nullable Wolf wolf) {
+        if (wolf != null) {
+            int distance = (level.getServer().getPlayerList().getSimulationDistance() * 16) * 2;
+            // collect first
+            Set<Wolf> others = WolfBenedictionHelper.collectTpAllTargets(wolf, player, distance, true);
+            untetherWolf(wolf);
 
-        if (tpAll) {
-            BlockPos mainWolfPos = mainWolf.blockPosition();
-            if (tpMode) {
-                if (isNotValidForTP(mainWolf.level(), mainWolfPos)) return;
-                player.teleportTo(mainWolfPos.getX(), mainWolfPos.getY(), mainWolfPos.getZ());
-                wolf.teleportToAroundBlockPos(mainWolfPos);
+            if (isSameDimension(player, wolf) && player.canTeleport(player.level(), wolf.level())) {
+                tryTeleport(player, wolf);
             } else {
-                if (isNotValidForTP(player.level(), playerPos)) return;
-                wolf.teleportToAroundBlockPos(playerPos);
-                mainWolf.teleportToAroundBlockPos(mainWolfPos);
+                processTeleports(level, player, wolf);
             }
-            untetherWolf(mainWolf);
+
+            for (Wolf other : others) WolfBenedictionHelper.pullToOwner(level, other, player);
+            return;
+        }
+
+        ServerPlayer.RespawnConfig config = player.getRespawnConfig();
+        LevelData.RespawnData data = config == null ? level.getRespawnData() : config.respawnData();
+
+        ServerLevel target = level.getServer().getLevel(data.dimension());
+        if (target == null) return;
+
+        player.teleport(new TeleportTransition(
+                target,
+                Vec3.atBottomCenterOf(data.pos()),
+                Vec3.ZERO,
+                target.getRespawnData().yaw(),
+                target.getRespawnData().pitch(),
+                TeleportTransition.PLACE_PORTAL_TICKET
+        ));
+        addEffect(player, VWEffects.WIND_VEIL, 3, 0);
+    }
+
+    private static void processTeleports(ServerLevel level, ServerPlayer player, Wolf wolf) {
+        if (player.getData(PlayerPrefs.BENEDICTION_PLAYER_TP_METHOD) < 1) {
+            player.teleport(WolfBenedictionHelper.teleporter(level, wolf));
+            addEffect(player, VWEffects.WIND_VEIL, 3, 0);
         } else {
-            if (tpMode) {
-                if (isNotValidForTP(wolf.level(), wolfPos)) return;
-                player.teleportTo(wolfPos.getX(), wolfPos.getY(), wolfPos.getZ());
-            } else {
-                if (isNotValidForTP(player.level(), playerPos)) return;
-                wolf.teleportToAroundBlockPos(playerPos);
+            Entity moved = wolf.teleport(WolfBenedictionHelper.teleporter(level, player));
+            if (moved instanceof Wolf w) addEffect(w, VWEffects.WIND_VEIL, 3, 0);
+        }
+    }
+    private static void tryTeleport(Player player, Wolf wolf) {
+        if (player.getData(PlayerPrefs.BENEDICTION_PLAYER_TP_METHOD) < 1) {
+            player.teleportTo(wolf.getX(), wolf.getY(), wolf.getZ());
+            addEffect(player, VWEffects.WIND_VEIL, 3, 0);
+        } else {
+            wolf.teleportToAroundBlockPos(player.blockPosition());
+            addEffect(wolf, VWEffects.WIND_VEIL, 3, 0);
+        }
+    }
+
+    public static boolean validLevel(LivingEntity entity) {
+        int y = entity.blockPosition().getY();
+        return isDimension(entity, Level.END) ? y >= -32 : y >= -63;
+    }
+    private static @Nullable Wolf findBenedictionWolf(ServerPlayer player, ServerLevel level) {
+        Wolf best = null;
+        double bestDist = Double.MAX_VALUE;
+        for (ServerLevel l : level.getServer().getAllLevels()) {
+            for (Wolf w : l.getEntities(EntityTypes.WOLF, t -> WolfAttachment.benedictionStack(t) > 0 && t.getOwner() == player)) {
+                double dist = l == level ? w.distanceToSqr(player) : Double.MAX_VALUE / 2; // same dimension first, then nearest
+                if (best == null || dist < bestDist) {
+                    best = w;
+                    bestDist = dist;
+                }
             }
         }
-        untetherWolf(wolf);
+        return best;
     }
-    private static void untetherWolf(Wolf wolf) {
+
+    public static void untetherWolf(Wolf wolf) {
         wolf.unRide();
         wolf.dropLeash();
         wolf.setOrderedToSit(false);
@@ -155,13 +196,14 @@ public class RevivalByProxy {
                 .getIntOr(TOTVW.MOD_ID + ":benediction_of_the_verdant_mountains", 0);
         return equipment > 0;
     }
-    private static void processRevivalThroughRunestone(ServerLevel level, Player player, List<CompoundTag> souls, CompoundTag stack, DamageSource source) {
-        CompoundTag attachments = stack.getCompoundOrEmpty(ATT).copy();
-        CompoundTag benediction = attachments.getCompoundOrEmpty(BENEDICTION_KEY).copy();
-        int count = benediction.getIntOr("value", 0);
-        benediction.putInt("value", count - 1);
-        attachments.put(BENEDICTION_KEY, benediction);
-        stack.put(ATT, attachments);
+    private static void processRevivalThroughRunestone(ServerLevel level, ServerPlayer player, List<CompoundTag> souls, CompoundTag stack, DamageSource source) {
+        CompoundTag attachments = stack.getCompoundOrEmpty("neoforge:attachments").copy();
+        int count = attachments.getIntOr(TOTVW.MOD_ID + ":wolf_benediction", 0);
+        RandomSource random = level.getRandom();
+        Inventory inv = player.getInventory();
+
+        attachments.putInt(TOTVW.MOD_ID + ":wolf_benediction", count - 1);
+        stack.put("neoforge:attachments", attachments);
 
         souls.remove(stack);
         souls.add(stack);
@@ -169,9 +211,11 @@ public class RevivalByProxy {
 
         float chance = 0.05f + ((souls.size() - 3) * 0.05f);
         boolean checkDMGSource= source.is(DamageTypes.FELL_OUT_OF_WORLD) || source.is(DamageTypes.GENERIC_KILL);
+        if (source.is(DamageTypes.FELL_OUT_OF_WORLD)) {
+            validateLocationBeforeRevival(level, player);
+        }
         if (!checkDMGSource && souls.size() > 3 && random.nextFloat() < (0.33f + chance)) {
-            SoulRunestonePlate.processAndSummonSouls(player, level, souls);
-            Inventory inv = player.getInventory();
+            SoulRunestonePlate.loadWolves(level, player, souls);
 
             int slot = inv.findSlotMatchingItem(new ItemStack(VWItems.SOUL_RUNESTONE_PLATE.get()));
             inv.removeItem(slot, 1);
@@ -196,5 +240,39 @@ public class RevivalByProxy {
         }
         VerdantWindBlessing.applyBenedictionEffects(player, true);
         level.broadcastEntityEvent(player, (byte) 35);
+    }
+    private static void validateLocationBeforeRevival(ServerLevel level, ServerPlayer player) {
+        if (player.blockPosition().getY() > -64) return;
+
+        ServerLevel serverLevel;
+        BlockPos pos;
+        ServerPlayer.RespawnConfig data = player.getRespawnConfig();
+        LevelData.RespawnData respawnData;
+        if (data == null) {
+            respawnData = level.getRespawnData();
+            serverLevel = level;
+            pos = level.getRespawnData().pos();
+        } else {
+            respawnData = data.respawnData();
+            serverLevel = level.getServer().getLevel(data.respawnData().dimension());
+            pos = respawnData.pos();
+        }
+
+        if (serverLevel == null) {
+            TOTVW.sendError("Failed to validate player location at " + player.blockPosition() + " in dimension " + player.level().dimension() + ".");
+            return;
+        }
+
+        player.teleport(
+                new TeleportTransition(
+                        serverLevel,
+                        Vec3.atBottomCenterOf(pos),
+                        Vec3.ZERO,
+                        respawnData.yaw(),
+                        respawnData.pitch(),
+                        TeleportTransition.PLACE_PORTAL_TICKET.then(TeleportTransition.PLAY_PORTAL_SOUND)
+                )
+        );
+        sendToChat(player, VWColors.BLOODLUST_MUTED, "Player is out of bounds! Attempted to return to a valid location.");
     }
 }

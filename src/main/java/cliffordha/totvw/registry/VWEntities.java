@@ -1,7 +1,7 @@
 package cliffordha.totvw.registry;
 
 import cliffordha.totvw.TOTVW;
-import cliffordha.totvw.entity.VWGlobalEntityBehaviors;
+import cliffordha.totvw.entity.GlobalEntityEvents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
@@ -36,7 +36,7 @@ public class VWEntities {
 
     public static void register(IEventBus eventBus) {
         ENTITY_TYPES.register(eventBus);
-        VWGlobalEntityBehaviors.register();
+        GlobalEntityEvents.register();
         sendClassRegisterLog("Entities");
     }
 }
