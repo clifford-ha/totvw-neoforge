@@ -3,17 +3,12 @@ package cliffordha.totvw.datagen;
 import cliffordha.totvw.registry.VWBlocks;
 import cliffordha.totvw.registry.VWItems;
 import cliffordha.totvw.tag.VWItemTags;
-import cliffordha.totvw.util.ExtUtil;
-
-import net.minecraft.advancements.Advancement;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
-import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.CookingBookCategory;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Blocks;
 
@@ -43,16 +38,10 @@ public class VWRecipeProvider extends RecipeProvider {
         }
     }
 
-    private void stonecutter(RecipeCategory category, ItemLike result, ItemLike base, int count) {
-        SingleItemRecipeBuilder.stonecutting(Ingredient.of(base), category, result, count)
-                .unlockedBy(getHasName(base), this.has(base))
-                .save(this.output, "stonecutting_" + getHasName(result) + "_from_" + getHasName(base));
-    }
-
     private void dyeFromIridescentGlass(ItemLike... items) {
         for (ItemLike item : items) {
-            stonecutter(RecipeCategory.MISC, item, VWBlocks.IRIDESCENT_GLASS, 4);
-            stonecutter(RecipeCategory.MISC, item, VWBlocks.IRIDESCENT_GLASS_PANE, 2);
+            stonecutting(Ingredient.of(item), RecipeCategory.MISC, VWBlocks.IRIDESCENT_GLASS, 4);
+            stonecutting(Ingredient.of(item), RecipeCategory.MISC, VWBlocks.IRIDESCENT_GLASS_PANE, 2);
         }
     }
 
@@ -358,7 +347,7 @@ public class VWRecipeProvider extends RecipeProvider {
                 .unlockedBy(getHasName(Blocks.GLASS), has(Blocks.GLASS))
                 .save(output);
 
-        stonecutter(RecipeCategory.MISC, VWBlocks.IRIDESCENT_GLASS_PANE, VWBlocks.IRIDESCENT_GLASS_PANE, 16);
+        stonecutterResultFromBase(RecipeCategory.MISC, VWBlocks.IRIDESCENT_GLASS_PANE, VWBlocks.IRIDESCENT_GLASS_PANE, 16);
 
         dyeFromIridescentGlass(
                 Items.DYE.white(),
